@@ -71,6 +71,31 @@
   section.active{display:block;}
 
   /* ===== INICIO ===== */
+  .announce-bar{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    background:linear-gradient(90deg, var(--accent-dim), var(--panel-2));
+    border:1px solid var(--accent-dim);border-radius:8px;
+    padding:12px 18px;margin-top:24px;text-decoration:none;color:var(--line);
+    transition:border-color .15s;
+  }
+  .announce-bar:hover{border-color:var(--accent);}
+  .live-dot{
+    width:9px;height:9px;border-radius:50%;background:#E85555;flex-shrink:0;
+    animation:pulse-dot 1.8s infinite;
+  }
+  @keyframes pulse-dot{
+    0%{box-shadow:0 0 0 0 rgba(232,85,85,0.55);}
+    70%{box-shadow:0 0 0 8px rgba(232,85,85,0);}
+    100%{box-shadow:0 0 0 0 rgba(232,85,85,0);}
+  }
+  .announce-text{font-size:13.5px;flex:1;min-width:200px;}
+  .announce-text b{font-family:'Oswald',sans-serif;letter-spacing:0.3px;}
+  .announce-cta{
+    font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;
+    color:var(--accent);white-space:nowrap;
+  }
+  @media (prefers-reduced-motion: reduce){ .live-dot{animation:none;} }
+
   .hero{
     display:flex;align-items:center;gap:32px;padding:52px 0 40px;
     border-bottom:1px solid var(--border);
@@ -182,6 +207,12 @@
   .item-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5;}
   .item-card .meta{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--steel);}
 
+  .cupo-block{margin-bottom:28px;max-width:420px;}
+  .cupo-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px;}
+  .cupo-label span:last-child{color:var(--accent);font-weight:600;}
+  .cupo-bar{height:6px;border-radius:4px;background:var(--border);overflow:hidden;}
+  .cupo-fill{height:100%;background:var(--accent);border-radius:4px;}
+
   .back-btn{
     display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--muted);
     font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:0.5px;text-transform:uppercase;
@@ -225,6 +256,21 @@
     font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:1px;text-transform:uppercase;
     color:var(--muted);margin:0 0 14px;
   }
+
+  .search-wrap{
+    position:relative;max-width:360px;margin-bottom:28px;
+  }
+  .search-wrap svg{
+    position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--muted);
+  }
+  .search-wrap input{
+    width:100%;background:var(--panel);border:1px solid var(--border);border-radius:6px;
+    padding:10px 12px 10px 36px;font-family:'Work Sans',sans-serif;font-size:14px;color:var(--line);outline:none;
+    transition:border-color .15s;
+  }
+  .search-wrap input:focus{border-color:var(--accent-dim);}
+  .search-wrap input::placeholder{color:var(--muted);}
+  .search-empty{color:var(--muted);font-size:13px;margin:0 0 20px;}
 
   .champ-list{
     background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;
@@ -283,6 +329,12 @@
 
   <!-- ===== INICIO ===== -->
   <section id="inicio" class="active">
+    <a class="announce-bar" href="https://discord.gg/wMeWWEmbNd" target="_blank" rel="noopener">
+      <span class="live-dot"></span>
+      <span class="announce-text"><b>HOY · Relámpago 23:00 (ARG)</b> — quedan 3 cupos disponibles</span>
+      <span class="announce-cta">Anotarme por Discord →</span>
+    </a>
+
     <div class="hero">
       <div class="hero-text">
         <p class="hero-eyebrow">Comunidad de FIFA / EA FC</p>
@@ -401,6 +453,11 @@
     <div id="relampago-list">
       <div class="section-head"><h2>Relámpagos</h2><span class="tag">tocá uno para ver los cruces</span></div>
       <div class="card-grid" id="relampagoGrid"></div>
+
+      <div class="tyc-box">
+        <p>Reglamento oficial de los torneos relámpago de ArgenLeague: requisitos de jugadores, formato de cruces y condiciones de juego.</p>
+        <a href="https://docs.google.com/document/d/1L6l1WXMbOIa2CWRElSzy1euDRDJPl-5QSg7qnk1kfeY/edit?usp=sharing" target="_blank" rel="noopener">Ver reglamento</a>
+      </div>
     </div>
     <div id="relampago-detail" style="display:none;"></div>
   </section>
@@ -408,6 +465,12 @@
   <!-- ===== HISTORIAL ===== -->
   <section id="historial">
     <div class="section-head"><h2>Historial</h2><span class="tag">campeones y estadísticas</span></div>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="histSearch" placeholder="Buscar equipo... (ej: LechonasGang)">
+    </div>
+    <p class="search-empty" id="histSearchEmpty" style="display:none;">No encontramos ningún equipo con ese nombre en el historial.</p>
 
     <h3 class="hist-subhead">Campeones</h3>
     <div class="champ-list" id="campeonesList"></div>
@@ -446,8 +509,10 @@
       nombre:'Liga de Clubes Pro',
       estado:'abierto',
       estadoLabel:'Inscripciones abiertas',
-      descripcion:'Primera liga de clubes de ArgenLeague, formato 11 vs 11. Se está armando el cupo de equipos.',
-      meta:'Arranca próximamente',
+      descripcion:'Primera liga de clubes de ArgenLeague, formato 11 vs 11. 7 equipos inscriptos — quedan 3 cupos disponibles.',
+      meta:'7/10 equipos · quedan 3 cupos',
+      cupoOcupado:7,
+      cupoTotal:10,
       reglamentoUrl:'https://docs.google.com/document/d/1ru0Yt-FOYexJbndgDn-oE-PMaSRlJmfLkA8tYdFkAqw/edit?usp=sharing'
     }
   ];
@@ -470,6 +535,10 @@
     detail.innerHTML = `
       <button class="back-btn" id="backLigas">← Volver a ligas</button>
       <div class="section-head"><h2>${l.nombre}</h2><span class="tag">${l.estadoLabel}</span></div>
+      ${l.cupoTotal ? `<div class="cupo-block">
+        <div class="cupo-label"><span>${l.cupoOcupado} de ${l.cupoTotal} equipos inscriptos</span><span>Quedan ${l.cupoTotal - l.cupoOcupado} cupos</span></div>
+        <div class="cupo-bar"><div class="cupo-fill" style="width:${(l.cupoOcupado/l.cupoTotal*100).toFixed(0)}%;"></div></div>
+      </div>` : ''}
       <div class="empty-state">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg></div>
         <h3>Esta liga todavía no arrancó</h3>
@@ -629,6 +698,32 @@
     });
   }
   buildHistorial();
+
+  // ---- Buscador rápido de equipo en Historial ----
+  const histSearch = document.getElementById('histSearch');
+  const histSearchEmpty = document.getElementById('histSearchEmpty');
+  histSearch.addEventListener('input', ()=>{
+    const q = histSearch.value.trim().toLowerCase();
+    let anyVisible = false;
+
+    document.querySelectorAll('#campeonesList .champ-row').forEach(row=>{
+      const team = row.querySelector('.team').textContent.toLowerCase();
+      const match = !q || team.includes(q);
+      row.style.display = match ? '' : 'none';
+      if(match) anyVisible = true;
+    });
+
+    ['#golesFavorList', '#golesContraList'].forEach(sel=>{
+      document.querySelectorAll(sel + ' .rank-row').forEach(row=>{
+        const team = row.querySelector('.team').textContent.toLowerCase();
+        const match = !q || team.includes(q);
+        row.style.display = match ? '' : 'none';
+        if(match) anyVisible = true;
+      });
+    });
+
+    histSearchEmpty.style.display = (q && !anyVisible) ? 'block' : 'none';
+  });
 </script>
 
 </body>
