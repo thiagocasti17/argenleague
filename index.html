@@ -988,7 +988,7 @@
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
         ],
         amarillas:[
-          // {jugador:'Nombre Apellido', equipo:'Nombre del equipo', cantidad:2},
+          {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:1},
         ],
         rojas:[
           // {jugador:'Nombre Apellido', equipo:'Nombre del equipo', cantidad:1},
@@ -1067,10 +1067,10 @@
         </div>`;
     }
 
-    // vallas menos vencidas: solo equipos con valla invicta (0 goles en contra)
+    // vallas menos vencidas: todos los equipos ordenados por menos goles recibidos
     let vallasBlock = `<div><h3 class="hist-subhead" style="margin-top:24px;">Vallas menos vencidas</h3><div class="stats-empty">Todavía no hay partidos jugados.</div></div>`;
     if(Array.isArray(l.fixture) && l.fixture.length){
-      const tabla = calcularTablaLiga(l).filter(f=>f.pj>0 && f.gc===0).sort((a,b)=> b.pj - a.pj);
+      const tabla = calcularTablaLiga(l).filter(f=>f.pj>0).sort((a,b)=> a.gc - b.gc);
       if(tabla.length){
         vallasBlock = `
           <div>
@@ -1080,12 +1080,32 @@
               <div class="rank-row">
                 <span class="n">${i+1}</span>
                 <span class="team">${f.equipo}</span>
+                <span class="val">${f.gc}</span>
+              </div>`).join('')}
+            </div>
+          </div>`;
+      }
+    }
+
+    // valla invicta: solo equipos que todavía no recibieron ningún gol
+    let vallaInvictaBlock = `<div><h3 class="hist-subhead" style="margin-top:24px;">Valla invicta</h3><div class="stats-empty">Todavía no hay partidos jugados.</div></div>`;
+    if(Array.isArray(l.fixture) && l.fixture.length){
+      const tablaInv = calcularTablaLiga(l).filter(f=>f.pj>0 && f.gc===0).sort((a,b)=> b.pj - a.pj);
+      if(tablaInv.length){
+        vallaInvictaBlock = `
+          <div>
+            <h3 class="hist-subhead" style="margin-top:24px;">Valla invicta</h3>
+            <div class="rank-list">
+              ${tablaInv.map((f,i)=>`
+              <div class="rank-row">
+                <span class="n">${i+1}</span>
+                <span class="team">${f.equipo}</span>
                 <span class="val">${f.pj} sin recibir</span>
               </div>`).join('')}
             </div>
           </div>`;
       } else {
-        vallasBlock = `<div><h3 class="hist-subhead" style="margin-top:24px;">Vallas menos vencidas</h3><div class="stats-empty">Todavía ningún equipo mantuvo la valla invicta.</div></div>`;
+        vallaInvictaBlock = `<div><h3 class="hist-subhead" style="margin-top:24px;">Valla invicta</h3><div class="stats-empty">Todavía ningún equipo mantuvo la valla invicta.</div></div>`;
       }
     }
 
@@ -1102,7 +1122,8 @@
       <div class="stats-cols">
         ${rankBlock('MVP del partido', e.mvp, '', '')}
       </div>
-      ${vallasBlock}`;
+      ${vallasBlock}
+      ${vallaInvictaBlock}`;
   }
 
   function showLigaDetail(l){
