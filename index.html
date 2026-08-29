@@ -893,7 +893,7 @@
       estado:'en-curso',
       estadoLabel:'En juego',
       descripcion:'Primera liga de clubes de ArgenLeague, formato 11 vs 11. 7 equipos compitiendo a dos ruedas.',
-      meta:'7 equipos · Fecha 1 arranca hoy',
+      meta:'7 equipos · Fecha 1 jugada',
       cupoOcupado:7,
       cupoTotal:7,
       reglamentoUrl:'https://docs.google.com/document/d/1ru0Yt-FOYexJbndgDn-oE-PMaSRlJmfLkA8tYdFkAqw/edit?usp=sharing',
@@ -903,7 +903,7 @@
       fixture:[
         {fecha:1, dia:'Viernes', fechaTxt:'28/08/2026', hora:'23:00', libre:'Rejunte 40', partidos:[
           {l:'Cazachilenos FC', v:'Lento 5', h:'23:00', gl:null, gv:null},
-          {l:'Chapecoence', v:'Fulbo Champeta', h:'23:00', gl:null, gv:null},
+          {l:'Chapecoence', v:'Fulbo Champeta', h:'23:00', gl:2, gv:1},
           {l:'Lechonas Gang', v:'Agentes Libres', h:'23:00', gl:null, gv:null},
         ]},
         {fecha:2, dia:'Sábado', fechaTxt:'29/08/2026', hora:'23:00', libre:'Fulbo Champeta', partidos:[
@@ -980,16 +980,21 @@
       // a medida que tengas los datos. "vallas menos vencidas" se calcula solo con el fixture.
       estadisticas:{
         goleadores:[
-          // {jugador:'Nombre Apellido', equipo:'Nombre del equipo', cantidad:5},
+          {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
+          {jugador:'C.Robert', equipo:'Chapecoence', cantidad:1},
+          // Falta el goleador de Fulbo Champeta (el descuento del 2-1) — sumalo cuando lo tengas.
         ],
         asistidores:[
-          // {jugador:'Nombre Apellido', equipo:'Nombre del equipo', cantidad:3},
+          {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
         ],
         amarillas:[
           // {jugador:'Nombre Apellido', equipo:'Nombre del equipo', cantidad:2},
         ],
         rojas:[
           // {jugador:'Nombre Apellido', equipo:'Nombre del equipo', cantidad:1},
+        ],
+        mvp:[
+          {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
         ],
       }
     }
@@ -1062,10 +1067,10 @@
         </div>`;
     }
 
-    // vallas menos vencidas: se calcula solo a partir de los goles en contra del fixture
+    // vallas menos vencidas: solo equipos con valla invicta (0 goles en contra)
     let vallasBlock = `<div><h3 class="hist-subhead" style="margin-top:24px;">Vallas menos vencidas</h3><div class="stats-empty">Todavía no hay partidos jugados.</div></div>`;
     if(Array.isArray(l.fixture) && l.fixture.length){
-      const tabla = calcularTablaLiga(l).filter(f=>f.pj>0).sort((a,b)=> a.gc - b.gc);
+      const tabla = calcularTablaLiga(l).filter(f=>f.pj>0 && f.gc===0).sort((a,b)=> b.pj - a.pj);
       if(tabla.length){
         vallasBlock = `
           <div>
@@ -1075,10 +1080,12 @@
               <div class="rank-row">
                 <span class="n">${i+1}</span>
                 <span class="team">${f.equipo}</span>
-                <span class="val">${f.gc}</span>
+                <span class="val">${f.pj} sin recibir</span>
               </div>`).join('')}
             </div>
           </div>`;
+      } else {
+        vallasBlock = `<div><h3 class="hist-subhead" style="margin-top:24px;">Vallas menos vencidas</h3><div class="stats-empty">Todavía ningún equipo mantuvo la valla invicta.</div></div>`;
       }
     }
 
@@ -1091,6 +1098,9 @@
       <div class="stats-cols">
         ${rankBlock('Tarjetas amarillas', e.amarillas, '', 'amarilla')}
         ${rankBlock('Tarjetas rojas', e.rojas, '', 'roja')}
+      </div>
+      <div class="stats-cols">
+        ${rankBlock('MVP del partido', e.mvp, '', '')}
       </div>
       ${vallasBlock}`;
   }
