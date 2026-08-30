@@ -358,6 +358,35 @@
   }
   .stats-empty{color:var(--muted);font-size:13px;padding:14px 16px;background:var(--panel);border:1px solid var(--border);border-radius:8px;}
 
+  /* ===== PLANTELES ===== */
+  .plantel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .plantel-card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:18px 20px;}
+  .plantel-card-head{
+    display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);
+  }
+  .plantel-card-head h4{margin:0;font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:var(--line);}
+  .plantel-count{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);white-space:nowrap;}
+  .plantel-list{list-style:none;margin:0;padding:0;}
+  .plantel-row{
+    display:flex;align-items:center;gap:10px;padding:6px 0;
+    border-bottom:1px solid rgba(27,42,66,0.6);
+  }
+  .plantel-row:last-child{border-bottom:none;}
+  .plantel-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);width:18px;flex-shrink:0;}
+  .plantel-name{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--line);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .plantel-role-badge{
+    flex-shrink:0;font-family:'Oswald',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.5px;
+    padding:2px 8px;border-radius:10px;
+  }
+  .plantel-role-badge.cap{background:var(--accent);color:#071019;}
+  .plantel-role-badge.sub{background:var(--accent-dim);color:var(--accent);}
+  .plantel-card-solo{max-width:420px;}
+  .plantel-team-card{text-align:left;}
+  .plantel-team-card h3{margin:0 0 6px;font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;}
+  .plantel-team-card p{margin:0;color:var(--muted);font-size:13px;}
+
   /* ===== ARGENCOINS ===== */
   .coins-intro{
     display:flex;align-items:flex-start;gap:14px;
@@ -898,6 +927,50 @@
       cupoOcupado:7,
       cupoTotal:7,
       reglamentoUrl:'https://docs.google.com/document/d/1ru0Yt-FOYexJbndgDn-oE-PMaSRlJmfLkA8tYdFkAqw/edit?usp=sharing',
+      planteles:[
+        {
+          equipo:'Cazachilenos FC',
+          capitan:'JoacoAmorbello8 (@joaco8)',
+          subcapitan:'R3NDE5 (@orangutan5)',
+          jugadores:['LeoIglesias14','juan10depo','Santy_sila','totuesc','joacoagro','Ssuffo17','kilmes678','TeoCaffa07','JuliSila9']
+        },
+        {
+          equipo:'Lechonas Gang',
+          capitan:'Lucario3438458 (ElPulpaZanetti)',
+          subcapitan:'Nyx1887 (22lionelmessi)',
+          jugadores:['MauricioMacri010','Bolsofc','Matiezeee','Julian-_CaT','sheigy247','Elwachy29','dioseslaclave32','Gondoou','iGvNzZ','MESSIEMI27','Fran-2021','Sebabalcarce','inmemorialll','12121309']
+        },
+        {
+          equipo:'Rejunte 40',
+          capitan:'ian_toled100k (@iantoled0)',
+          subcapitan:'Izux-T (MR. Izzx)',
+          jugadores:['Sibak02','infinityaef0','Gustry124','Pichu215','Theverimixv','fansoide','elchapii03','pumpedbymaradona','Leshennpai','Sould2Divided']
+        },
+        {
+          equipo:'Chapecoence',
+          capitan:'Val_zigTV',
+          subcapitan:'tatoigartuaxd',
+          jugadores:['Facuytato','roooddrrii','Diegoxeneize1992','Chucky3412','Tobiizabala']
+        },
+        {
+          equipo:'Fulbo Champeta',
+          capitan:'Champeta37 (@leandro)',
+          subcapitan:'Bruno121365',
+          jugadores:['Fef2002','Tomascraft011','Juanvazquezzz','Grasbond97','Ivangaleanno','GonzaloPanza','Noloo03','DivinoBoton8','Santi_rodriguez4','Tebasoni22','Lautyraimondo34','Blanchini','Juanrabuelo','Brunibrux12']
+        },
+        {
+          equipo:'Agentes Libres',
+          capitan:'pedropocabj12 (pedropox12)',
+          subcapitan:'Torresteo05 (teotorres)',
+          jugadores:['Serrano105752','Lukita8033','TEFITA1310','Kalvin_11']
+        },
+        {
+          equipo:'Lento 5',
+          capitan:'JEDAY_-504 (@dayan_911)',
+          subcapitan:'Viejito_504 (@serdeluz7)',
+          jugadores:['paputy777','Felizelefante','Juan_444777Gual','Loco11lol','Josephfg11','xSkiel','Rudiger4','yeshua504','FLASHXXT77','Jxhmed_05','JafetG2','Jhonvi2913','teomyyg5u25k','varsin07']
+        },
+      ],
       equipos:['Rejunte 40','Lento 5','Chapecoence','Agentes Libres','Lechonas Gang','Fulbo Champeta','Cazachilenos FC'],
       // Cargá gl/gv (goles local / goles visitante) a medida que se jueguen los partidos.
       // Mientras estén en null, el partido figura como pendiente y no afecta la tabla.
@@ -1047,6 +1120,53 @@
     });
   }
 
+  // ---- arma el HTML de la pestaña Planteles de una liga ----
+  function plantelesListHtml(l){
+    if(!Array.isArray(l.planteles) || !l.planteles.length){
+      return `<div class="empty-state">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg></div>
+        <h3>Todavía no cargamos los planteles</h3>
+        <p>Apenas los tengamos, acá vas a poder ver el capitán, subcapitán y jugadores de cada equipo.</p>
+      </div>`;
+    }
+    return `<div class="card-grid">
+      ${l.planteles.map((p,i) => `
+        <button class="item-card plantel-team-card" data-idx="${i}" type="button">
+          <h3>${p.equipo}</h3>
+          <p>DT: ${p.capitan.split(' (')[0]}</p>
+          <div class="meta">${p.jugadores.length + 2} jugadores</div>
+        </button>`).join('')}
+    </div>`;
+  }
+
+  function plantelDetailHtml(p){
+    return `
+      <button class="back-btn" data-back="planteles">← Volver a planteles</button>
+      <div class="plantel-card plantel-card-solo">
+        <div class="plantel-card-head">
+          <h4>${p.equipo}</h4>
+          <span class="plantel-count">${p.jugadores.length + 2} jugadores</span>
+        </div>
+        <ol class="plantel-list">
+          <li class="plantel-row"><span class="plantel-num">01</span><span class="plantel-name">${p.capitan}</span><span class="plantel-role-badge cap">DT</span></li>
+          <li class="plantel-row"><span class="plantel-num">02</span><span class="plantel-name">${p.subcapitan}</span><span class="plantel-role-badge sub">SC</span></li>
+          ${p.jugadores.map((j,i)=>`<li class="plantel-row"><span class="plantel-num">${String(i+3).padStart(2,'0')}</span><span class="plantel-name">${j}</span></li>`).join('')}
+        </ol>
+      </div>`;
+  }
+
+  function renderPlantelesPanel(panel, l){
+    panel.innerHTML = plantelesListHtml(l);
+    panel.querySelectorAll('.plantel-team-card').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        panel.innerHTML = plantelDetailHtml(l.planteles[btn.dataset.idx]);
+        panel.querySelector('[data-back="planteles"]').addEventListener('click', ()=>{
+          renderPlantelesPanel(panel, l);
+        });
+      });
+    });
+  }
+
   // ---- arma el HTML de la pestaña Estadísticas de una liga ----
   function statsHtml(l){
     function rankBlock(titulo, items, valSuffix, rowClass){
@@ -1190,10 +1310,12 @@
         <button class="liga-subtab-btn active" data-sub="tabla">Tabla de posiciones</button>
         <button class="liga-subtab-btn" data-sub="fixture">Fixture</button>
         <button class="liga-subtab-btn" data-sub="stats">Estadísticas</button>
+        <button class="liga-subtab-btn" data-sub="planteles">Planteles</button>
       </div>
       <div class="liga-subpanel" id="ligaSubTabla">${tablaHtml}</div>
       <div class="liga-subpanel" id="ligaSubFixture" style="display:none;">${fixtureHtml}</div>
       <div class="liga-subpanel" id="ligaSubStats" style="display:none;">${statsHtml(l)}</div>
+      <div class="liga-subpanel" id="ligaSubPlanteles" style="display:none;"></div>
       ` : `
       <div class="empty-state">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg></div>
@@ -1206,12 +1328,14 @@
       </div>` : ''}`;
 
     if(tieneFixture){
+      renderPlantelesPanel(detail.querySelector('#ligaSubPlanteles'), l);
       detail.querySelectorAll('.liga-subtab-btn').forEach(btn=>{
         btn.addEventListener('click', ()=>{
           detail.querySelectorAll('.liga-subtab-btn').forEach(b=>b.classList.toggle('active', b===btn));
           detail.querySelector('#ligaSubTabla').style.display = btn.dataset.sub==='tabla' ? 'block' : 'none';
           detail.querySelector('#ligaSubFixture').style.display = btn.dataset.sub==='fixture' ? 'block' : 'none';
           detail.querySelector('#ligaSubStats').style.display = btn.dataset.sub==='stats' ? 'block' : 'none';
+          detail.querySelector('#ligaSubPlanteles').style.display = btn.dataset.sub==='planteles' ? 'block' : 'none';
         });
       });
     }
