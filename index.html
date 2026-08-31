@@ -559,6 +559,12 @@
   .tabla-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:12px;color:var(--muted);}
   .tabla-legend .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex-shrink:0;}
   .tabla-criterio{margin-top:6px;font-size:11.5px;color:var(--steel);}
+  .copy-tabla-btn{
+    margin-top:16px;background:var(--panel);border:1px solid var(--accent-dim);color:var(--accent);
+    font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.3px;
+    padding:9px 16px;border-radius:6px;cursor:pointer;transition:background .15s;
+  }
+  .copy-tabla-btn:hover{background:var(--panel-2);}
 
   .fixture-list{display:flex;flex-direction:column;gap:14px;}
   .fixture-jornada{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
@@ -579,6 +585,23 @@
   }
   .fp-wo{color:var(--muted);font-size:10px;letter-spacing:0.3px;}
   .fixture-libre{margin-top:8px;font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+  /* ===== RACHA Y RESUMEN DE FECHA ===== */
+  .racha-badge{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+    padding:1px 7px;border-radius:10px;margin-left:6px;white-space:nowrap;vertical-align:middle;
+  }
+  .racha-g{background:rgba(79,166,232,0.15);color:var(--accent);}
+  .racha-p{background:rgba(193,68,58,0.15);color:var(--red);}
+  .racha-e{background:var(--panel-2);color:var(--muted);}
+
+  .fecha-resumen{
+    display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  }
+  .fecha-resumen span{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;
+  }
   .fixture-playoffs{border-color:var(--accent-dim);}
   .fixture-partido-tbd{grid-template-columns:auto 1fr;justify-content:space-between;}
   .fixture-partido-tbd .fp-equipo{font-family:'Oswald',sans-serif;font-weight:600;color:var(--line);}
@@ -1156,6 +1179,71 @@
     });
   }
 
+  // ---- racha actual de cada equipo (V/E/P consecutivos, del más reciente hacia atrás) ----
+  function calcularRachas(l){
+    const historial = {};
+    l.equipos.forEach(eq => historial[eq] = []);
+    const fechasOrdenadas = l.fixture.slice().sort((a,b)=> a.fecha - b.fecha);
+    fechasOrdenadas.forEach(fecha=>{
+      fecha.partidos.forEach(p=>{
+        if(p.gl==null || p.gv==null) return;
+        if(!historial[p.l] || !historial[p.v]) return;
+        if(p.gl > p.gv){ historial[p.l].push('G'); historial[p.v].push('P'); }
+        else if(p.gl < p.gv){ historial[p.v].push('G'); historial[p.l].push('P'); }
+        else { historial[p.l].push('E'); historial[p.v].push('E'); }
+      });
+    });
+    const rachas = {};
+    Object.entries(historial).forEach(([eq, resultados])=>{
+      if(!resultados.length){ rachas[eq] = null; return; }
+      const ultimo = resultados[resultados.length - 1];
+      let cant = 0;
+      for(let i = resultados.length - 1; i >= 0 && resultados[i] === ultimo; i--) cant++;
+      rachas[eq] = {tipo: ultimo, cant};
+    });
+    return rachas;
+  }
+
+  function rachaBadge(racha){
+    if(!racha || racha.cant < 2) return '';
+    if(racha.tipo === 'G') return `<span class="racha-badge racha-g">🔥 ${racha.cant}G</span>`;
+    if(racha.tipo === 'P') return `<span class="racha-badge racha-p">❄️ ${racha.cant}P</span>`;
+    return `<span class="racha-badge racha-e">➖ ${racha.cant}E</span>`;
+  }
+
+  // ---- arma la tabla de posiciones como texto plano, lista para pegar en Discord ----
+  function tablaComoTexto(l){
+    const filas = calcularTablaLiga(l);
+    const anchoEquipo = Math.max(...filas.map(f=>f.equipo.length), 'Equipo'.length);
+    const pad = (s, n) => String(s).padEnd(n, ' ');
+    const padNum = (s, n) => String(s).padStart(n, ' ');
+
+    let out = `🏆 TABLA DE POSICIONES — ${l.nombre}\n`;
+    out += '```\n';
+    out += `#  ${pad('Equipo', anchoEquipo)}  PJ PG PE PP  GF  GC   DG Pts\n`;
+    filas.forEach((f,i)=>{
+      out += `${padNum(i+1, 2)} ${pad(f.equipo, anchoEquipo)}  ${padNum(f.pj,2)} ${padNum(f.pg,2)} ${padNum(f.pe,2)} ${padNum(f.pp,2)} ${padNum(f.gf,3)} ${padNum(f.gc,3)} ${padNum((f.dg>0?'+':'')+f.dg,4)} ${padNum(f.pts,3)}\n`;
+    });
+    out += '```\n';
+    out += `Top 4 clasifica a playoffs.`;
+    return out;
+  }
+
+  // ---- resumen de una fecha ya completa (todos los partidos con resultado) ----
+  function resumenFecha(fecha){
+    if(!fecha.partidos.every(p => p.gl!=null && p.gv!=null)) return null;
+    const partidos = fecha.partidos;
+    const golesTotales = partidos.reduce((acc,p)=> acc + p.gl + p.gv, 0);
+    const goleada = partidos.slice().sort((a,b)=> Math.abs(b.gl-b.gv) - Math.abs(a.gl-a.gv))[0];
+    return {
+      fecha: fecha.fecha,
+      cantPartidos: partidos.length,
+      golesTotales,
+      promedio: (golesTotales / partidos.length).toFixed(1),
+      goleada,
+    };
+  }
+
   // ---- arma el HTML de la pestaña Planteles de una liga ----
   function plantelesListHtml(l){
     if(!Array.isArray(l.planteles) || !l.planteles.length){
@@ -1292,6 +1380,7 @@
 
     const tablaHtml = tieneFixture ? (()=>{
       const filas = calcularTablaLiga(l);
+      const rachas = calcularRachas(l);
       return `
       <div class="tabla-wrap">
         <table class="tabla-posiciones">
@@ -1301,13 +1390,14 @@
           <tbody>
             ${filas.map((f,i)=>`
             <tr class="${i<4 ? 'clasifica' : ''}">
-              <td>${i+1}</td><td class="col-equipo">${f.equipo}</td><td>${f.pj}</td><td>${f.pg}</td><td>${f.pe}</td><td>${f.pp}</td><td>${f.gf}</td><td>${f.gc}</td><td>${f.dg>0?'+':''}${f.dg}</td><td class="pts">${f.pts}</td>
+              <td>${i+1}</td><td class="col-equipo">${f.equipo} ${rachaBadge(rachas[f.equipo])}</td><td>${f.pj}</td><td>${f.pg}</td><td>${f.pe}</td><td>${f.pp}</td><td>${f.gf}</td><td>${f.gc}</td><td>${f.dg>0?'+':''}${f.dg}</td><td class="pts">${f.pts}</td>
             </tr>`).join('')}
           </tbody>
         </table>
       </div>
       <div class="tabla-legend"><span class="dot"></span> Top 4 clasifica a playoffs</div>
-      <div class="tabla-criterio">Criterio de desempate: 1° diferencia de gol · 2° goles a favor · 3° resultado entre sí</div>`;
+      <div class="tabla-criterio">Criterio de desempate: 1° diferencia de gol · 2° goles a favor · 3° resultado entre sí</div>
+      <button class="copy-tabla-btn" type="button" id="copyTablaBtn">📋 Copiar tabla para Discord</button>`;
     })() : '';
 
     const fixtureHtml = tieneFixture ? `
@@ -1315,6 +1405,12 @@
         ${l.fixture.map(fecha => `
           <div class="fixture-jornada">
             <div class="fixture-jornada-head">Fecha ${fecha.fecha} — ${fecha.dia} ${fecha.fechaTxt}${fecha.hora ? ' · ' + fecha.hora + ' hs' : ''}</div>
+            ${(()=>{ const r = resumenFecha(fecha); return r ? `
+            <div class="fecha-resumen">
+              <span>${r.cantPartidos} partidos</span>
+              <span>${r.golesTotales} goles (${r.promedio} por partido)</span>
+              ${r.goleada && Math.abs(r.goleada.gl - r.goleada.gv) >= 2 ? `<span>🔥 Goleada: ${r.goleada.l} ${r.goleada.gl}-${r.goleada.gv} ${r.goleada.v}</span>` : ''}
+            </div>` : ''; })()}
             ${fecha.partidos.map(p => `
               <div class="fixture-partido">
                 <span class="fp-equipo fp-local">${p.l}</span>
@@ -1365,6 +1461,47 @@
 
     if(tieneFixture){
       renderPlantelesPanel(detail.querySelector('#ligaSubPlanteles'), l);
+
+      const copyBtn = detail.querySelector('#copyTablaBtn');
+      if(copyBtn){
+        copyBtn.addEventListener('click', ()=>{
+          const texto = tablaComoTexto(l);
+          const original = copyBtn.textContent;
+
+          function copiarConTextarea(){
+            try{
+              const ta = document.createElement('textarea');
+              ta.value = texto;
+              ta.style.position = 'fixed';
+              ta.style.left = '-9999px';
+              document.body.appendChild(ta);
+              ta.focus();
+              ta.select();
+              const ok = document.execCommand('copy');
+              document.body.removeChild(ta);
+              return ok;
+            } catch(e){ return false; }
+          }
+
+          function marcarExito(){
+            copyBtn.textContent = '✅ ¡Copiada!';
+            setTimeout(()=>{ copyBtn.textContent = original; }, 2000);
+          }
+          function marcarError(){
+            copyBtn.textContent = original;
+            window.prompt('No se pudo copiar automático. Copiá el texto de acá (Ctrl+C / Cmd+C) y pegalo en Discord:', texto);
+          }
+
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(texto).then(marcarExito).catch(()=>{
+              if(copiarConTextarea()) marcarExito(); else marcarError();
+            });
+          } else {
+            if(copiarConTextarea()) marcarExito(); else marcarError();
+          }
+        });
+      }
+
       detail.querySelectorAll('.liga-subtab-btn').forEach(btn=>{
         btn.addEventListener('click', ()=>{
           detail.querySelectorAll('.liga-subtab-btn').forEach(b=>b.classList.toggle('active', b===btn));
