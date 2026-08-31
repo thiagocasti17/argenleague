@@ -342,6 +342,7 @@
     font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);width:18px;flex-shrink:0;
   }
   .rank-row .team{flex:1;font-size:14px;color:var(--line);min-width:0;}
+  .rank-row .team-sub{display:block;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px;}
   .rank-row .val{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;color:var(--accent);}
   .rank-row.contra .val{color:var(--red);}
   .rank-row.amarilla .val{color:#eab308;}
@@ -950,6 +951,10 @@
       cupoOcupado:7,
       cupoTotal:7,
       reglamentoUrl:'https://docs.google.com/document/d/1ru0Yt-FOYexJbndgDn-oE-PMaSRlJmfLkA8tYdFkAqw/edit?usp=sharing',
+      arqueros:{
+        'Rejunte 40':'CPU',
+        'Lechonas Gang':'Lucario3438458',
+      },
       planteles:[
         {
           equipo:'Cazachilenos FC',
@@ -1180,6 +1185,23 @@
   }
 
   // ---- racha actual de cada equipo (V/E/P consecutivos, del más reciente hacia atrás) ----
+  // ---- cantidad de partidos que cada equipo terminó sin recibir goles (clean sheets, no cuentan los W.O.) ----
+  function calcularVallasInvictas(l){
+    const conteo = {};
+    l.equipos.forEach(eq => conteo[eq] = 0);
+    l.fixture.forEach(fecha=>{
+      fecha.partidos.forEach(p=>{
+        if(p.gl==null || p.gv==null || p.wo) return;
+        if(conteo[p.l] !== undefined && p.gv === 0) conteo[p.l]++;
+        if(conteo[p.v] !== undefined && p.gl === 0) conteo[p.v]++;
+      });
+    });
+    return Object.entries(conteo)
+      .map(([equipo, vallas]) => ({equipo, vallas}))
+      .filter(x => x.vallas > 0)
+      .sort((a,b) => b.vallas - a.vallas);
+  }
+
   function calcularRachas(l){
     const historial = {};
     l.equipos.forEach(eq => historial[eq] = []);
@@ -1332,10 +1354,10 @@
       }
     }
 
-    // valla invicta: solo equipos que todavía no recibieron ningún gol
+    // valla invicta: cantidad de partidos que cada equipo terminó sin recibir goles
     let vallaInvictaBlock = `<div><h3 class="hist-subhead" style="margin-top:24px;">Valla invicta</h3><div class="stats-empty">Todavía no hay partidos jugados.</div></div>`;
     if(Array.isArray(l.fixture) && l.fixture.length){
-      const tablaInv = calcularTablaLiga(l).filter(f=>f.pj>0 && f.gc===0).sort((a,b)=> b.pj - a.pj);
+      const tablaInv = calcularVallasInvictas(l);
       if(tablaInv.length){
         vallaInvictaBlock = `
           <div>
@@ -1344,8 +1366,8 @@
               ${tablaInv.map((f,i)=>`
               <div class="rank-row">
                 <span class="n">${i+1}</span>
-                <span class="team">${f.equipo}</span>
-                <span class="val">${f.pj} sin recibir</span>
+                <span class="team">${f.equipo}${l.arqueros && l.arqueros[f.equipo] ? `<span class="team-sub">Arquero: ${l.arqueros[f.equipo]}</span>` : ''}</span>
+                <span class="val">${f.vallas} ${f.vallas===1 ? 'partido' : 'partidos'}</span>
               </div>`).join('')}
             </div>
           </div>`;
