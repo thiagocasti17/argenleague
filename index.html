@@ -388,6 +388,21 @@
   .plantel-team-card h3{margin:0 0 6px;font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;}
   .plantel-team-card p{margin:0;color:var(--muted);font-size:13px;}
 
+  /* ===== PREMIOS ===== */
+  .premios-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+  .premio-row{
+    background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 18px;
+  }
+  .premio-row.premio-top{border-color:var(--accent-dim);background:var(--panel-2);}
+  .premio-row h4{margin:0 0 6px;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;color:var(--line);}
+  .premio-row p{margin:0;color:var(--muted);font-size:13px;line-height:1.55;}
+  .premio-bonus{
+    background:linear-gradient(135deg, var(--accent-dim), var(--panel));
+    border:1px solid var(--accent-dim);border-radius:8px;padding:18px 20px;
+  }
+  .premio-bonus h4{margin:0 0 6px;font-family:'Oswald',sans-serif;font-size:14.5px;font-weight:700;color:var(--accent);}
+  .premio-bonus p{margin:0;color:var(--line);font-size:13px;line-height:1.55;}
+
   /* ===== ARGENCOINS ===== */
   .coins-intro{
     display:flex;align-items:flex-start;gap:14px;
@@ -955,6 +970,12 @@
         'Rejunte 40':'CPU',
         'Lechonas Gang':'Lucario3438458',
       },
+      premios:[
+        {titulo:'Campeón de Playoffs', valor:'$60.000 + 25% de descuento en la próxima inscripción + 5 ArgenCoins', top:true},
+        {titulo:'Subcampeón de Playoffs', valor:'$12.500 + 15% de descuento en la próxima inscripción + 2 ArgenCoins'},
+        {titulo:'Campeón de la Tabla General', valor:'20% de descuento en la próxima inscripción + 1 ArgenCoin extra'},
+      ],
+      premioBonus:{titulo:'👑 Doble Campeón (Tabla General + Playoffs)', valor:'$60.000 + 30% de descuento en la próxima inscripción + 5 ArgenCoins, por salir campeón de todo.'},
       planteles:[
         {
           equipo:'Cazachilenos FC',
@@ -1211,7 +1232,7 @@
     l.equipos.forEach(eq => conteo[eq] = 0);
     l.fixture.forEach(fecha=>{
       fecha.partidos.forEach(p=>{
-        if(p.gl==null || p.gv==null || p.wo) return;
+        if(p.gl==null || p.gv==null) return;
         if(conteo[p.l] !== undefined && p.gv === 0) conteo[p.l]++;
         if(conteo[p.v] !== undefined && p.gl === 0) conteo[p.v]++;
       });
@@ -1287,6 +1308,29 @@
   }
 
   // ---- arma el HTML de la pestaña Planteles de una liga ----
+  function premiosHtml(l){
+    if(!Array.isArray(l.premios) || !l.premios.length){
+      return `<div class="empty-state">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 4M17 5h3a3 3 0 0 1-3 4"/></svg></div>
+        <h3>Todavía no hay premios confirmados</h3>
+        <p>Apenas se definan, acá vas a ver qué se lleva cada posición.</p>
+      </div>`;
+    }
+    return `
+      <div class="premios-list">
+        ${l.premios.map(p => `
+          <div class="premio-row ${p.top ? 'premio-top' : ''}">
+            <h4>${p.titulo}</h4>
+            <p>${p.valor}</p>
+          </div>`).join('')}
+      </div>
+      ${l.premioBonus ? `
+      <div class="premio-bonus">
+        <h4>${l.premioBonus.titulo}</h4>
+        <p>${l.premioBonus.valor}</p>
+      </div>` : ''}`;
+  }
+
   function plantelesListHtml(l){
     if(!Array.isArray(l.planteles) || !l.planteles.length){
       return `<div class="empty-state">
@@ -1485,11 +1529,13 @@
         <button class="liga-subtab-btn" data-sub="fixture">Fixture</button>
         <button class="liga-subtab-btn" data-sub="stats">Estadísticas</button>
         <button class="liga-subtab-btn" data-sub="planteles">Planteles</button>
+        <button class="liga-subtab-btn" data-sub="premios">Premios</button>
       </div>
       <div class="liga-subpanel" id="ligaSubTabla">${tablaHtml}</div>
       <div class="liga-subpanel" id="ligaSubFixture" style="display:none;">${fixtureHtml}</div>
       <div class="liga-subpanel" id="ligaSubStats" style="display:none;">${statsHtml(l)}</div>
       <div class="liga-subpanel" id="ligaSubPlanteles" style="display:none;"></div>
+      <div class="liga-subpanel" id="ligaSubPremios" style="display:none;">${premiosHtml(l)}</div>
       ` : `
       <div class="empty-state">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg></div>
@@ -1551,6 +1597,7 @@
           detail.querySelector('#ligaSubFixture').style.display = btn.dataset.sub==='fixture' ? 'block' : 'none';
           detail.querySelector('#ligaSubStats').style.display = btn.dataset.sub==='stats' ? 'block' : 'none';
           detail.querySelector('#ligaSubPlanteles').style.display = btn.dataset.sub==='planteles' ? 'block' : 'none';
+          detail.querySelector('#ligaSubPremios').style.display = btn.dataset.sub==='premios' ? 'block' : 'none';
         });
       });
     }
