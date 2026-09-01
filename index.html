@@ -1016,12 +1016,12 @@
         {fecha:3, dia:'Domingo', fechaTxt:'30/08/2026', hora:'23:00', libre:'Agentes Libres', partidos:[
           {l:'Rejunte 40', v:'Fulbo Champeta', h:'23:00', gl:1, gv:0},
           {l:'Cazachilenos FC', v:'Lechonas Gang', h:'23:00', gl:1, gv:2},
-          {l:'Chapecoence', v:'Lento 5', h:'23:00', gl:null, gv:null},
+          {l:'Chapecoence', v:'Lento 5', h:'23:00', gl:3, gv:0},
         ]},
         {fecha:4, dia:'Lunes', fechaTxt:'31/08/2026', hora:'23:00', libre:'Lento 5', partidos:[
           {l:'Lechonas Gang', v:'Rejunte 40', h:'23:00', gl:4, gv:0},
-          {l:'Fulbo Champeta', v:'Agentes Libres', h:'23:00', gl:null, gv:null},
-          {l:'Chapecoence', v:'Cazachilenos FC', h:'23:00', gl:null, gv:null},
+          {l:'Fulbo Champeta', v:'Agentes Libres', h:'23:00', gl:3, gv:0},
+          {l:'Chapecoence', v:'Cazachilenos FC', h:'23:00', gl:2, gv:4},
         ]},
         {fecha:5, dia:'Martes', fechaTxt:'01/09/2026', hora:'23:00', libre:'Cazachilenos FC', partidos:[
           {l:'Rejunte 40', v:'Agentes Libres', h:'23:00', gl:null, gv:null},
@@ -1085,10 +1085,12 @@
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
           {jugador:'C.Robert', equipo:'Chapecoence', cantidad:1},
           {jugador:'M.Rocha', equipo:'Fulbo Champeta', cantidad:1},
-          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:11},
+          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:13},
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:3},
           {jugador:'Bandana', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Lopez', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Titan', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Izuk', equipo:'Rejunte 40', cantidad:1},
           {jugador:'SrFox', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Sibak', equipo:'Rejunte 40', cantidad:1},
@@ -1103,12 +1105,13 @@
         ],
         asistidores:[
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
-          {jugador:'Lopez', equipo:'Cazachilenos FC', cantidad:4},
-          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:2},
+          {jugador:'Lopez', equipo:'Cazachilenos FC', cantidad:6},
+          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:3},
           {jugador:'Kone', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Bandana', equipo:'Cazachilenos FC', cantidad:4},
           {jugador:'Iglesias', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:2},
           {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:4},
@@ -1124,19 +1127,36 @@
           {jugador:'Y.Luna', equipo:'Lento 5', cantidad:1},
           {jugador:'M.Rocha', equipo:'Fulbo Champeta', cantidad:1},
           {jugador:'E.Pela', equipo:'Fulbo Champeta', cantidad:1},
+          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Titan', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Chila', equipo:'Chapecoence', cantidad:1},
         ],
         rojas:[
           // {jugador:'Nombre Apellido', equipo:'Nombre del equipo', cantidad:1},
         ],
         mvp:[
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
-          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:2},
+          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:3},
           {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:2},
           {jugador:'Bananin', equipo:'Rejunte 40', cantidad:1},
         ],
       }
     }
   ];
+  // ---- arma el texto "X equipos · Fecha Y en juego" solo, a partir de los resultados cargados ----
+  function estadoFechasLiga(l){
+    const equiposTxt = Array.isArray(l.equipos) ? `${l.equipos.length} equipos` : (l.meta || '');
+    if(!Array.isArray(l.fixture) || !l.fixture.length) return equiposTxt;
+    const total = l.fixture.length;
+    const jugadas = l.fixture.filter(fecha => fecha.partidos.every(p => p.gl!=null && p.gv!=null)).length;
+    if(jugadas >= total) return `${equiposTxt} · Fixture completo`;
+    if(jugadas === 0) return `${equiposTxt} · Fecha 1 arranca pronto`;
+    const pendiente = l.fixture.find(fecha => fecha.partidos.some(p => p.gl==null || p.gv==null));
+    const nroPendiente = pendiente ? pendiente.fecha : jugadas + 1;
+    return `${equiposTxt} · Fecha ${nroPendiente} en juego (${jugadas} jugada${jugadas===1?'':'s'})`;
+  }
+
   const ligasGrid = document.getElementById('ligasGrid');
   ligas.forEach(l=>{
     const card = document.createElement('button');
@@ -1145,7 +1165,7 @@
       <span class="status ${l.estado}">${l.estadoLabel}</span>
       <h3>${l.nombre}</h3>
       <p>${l.descripcion}</p>
-      <div class="meta">${l.meta}</div>`;
+      <div class="meta">${estadoFechasLiga(l)}</div>`;
     card.addEventListener('click', ()=>showLigaDetail(l));
     ligasGrid.appendChild(card);
   });
