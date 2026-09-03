@@ -615,11 +615,23 @@
   .copy-tabla-btn:hover{background:var(--panel-2);}
 
   .fixture-list{display:flex;flex-direction:column;gap:14px;}
-  .fixture-jornada{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
+  .fixture-jornada{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:0;overflow:hidden;}
+  .fixture-jornada.actual{border-color:var(--accent-dim);box-shadow:0 0 0 1px rgba(79,166,232,.08) inset;}
   .fixture-jornada-head{
+    width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;
     font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:0.3px;
-    color:var(--line);margin-bottom:10px;
+    color:var(--line);padding:13px 16px;margin:0;background:transparent;border:0;cursor:pointer;text-align:left;
   }
+  .fixture-jornada-head:hover{background:var(--panel-2);}
+  .fixture-jornada-title{min-width:0;}
+  .fixture-jornada-head .fixture-chevron{color:var(--muted);font-size:15px;line-height:1;transition:transform .18s ease;flex-shrink:0;}
+  .fixture-jornada.open .fixture-chevron{transform:rotate(180deg);color:var(--accent);}
+  .fixture-jornada-body{padding:0 16px 14px;}
+  .fixture-jornada:not(.open) .fixture-jornada-body{display:none;}
+  .fixture-current-label{display:inline-flex;align-items:center;margin-left:7px;padding:2px 7px;border:1px solid var(--accent-dim);border-radius:999px;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;vertical-align:middle;}
+
+  #mobileBackToTop{display:none;position:fixed;right:16px;bottom:18px;z-index:70;width:44px;height:44px;border-radius:50%;border:1px solid var(--accent-dim);background:rgba(13,20,31,.94);color:var(--accent);font-size:20px;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.28);opacity:0;pointer-events:none;transform:translateY(8px);transition:.18s;}
+  #mobileBackToTop.visible{opacity:1;pointer-events:auto;transform:translateY(0);}
   .fixture-partido{
     display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
     padding:7px 0;font-size:13px;
@@ -687,8 +699,9 @@
     #ligas-detail .section-head h2{font-size:22px;line-height:1.1;}
     #ligas-detail .cupo-block{max-width:none;margin-bottom:18px;}
     #ligas-detail .cupo-label{gap:8px;flex-wrap:wrap;}
-    .fixture-jornada{padding:12px;}
-    .fixture-jornada-head{font-size:12.5px;line-height:1.35;}
+    .fixture-jornada{padding:0;}
+    .fixture-jornada-head{font-size:12.5px;line-height:1.35;padding:12px;}
+    .fixture-jornada-body{padding:0 12px 12px;}
     .fecha-resumen{gap:5px;margin-bottom:8px;}
     .fecha-resumen span{font-size:9.5px;padding:3px 7px;}
     .fixture-partido.con-acciones{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:7px;}
@@ -701,6 +714,7 @@
     .tabla-wrap{-webkit-overflow-scrolling:touch;}
     .plantel-grid{grid-template-columns:1fr;}
     .jugador-stat-grid{grid-template-columns:repeat(2,1fr);}
+    #mobileBackToTop{display:flex;}
   }
   @media (max-width:520px){
     .fixture-action-btn span{display:none;}
@@ -1279,6 +1293,13 @@
     return `${equiposTxt} · Fecha ${nroPendiente} en juego (${jugadas} jugada${jugadas===1?'':'s'})`;
   }
 
+
+  // Primera jornada con al menos un partido pendiente. Si ya terminó la fase regular, usa la última.
+  function fechaActualLiga(l){
+    if(!Array.isArray(l.fixture) || !l.fixture.length) return null;
+    return l.fixture.find(fecha => (fecha.partidos||[]).some(p => p.gl==null || p.gv==null)) || l.fixture[l.fixture.length-1];
+  }
+
   const ligasGrid = document.getElementById('ligasGrid');
   ligas.forEach(l=>{
     const card = document.createElement('button');
@@ -1800,37 +1821,50 @@
       <button class="copy-tabla-btn" type="button" id="copyTablaBtn">📋 Copiar tabla para Discord</button>`;
     })() : '';
 
+    const fechaActual = tieneFixture ? fechaActualLiga(l) : null;
     const fixtureHtml = tieneFixture ? `
       <div class="fixture-list">
-        ${l.fixture.map((fecha, fechaIdx) => `
-          <div class="fixture-jornada">
-            <div class="fixture-jornada-head">Fecha ${fecha.fecha} — ${fecha.dia} ${fecha.fechaTxt}${fecha.hora ? ' · ' + fecha.hora + ' hs' : ''}</div>
-            ${(()=>{ const r = resumenFecha(fecha); return r ? `
-            <div class="fecha-resumen">
-              <span>${r.cantPartidos} partidos</span>
-              <span>${r.golesTotales} goles (${r.promedio} por partido)</span>
-              ${r.goleada && Math.abs(r.goleada.gl - r.goleada.gv) >= 2 ? `<span>🔥 Goleada: ${r.goleada.l} ${r.goleada.gl}-${r.goleada.gv} ${r.goleada.v}</span>` : ''}
-            </div>` : ''; })()}
-            ${fecha.partidos.map((p, partidoIdx) => `
-              <div class="fixture-partido con-acciones">
-                <span class="fp-equipo fp-local">${p.l}</span>
-                <span class="fp-resultado">${p.gl!=null && p.gv!=null ? `${p.gl} - ${p.gv}${p.wo ? ' <span class="fp-wo">W.O.</span>' : ''}` : p.h}</span>
-                <span class="fp-equipo fp-visita">${p.v}</span>
-                <span class="fp-actions">
-                  <button type="button" class="fixture-action-btn calendar-btn" data-fecha-idx="${fechaIdx}" data-partido-idx="${partidoIdx}" title="Agregar a mi calendario">📅 <span>Calendario</span></button>
-                  ${p.gl!=null && p.gv!=null ? `<button type="button" class="fixture-action-btn share-result-btn" data-fecha-idx="${fechaIdx}" data-partido-idx="${partidoIdx}" title="Compartir resultado como imagen">↗ <span>Compartir</span></button>` : ''}
-                </span>
-              </div>`).join('')}
-            <div class="fixture-libre">Libre: ${fecha.libre}</div>
-          </div>`).join('')}
+        ${l.fixture.map((fecha, fechaIdx) => {
+          const esActual = !!fechaActual && fecha.fecha === fechaActual.fecha;
+          return `
+          <div class="fixture-jornada ${esActual ? 'actual open' : ''}" data-fecha="${fecha.fecha}">
+            <button type="button" class="fixture-jornada-head" aria-expanded="${esActual ? 'true' : 'false'}">
+              <span class="fixture-jornada-title">Fecha ${fecha.fecha} — ${fecha.dia} ${fecha.fechaTxt}${fecha.hora ? ' · ' + fecha.hora + ' hs' : ''}${esActual ? '<span class="fixture-current-label">ACTUAL</span>' : ''}</span>
+              <span class="fixture-chevron" aria-hidden="true">⌄</span>
+            </button>
+            <div class="fixture-jornada-body">
+              ${(()=>{ const r = resumenFecha(fecha); return r ? `
+              <div class="fecha-resumen">
+                <span>${r.cantPartidos} partidos</span>
+                <span>${r.golesTotales} goles (${r.promedio} por partido)</span>
+                ${r.goleada && Math.abs(r.goleada.gl - r.goleada.gv) >= 2 ? `<span>🔥 Goleada: ${r.goleada.l} ${r.goleada.gl}-${r.goleada.gv} ${r.goleada.v}</span>` : ''}
+              </div>` : ''; })()}
+              ${fecha.partidos.map((p, partidoIdx) => `
+                <div class="fixture-partido con-acciones">
+                  <span class="fp-equipo fp-local">${p.l}</span>
+                  <span class="fp-resultado">${p.gl!=null && p.gv!=null ? `${p.gl} - ${p.gv}${p.wo ? ' <span class="fp-wo">W.O.</span>' : ''}` : p.h}</span>
+                  <span class="fp-equipo fp-visita">${p.v}</span>
+                  <span class="fp-actions">
+                    <button type="button" class="fixture-action-btn calendar-btn" data-fecha-idx="${fechaIdx}" data-partido-idx="${partidoIdx}" title="Agregar a mi calendario">📅 <span>Calendario</span></button>
+                    ${p.gl!=null && p.gv!=null ? `<button type="button" class="fixture-action-btn share-result-btn" data-fecha-idx="${fechaIdx}" data-partido-idx="${partidoIdx}" title="Compartir resultado como imagen">↗ <span>Compartir</span></button>` : ''}
+                  </span>
+                </div>`).join('')}
+              <div class="fixture-libre">Libre: ${fecha.libre}</div>
+            </div>
+          </div>`;
+        }).join('')}
         ${Array.isArray(l.playoffs) && l.playoffs.length ? `
           <div class="fixture-jornada fixture-playoffs">
-            <div class="fixture-jornada-head">Fase final</div>
-            ${l.playoffs.map(r => `
-              <div class="fixture-partido fixture-partido-tbd">
-                <span class="fp-equipo">${r.ronda}</span>
-                <span class="fp-resultado">${r.dia} ${r.fechaTxt} · ${r.h}</span>
-              </div>`).join('')}
+            <button type="button" class="fixture-jornada-head" aria-expanded="false">
+              <span class="fixture-jornada-title">Fase final</span><span class="fixture-chevron" aria-hidden="true">⌄</span>
+            </button>
+            <div class="fixture-jornada-body">
+              ${l.playoffs.map(r => `
+                <div class="fixture-partido fixture-partido-tbd">
+                  <span class="fp-equipo">${r.ronda}</span>
+                  <span class="fp-resultado">${r.dia} ${r.fechaTxt} · ${r.h}</span>
+                </div>`).join('')}
+            </div>
           </div>` : ''}
       </div>` : '';
 
@@ -1897,6 +1931,16 @@
         });
       });
 
+      detail.querySelectorAll('.fixture-jornada-head').forEach(head=>{
+        head.addEventListener('click',()=>{
+          const jornada=head.closest('.fixture-jornada');
+          if(!jornada) return;
+          const abrir=!jornada.classList.contains('open');
+          jornada.classList.toggle('open',abrir);
+          head.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+        });
+      });
+
       const copyBtn = detail.querySelector('#copyTablaBtn');
       if(copyBtn){
         copyBtn.addEventListener('click', ()=>{
@@ -1949,6 +1993,15 @@
         detail.querySelectorAll('.liga-subtab-btn').forEach(b=>b.classList.toggle('active', b.dataset.sub===sub));
         const mobileSelect=detail.querySelector('#ligaMobileSelect');
         if(mobileSelect && mobileSelect.value!==sub) mobileSelect.value=sub;
+        if(sub==='fixture') {
+          const actual=detail.querySelector('#ligaSubFixture .fixture-jornada.actual');
+          if(actual){
+            actual.classList.add('open');
+            const head=actual.querySelector('.fixture-jornada-head');
+            if(head) head.setAttribute('aria-expanded','true');
+            requestAnimationFrame(()=>actual.scrollIntoView({behavior:'smooth',block:'start'}));
+          }
+        }
       }
 
       detail.querySelectorAll('.liga-subtab-btn').forEach(btn=>{
@@ -2306,6 +2359,25 @@
       receipt.scrollIntoView({behavior:'smooth', block:'nearest'});
     });
   });
+
+  // ===== VOLVER ARRIBA (SOLO MOBILE) =====
+  (function(){
+    const btn=document.createElement('button');
+    btn.id='mobileBackToTop';
+    btn.type='button';
+    btn.setAttribute('aria-label','Volver arriba');
+    btn.title='Volver arriba';
+    btn.textContent='↑';
+    document.body.appendChild(btn);
+    const actualizar=()=>{
+      const mobile=window.matchMedia('(max-width:760px)').matches;
+      btn.classList.toggle('visible', mobile && window.scrollY>520);
+    };
+    window.addEventListener('scroll',actualizar,{passive:true});
+    window.addEventListener('resize',actualizar);
+    btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+    actualizar();
+  })();
 </script>
 
 <a class="float-discord" href="https://discord.gg/wMeWWEmbNd" target="_blank" rel="noopener" title="Unite a nuestro Discord">
