@@ -336,6 +336,9 @@
 
   .goals-cols{display:grid;grid-template-columns:1fr 1fr;gap:36px;}
   .rank-list{background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .rank-collapsible.collapsed .rank-extra{display:none;}
+  .rank-toggle{width:100%;margin-top:8px;padding:9px 12px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:border-color .15s,color .15s,background .15s;}
+  .rank-toggle:hover{border-color:var(--accent);color:var(--accent);background:rgba(255,255,255,.02);}
   .rank-row{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--border);}
   .rank-row:last-child{border-bottom:none;}
   .rank-row .n{
@@ -892,7 +895,7 @@
 
     <div class="search-wrap">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="histSearch" placeholder="Buscar equipo... (ej: LechonasGang)">
+      <input type="text" id="histSearch" placeholder="Buscar equipo... (ej: Lechonas Gang)">
     </div>
     <p class="search-empty" id="histSearchEmpty" style="display:none;">No encontramos ningún equipo con ese nombre en el historial.</p>
 
@@ -1606,17 +1609,20 @@
         return `<div><h3 class="hist-subhead" style="margin-top:24px;">${titulo}</h3><div class="stats-empty">Todavía no cargamos estos datos.</div></div>`;
       }
       const ordenado = items.slice().sort((a,b)=> b.cantidad - a.cantidad);
+      const plegable = titulo === 'Goleadores' || titulo === 'Asistidores';
+      const tieneMas = plegable && ordenado.length > 5;
       return `
         <div>
           <h3 class="hist-subhead" style="margin-top:24px;">${titulo}</h3>
-          <div class="rank-list">
+          <div class="rank-list ${tieneMas ? 'rank-collapsible collapsed' : ''}">
             ${ordenado.map((it,i)=>`
-            <div class="rank-row ${rowClass||''}">
+            <div class="rank-row ${rowClass||''}${tieneMas && i >= 5 ? ' rank-extra' : ''}">
               <span class="n">${i+1}</span>
               <span class="team">${it.jugador}${it.equipo ? ` <span style="color:var(--muted);">· ${it.equipo}</span>` : ''}</span>
               <span class="val">${it.cantidad}${valSuffix||''}</span>
             </div>`).join('')}
           </div>
+          ${tieneMas ? `<button type="button" class="rank-toggle" aria-expanded="false">+ Ver todos</button>` : ''}
         </div>`;
     }
 
@@ -1964,24 +1970,24 @@
   const relampagos = [
     {
       id:'r1', nombre:'Relámpago — Lechonas Gang campeón', estado:'finalizado', estadoLabel:'Finalizado',
-      descripcion:'Semis y final del relámpago. LechonasGang se quedó con el título en una final durísima.', meta:'Relámpago a 4 equipos, arrancó directo desde semis',
+      descripcion:'Semis y final del relámpago. Lechonas Gang se quedó con el título en una final durísima.', meta:'Relámpago a 4 equipos, arrancó directo desde semis',
       bracket:{
         semis:[
-          {a:'EstadioConLinton', ag:3, b:'Rejunte40', bg:0},
-          {a:'JogoComAura', ag:4, b:'LechonasGang', bg:6},
+          {a:'EstadioConLinton', ag:3, b:'Rejunte 40', bg:0},
+          {a:'JogoComAura', ag:4, b:'Lechonas Gang', bg:6},
         ],
-        final:[{a:'EstadioConLinton', ag:6, b:'LechonasGang', bg:7}]
+        final:[{a:'EstadioConLinton', ag:6, b:'Lechonas Gang', bg:7}]
       }
     },
     {
-      id:'r2', nombre:'Relámpago — Chapecoense campeón', estado:'finalizado', estadoLabel:'Finalizado',
-      descripcion:'Chapecoense arrasó en la final tras pasar dos semis parejas.', meta:'Relámpago a 4 equipos, arrancó directo desde semis',
+      id:'r2', nombre:'Relámpago — Chapecoence campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      descripcion:'Chapecoence arrasó en la final tras pasar dos semis parejas.', meta:'Relámpago a 4 equipos, arrancó directo desde semis',
       bracket:{
         semis:[
-          {a:'Lento5 FC', ag:5, b:'ELN FC', bg:3},
-          {a:'Chapecoense', ag:3, b:'Antipolis', bg:0},
+          {a:'Lento 5', ag:5, b:'ELN FC', bg:3},
+          {a:'Chapecoence', ag:3, b:'Antipolis', bg:0},
         ],
-        final:[{a:'Lento5 FC', ag:0, b:'Chapecoense', bg:9}]
+        final:[{a:'Lento 5', ag:0, b:'Chapecoence', bg:9}]
       }
     },
     {
@@ -2003,19 +2009,19 @@
     },
     {
       id:'r4', nombre:'Relámpago — Lechonas Gang bicampeón', estado:'finalizado', estadoLabel:'Finalizado',
-      descripcion:'El más parejo hasta ahora en cuartos, pero LechonasGang se despachó con un baile en la final.', meta:'Relámpago a 8 equipos, desde cuartos de final',
+      descripcion:'El más parejo hasta ahora en cuartos, pero Lechonas Gang se despachó con un baile en la final.', meta:'Relámpago a 8 equipos, desde cuartos de final',
       bracket:{
         cuartos:[
-          {a:'JogoComAura', ag:1, b:'FulboChampeta', bg:3},
-          {a:'Cazachilenos', ag:3, b:'Cobres', bg:0},
-          {a:'LechonasGang', ag:3, b:'ELN FC', bg:0},
-          {a:'Chapecoense', ag:4, b:'Cartonsito FC', bg:0},
+          {a:'JogoComAura', ag:1, b:'Fulbo Champeta', bg:3},
+          {a:'Cazachilenos FC', ag:3, b:'Cobres', bg:0},
+          {a:'Lechonas Gang', ag:3, b:'ELN FC', bg:0},
+          {a:'Chapecoence', ag:4, b:'Cartonsito FC', bg:0},
         ],
         semis:[
-          {a:'FulboChampeta', ag:0, b:'Cazachilenos', bg:1},
-          {a:'LechonasGang', ag:5, b:'Chapecoense', bg:2},
+          {a:'Fulbo Champeta', ag:0, b:'Cazachilenos FC', bg:1},
+          {a:'Lechonas Gang', ag:5, b:'Chapecoence', bg:2},
         ],
-        final:[{a:'LechonasGang', ag:12, b:'Cazachilenos', bg:4}]
+        final:[{a:'Lechonas Gang', ag:12, b:'Cazachilenos FC', bg:4}]
       }
     },
   ];
@@ -2070,8 +2076,17 @@
   // ---- alias de nombres de equipo (mismo club, distinta forma de escribirlo entre relámpagos y ligas) ----
   const ALIAS_EQUIPO = {
     'Rejunte40':'Rejunte 40',
+    'Rejunte 40':'Rejunte 40',
     'LechonasGang':'Lechonas Gang',
+    'Lechonas Gang':'Lechonas Gang',
     'Chapecoense':'Chapecoence',
+    'Chapecoence':'Chapecoence',
+    'FulboChampeta':'Fulbo Champeta',
+    'Fulbo Champeta':'Fulbo Champeta',
+    'Cazachilenos':'Cazachilenos FC',
+    'Cazachilenos FC':'Cazachilenos FC',
+    'Lento5 FC':'Lento 5',
+    'Lento 5':'Lento 5',
   };
   function normEquipo(nombre){
     return ALIAS_EQUIPO[nombre] || nombre;
@@ -2098,10 +2113,10 @@
       });
       const final = r.bracket.final && r.bracket.final[0];
       if(final && final.ag!==null && final.bg!==null){
-        const winner = final.ag > final.bg ? final.a : final.b;
+        const winner = normEquipo(final.ag > final.bg ? final.a : final.b);
         const wg = final.ag > final.bg ? final.ag : final.bg;
         const lg = final.ag > final.bg ? final.bg : final.ag;
-        const loser = final.ag > final.bg ? final.b : final.a;
+        const loser = normEquipo(final.ag > final.bg ? final.b : final.a);
         const row = document.createElement('div');
         row.className = 'champ-row';
         row.innerHTML = `
@@ -2131,19 +2146,42 @@
 
     teamStats.slice().sort((a,b)=>b.gf-a.gf).forEach((s,i)=>{
       const row = document.createElement('div');
-      row.className = 'rank-row';
+      row.className = `rank-row${i >= 5 ? ' rank-extra' : ''}`;
       row.innerHTML = `<span class="n">${i+1}</span><span class="team">${s.team}</span><span class="val">${s.gf}</span>`;
       golesFavorList.appendChild(row);
     });
 
     teamStats.slice().sort((a,b)=>b.gc-a.gc).forEach((s,i)=>{
       const row = document.createElement('div');
-      row.className = 'rank-row contra';
+      row.className = `rank-row contra${i >= 5 ? ' rank-extra' : ''}`;
       row.innerHTML = `<span class="n">${i+1}</span><span class="team">${s.team}</span><span class="val">${s.gc}</span>`;
       golesContraList.appendChild(row);
     });
+
+    [golesFavorList, golesContraList].forEach(list=>{
+      if(list.children.length <= 5) return;
+      list.classList.add('rank-collapsible','collapsed');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'rank-toggle';
+      btn.setAttribute('aria-expanded','false');
+      btn.textContent = '+ Ver todos';
+      list.insertAdjacentElement('afterend', btn);
+    });
   }
   buildHistorial();
+
+  // ---- Desplegar / plegar rankings largos ----
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.rank-toggle');
+    if(!btn) return;
+    const list = btn.previousElementSibling;
+    if(!list || !list.classList.contains('rank-collapsible')) return;
+    const estabaPlegada = list.classList.contains('collapsed');
+    list.classList.toggle('collapsed');
+    btn.textContent = estabaPlegada ? '− Ver menos' : '+ Ver todos';
+    btn.setAttribute('aria-expanded', estabaPlegada ? 'true' : 'false');
+  });
 
   // ---- Buscador rápido de equipo en Historial ----
   const histSearch = document.getElementById('histSearch');
@@ -2151,6 +2189,23 @@
   histSearch.addEventListener('input', ()=>{
     const q = histSearch.value.trim().toLowerCase();
     let anyVisible = false;
+
+    ['#golesFavorList', '#golesContraList'].forEach(sel=>{
+      const list = document.querySelector(sel);
+      if(!list) return;
+      const btn = list.nextElementSibling && list.nextElementSibling.classList.contains('rank-toggle') ? list.nextElementSibling : null;
+      if(q){
+        list.classList.remove('collapsed');
+        if(btn) btn.style.display = 'none';
+      }else{
+        if(list.classList.contains('rank-collapsible')) list.classList.add('collapsed');
+        if(btn){
+          btn.style.display = '';
+          btn.textContent = '+ Ver todos';
+          btn.setAttribute('aria-expanded','false');
+        }
+      }
+    });
 
     document.querySelectorAll('#campeonesList .champ-row').forEach(row=>{
       const team = row.querySelector('.team').textContent.toLowerCase();
@@ -2173,7 +2228,7 @@
 
   // ---- ARGENCOINS: saldo por equipo ----
   const coinBalances = [
-    // { team:'LechonasGang', balance:8 },
+    // { team:'Lechonas Gang', balance:8 },
   ];
   const coinBalanceList = document.getElementById('coinBalanceList');
   const coinBalanceEmpty = document.getElementById('coinBalanceEmpty');
