@@ -407,6 +407,26 @@
   .premio-bonus p{margin:0;color:var(--line);font-size:13px;line-height:1.55;}
 
   /* ===== JUGADORES (perfil) ===== */
+  .stats-clickable{background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;}
+  .stats-clickable:hover{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
+  .stats-team-link{color:var(--muted);font-size:inherit;}
+  .stats-team-link:hover{color:var(--accent);}
+  .team-profile-link{background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;cursor:pointer;}
+  .team-profile-link:hover{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
+  .table-team-link{font-family:'Oswald',sans-serif;font-weight:500;text-align:left;}
+  .fixture-team-link{font-family:'Oswald',sans-serif;font-weight:600;}
+  .stats-profile-back{margin-bottom:14px;}
+  .team-detail{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px 22px;}
+  .team-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px;}
+  .team-detail-head h3{margin:0;font-family:'Oswald',sans-serif;font-size:21px;font-weight:600;color:var(--line);}
+  .team-detail-head .pos{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);border:1px solid var(--accent-dim);border-radius:999px;padding:4px 8px;white-space:nowrap;}
+  .team-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:10px;margin-bottom:14px;}
+  .team-stat-card{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:11px 10px;text-align:center;}
+  .team-stat-card .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:20px;color:var(--accent);}
+  .team-stat-card .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+  .team-detail-extra{border-top:1px solid var(--border);padding-top:13px;display:grid;gap:8px;font-size:13px;color:var(--muted);}
+  .team-detail-extra strong{color:var(--line);font-weight:600;}
+  .team-form-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .jugadores-search{margin-bottom:14px;}
   .jugadores-search input{
     width:100%;background:var(--panel);border:1px solid var(--border);border-radius:8px;
@@ -1052,6 +1072,135 @@
   }
   tabs.forEach(btn=>btn.addEventListener('click', ()=>goTab(btn.dataset.tab)));
 
+
+  // ---- IDENTIDADES INTERNAS ----
+  // Los nombres visibles siguen siendo los de siempre. Estos IDs estables evitan que
+  // variantes como "FulboChampeta" / "Fulbo Champeta" creen clubes distintos.
+  const EQUIPOS_REGISTRY = [
+    {id:'rejunte_40', nombre:'Rejunte 40', aliases:['Rejunte40']},
+    {id:'lento_5', nombre:'Lento 5', aliases:['Lento5','Lento5 FC','Lento 5 FC']},
+    {id:'chapecoence', nombre:'Chapecoence', aliases:['Chapecoense']},
+    {id:'agentes_libres', nombre:'Agentes Libres', aliases:['AgentesLibres']},
+    {id:'lechonas_gang', nombre:'Lechonas Gang', aliases:['LechonasGang']},
+    {id:'fulbo_champeta', nombre:'Fulbo Champeta', aliases:['FulboChampeta']},
+    {id:'cazachilenos_fc', nombre:'Cazachilenos FC', aliases:['Cazachilenos','CazachilenosFC']},
+  ];
+
+  const EQUIPO_POR_ID = Object.create(null);
+  const EQUIPO_ID_POR_ALIAS = Object.create(null);
+  const JUGADOR_NOMBRE_POR_ID = Object.create(null);
+  const JUGADOR_ID_POR_ALIAS = Object.create(null);
+
+  function claveIdentidad(valor){
+    return String(valor ?? '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .toLowerCase().trim().replace(/[^a-z0-9]+/g,'');
+  }
+
+  function registrarEquipo(def){
+    EQUIPO_POR_ID[def.id] = {id:def.id, nombre:def.nombre};
+    [def.nombre, ...(def.aliases||[])].forEach(alias=>{
+      const k = claveIdentidad(alias);
+      if(k) EQUIPO_ID_POR_ALIAS[k] = def.id;
+    });
+  }
+  EQUIPOS_REGISTRY.forEach(registrarEquipo);
+
+  function getEquipoId(nombre){
+    if(nombre == null || nombre === '' || nombre === '?') return null;
+    const k = claveIdentidad(nombre);
+    if(EQUIPO_ID_POR_ALIAS[k]) return EQUIPO_ID_POR_ALIAS[k];
+    // Para clubes nuevos se crea un ID determinístico. La primera escritura queda como nombre visible.
+    const id = `club_${k || 'sin_nombre'}`;
+    if(!EQUIPO_POR_ID[id]){
+      EQUIPO_POR_ID[id] = {id, nombre:String(nombre).trim()};
+      EQUIPO_ID_POR_ALIAS[k] = id;
+    }
+    return id;
+  }
+
+  function getEquipoNombre(id, fallback=''){
+    return (id && EQUIPO_POR_ID[id] && EQUIPO_POR_ID[id].nombre) || fallback || '';
+  }
+
+  function nombreEquipoCanonico(nombre){
+    const id = getEquipoId(nombre);
+    return id ? getEquipoNombre(id, nombre) : nombre;
+  }
+
+  function getJugadorId(nombre){
+    if(nombre == null || String(nombre).trim() === '') return '';
+    const k = claveIdentidad(nombre);
+    if(JUGADOR_ID_POR_ALIAS[k]) return JUGADOR_ID_POR_ALIAS[k];
+    const id = `jugador_${k || 'sin_nombre'}`;
+    JUGADOR_ID_POR_ALIAS[k] = id;
+    if(!JUGADOR_NOMBRE_POR_ID[id]) JUGADOR_NOMBRE_POR_ID[id] = String(nombre).trim();
+    return id;
+  }
+
+  // Permite que en el futuro un cambio de username siga apuntando al mismo jugador.
+  // Ejemplo: registrarAliasJugador('NuevoNombre', 'jugador_nyx1887');
+  function registrarAliasJugador(alias, jugadorId){
+    const k = claveIdentidad(alias);
+    if(k && jugadorId) JUGADOR_ID_POR_ALIAS[k] = jugadorId;
+  }
+
+  function prepararLigaIds(l){
+    l.equipos = (l.equipos||[]).map(eq=>nombreEquipoCanonico(eq));
+    l.equiposIds = l.equipos.map(getEquipoId);
+
+    if(l.arqueros){
+      const canon = {};
+      l.arquerosPorId = {};
+      Object.entries(l.arqueros).forEach(([eq, arquero])=>{
+        const id = getEquipoId(eq);
+        const nombre = getEquipoNombre(id, eq);
+        canon[nombre] = arquero;
+        if(id) l.arquerosPorId[id] = arquero;
+      });
+      l.arqueros = canon;
+    }
+
+    (l.planteles||[]).forEach(p=>{
+      p.equipoId = getEquipoId(p.equipo);
+      p.equipo = getEquipoNombre(p.equipoId, p.equipo);
+      p.capitanId = getJugadorId(p.capitan);
+      p.subcapitanId = getJugadorId(p.subcapitan);
+      p.jugadorIds = (p.jugadores||[]).map(getJugadorId);
+    });
+
+    (l.fixture||[]).forEach(fecha=>{
+      fecha.libreId = getEquipoId(fecha.libre);
+      if(fecha.libreId) fecha.libre = getEquipoNombre(fecha.libreId, fecha.libre);
+      (fecha.partidos||[]).forEach(p=>{
+        p.lId = getEquipoId(p.l);
+        p.vId = getEquipoId(p.v);
+        p.l = getEquipoNombre(p.lId, p.l);
+        p.v = getEquipoNombre(p.vId, p.v);
+      });
+    });
+
+    Object.values(l.estadisticas||{}).forEach(lista=>{
+      if(!Array.isArray(lista)) return;
+      lista.forEach(x=>{
+        x.jugadorId = getJugadorId(x.jugador);
+        x.equipoId = getEquipoId(x.equipo);
+        if(x.equipoId) x.equipo = getEquipoNombre(x.equipoId, x.equipo);
+      });
+    });
+  }
+
+  function prepararRelampagoIds(r){
+    Object.values(r.bracket||{}).forEach(round=>{
+      (round||[]).forEach(m=>{
+        m.aId = getEquipoId(m.a);
+        m.bId = getEquipoId(m.b);
+        if(m.aId) m.a = getEquipoNombre(m.aId, m.a);
+        if(m.bId) m.b = getEquipoNombre(m.bId, m.b);
+      });
+    });
+  }
+
   // ---- LIGAS ----
   const ligas = [
     {
@@ -1280,6 +1429,7 @@
       }
     }
   ];
+  ligas.forEach(prepararLigaIds);
   // ---- arma el texto "X equipos · Fecha Y en juego" solo, a partir de los resultados cargados ----
   function estadoFechasLiga(l){
     const equiposTxt = Array.isArray(l.equipos) ? `${l.equipos.length} equipos` : (l.meta || '');
@@ -1315,11 +1465,17 @@
   // ---- calcula la tabla de posiciones de una liga a partir de su fixture ----
   function calcularTablaLiga(l){
     const t = {};
-    l.equipos.forEach(eq=>{ t[eq] = {equipo:eq, pj:0,pg:0,pe:0,pp:0,gf:0,gc:0,dg:0,pts:0}; });
-    l.fixture.forEach(fecha=>{
-      fecha.partidos.forEach(p=>{
-        if(p.gl==null || p.gv==null) return; // partido todavía no jugado
-        const L = t[p.l], V = t[p.v];
+    (l.equipos||[]).forEach(eq=>{
+      const id = getEquipoId(eq);
+      if(!id) return;
+      t[id] = {equipo:getEquipoNombre(id, eq), equipoId:id, pj:0,pg:0,pe:0,pp:0,gf:0,gc:0,dg:0,pts:0};
+    });
+    (l.fixture||[]).forEach(fecha=>{
+      (fecha.partidos||[]).forEach(p=>{
+        if(p.gl==null || p.gv==null) return;
+        const lId = p.lId || getEquipoId(p.l);
+        const vId = p.vId || getEquipoId(p.v);
+        const L = t[lId], V = t[vId];
         if(!L || !V) return;
         L.pj++; V.pj++;
         L.gf += p.gl; L.gc += p.gv;
@@ -1330,20 +1486,22 @@
       });
     });
     Object.values(t).forEach(x=> x.dg = x.gf - x.gc);
-    function h2h(a, b){ // diferencia de gol entre a y b en los partidos jugados entre sí
+    function h2h(aId, bId){
       let dif = 0;
-      l.fixture.forEach(fecha=> fecha.partidos.forEach(p=>{
+      (l.fixture||[]).forEach(fecha=> (fecha.partidos||[]).forEach(p=>{
         if(p.gl==null || p.gv==null) return;
-        if(p.l===a && p.v===b) dif += (p.gl - p.gv);
-        if(p.l===b && p.v===a) dif += (p.gv - p.gl);
+        const lId = p.lId || getEquipoId(p.l);
+        const vId = p.vId || getEquipoId(p.v);
+        if(lId===aId && vId===bId) dif += (p.gl - p.gv);
+        if(lId===bId && vId===aId) dif += (p.gv - p.gl);
       }));
       return dif;
     }
     return Object.values(t).sort((x,y)=>{
-      if(y.pts !== x.pts) return y.pts - x.pts;      // 1. puntos
-      if(y.dg  !== x.dg)  return y.dg  - x.dg;        // 2. diferencia de gol
-      if(y.gf  !== x.gf)  return y.gf  - x.gf;        // 3. goles a favor
-      return h2h(x.equipo, y.equipo);                 // 4. resultado entre sí
+      if(y.pts !== x.pts) return y.pts - x.pts;
+      if(y.dg  !== x.dg)  return y.dg  - x.dg;
+      if(y.gf  !== x.gf)  return y.gf  - x.gf;
+      return h2h(x.equipoId, y.equipoId);
     });
   }
 
@@ -1351,40 +1509,49 @@
   // ---- cantidad de partidos que cada equipo terminó sin recibir goles (clean sheets, no cuentan los W.O.) ----
   function calcularVallasInvictas(l){
     const conteo = {};
-    l.equipos.forEach(eq => conteo[eq] = 0);
-    l.fixture.forEach(fecha=>{
-      fecha.partidos.forEach(p=>{
+    (l.equipos||[]).forEach(eq=>{
+      const id = getEquipoId(eq);
+      if(id) conteo[id] = 0;
+    });
+    (l.fixture||[]).forEach(fecha=>{
+      (fecha.partidos||[]).forEach(p=>{
         if(p.gl==null || p.gv==null) return;
-        if(conteo[p.l] !== undefined && p.gv === 0) conteo[p.l]++;
-        if(conteo[p.v] !== undefined && p.gl === 0) conteo[p.v]++;
+        const lId = p.lId || getEquipoId(p.l);
+        const vId = p.vId || getEquipoId(p.v);
+        if(conteo[lId] !== undefined && p.gv === 0) conteo[lId]++;
+        if(conteo[vId] !== undefined && p.gl === 0) conteo[vId]++;
       });
     });
     return Object.entries(conteo)
-      .map(([equipo, vallas]) => ({equipo, vallas}))
+      .map(([equipoId, vallas]) => ({equipoId, equipo:getEquipoNombre(equipoId), vallas}))
       .filter(x => x.vallas > 0)
       .sort((a,b) => b.vallas - a.vallas);
   }
 
   function calcularRachas(l){
     const historial = {};
-    l.equipos.forEach(eq => historial[eq] = []);
-    const fechasOrdenadas = l.fixture.slice().sort((a,b)=> a.fecha - b.fecha);
+    (l.equipos||[]).forEach(eq=>{
+      const id=getEquipoId(eq);
+      if(id) historial[id]=[];
+    });
+    const fechasOrdenadas = (l.fixture||[]).slice().sort((a,b)=> a.fecha - b.fecha);
     fechasOrdenadas.forEach(fecha=>{
-      fecha.partidos.forEach(p=>{
+      (fecha.partidos||[]).forEach(p=>{
         if(p.gl==null || p.gv==null) return;
-        if(!historial[p.l] || !historial[p.v]) return;
-        if(p.gl > p.gv){ historial[p.l].push('G'); historial[p.v].push('P'); }
-        else if(p.gl < p.gv){ historial[p.v].push('G'); historial[p.l].push('P'); }
-        else { historial[p.l].push('E'); historial[p.v].push('E'); }
+        const lId=p.lId||getEquipoId(p.l), vId=p.vId||getEquipoId(p.v);
+        if(!historial[lId] || !historial[vId]) return;
+        if(p.gl > p.gv){ historial[lId].push('G'); historial[vId].push('P'); }
+        else if(p.gl < p.gv){ historial[vId].push('G'); historial[lId].push('P'); }
+        else { historial[lId].push('E'); historial[vId].push('E'); }
       });
     });
     const rachas = {};
-    Object.entries(historial).forEach(([eq, resultados])=>{
-      if(!resultados.length){ rachas[eq] = null; return; }
+    Object.entries(historial).forEach(([id, resultados])=>{
+      if(!resultados.length){ rachas[id] = null; return; }
       const ultimo = resultados[resultados.length - 1];
       let cant = 0;
       for(let i = resultados.length - 1; i >= 0 && resultados[i] === ultimo; i--) cant++;
-      rachas[eq] = {tipo: ultimo, cant};
+      rachas[id] = {tipo: ultimo, cant};
     });
     return rachas;
   }
@@ -1400,17 +1567,22 @@
   // ---- forma reciente: últimos cinco resultados de cada equipo (del más antiguo al más reciente) ----
   function calcularFormaReciente(l){
     const historial = {};
-    (l.equipos||[]).forEach(eq => historial[eq] = []);
+    (l.equipos||[]).forEach(eq=>{
+      const id=getEquipoId(eq);
+      if(id) historial[id]=[];
+    });
     (l.fixture||[]).slice().sort((a,b)=>a.fecha-b.fecha).forEach(fecha=>{
       (fecha.partidos||[]).forEach(p=>{
-        if(p.gl==null || p.gv==null || !historial[p.l] || !historial[p.v]) return;
-        if(p.gl > p.gv){ historial[p.l].push('G'); historial[p.v].push('P'); }
-        else if(p.gl < p.gv){ historial[p.l].push('P'); historial[p.v].push('G'); }
-        else { historial[p.l].push('E'); historial[p.v].push('E'); }
+        if(p.gl==null || p.gv==null) return;
+        const lId=p.lId||getEquipoId(p.l), vId=p.vId||getEquipoId(p.v);
+        if(!historial[lId] || !historial[vId]) return;
+        if(p.gl > p.gv){ historial[lId].push('G'); historial[vId].push('P'); }
+        else if(p.gl < p.gv){ historial[lId].push('P'); historial[vId].push('G'); }
+        else { historial[lId].push('E'); historial[vId].push('E'); }
       });
     });
     const out = {};
-    Object.entries(historial).forEach(([eq,res])=> out[eq] = res.slice(-5));
+    Object.entries(historial).forEach(([id,res])=> out[id] = res.slice(-5));
     return out;
   }
 
@@ -1528,22 +1700,24 @@
   // sumando sus goles/asistencias/tarjetas/MVPs (case-insensitive por si se tipeó distinto en cada carga).
   function buildJugadoresIndex(l){
     const map = {};
-    function ensure(nombre, equipo){
-      const key = String(nombre).trim().toLowerCase();
-      if(!map[key]) map[key] = {nombre:String(nombre).trim(), equipo:equipo||'', goles:0, asistencias:0, amarillas:0, rojas:0, mvp:0};
-      if(equipo && !map[key].equipo) map[key].equipo = equipo;
+    function ensure(nombre, equipo, jugadorId, equipoId){
+      const key = jugadorId || getJugadorId(nombre);
+      const eqId = equipoId || getEquipoId(equipo);
+      const eqNombre = eqId ? getEquipoNombre(eqId, equipo) : (equipo||'');
+      if(!map[key]) map[key] = {id:key, nombre:String(nombre).trim(), equipo:eqNombre, equipoId:eqId||null, goles:0, asistencias:0, amarillas:0, rojas:0, mvp:0};
+      if(eqNombre && !map[key].equipo){ map[key].equipo = eqNombre; map[key].equipoId = eqId||null; }
       return map[key];
     }
     const e = l.estadisticas || {};
-    (e.goleadores||[]).forEach(x=> ensure(x.jugador, x.equipo).goles += x.cantidad);
-    (e.asistidores||[]).forEach(x=> ensure(x.jugador, x.equipo).asistencias += x.cantidad);
-    (e.amarillas||[]).forEach(x=> ensure(x.jugador, x.equipo).amarillas += x.cantidad);
-    (e.rojas||[]).forEach(x=> ensure(x.jugador, x.equipo).rojas += x.cantidad);
-    (e.mvp||[]).forEach(x=> ensure(x.jugador, x.equipo).mvp += x.cantidad);
+    (e.goleadores||[]).forEach(x=> ensure(x.jugador, x.equipo, x.jugadorId, x.equipoId).goles += x.cantidad);
+    (e.asistidores||[]).forEach(x=> ensure(x.jugador, x.equipo, x.jugadorId, x.equipoId).asistencias += x.cantidad);
+    (e.amarillas||[]).forEach(x=> ensure(x.jugador, x.equipo, x.jugadorId, x.equipoId).amarillas += x.cantidad);
+    (e.rojas||[]).forEach(x=> ensure(x.jugador, x.equipo, x.jugadorId, x.equipoId).rojas += x.cantidad);
+    (e.mvp||[]).forEach(x=> ensure(x.jugador, x.equipo, x.jugadorId, x.equipoId).mvp += x.cantidad);
     (l.planteles||[]).forEach(p=>{
-      ensure(p.capitan, p.equipo);
-      ensure(p.subcapitan, p.equipo);
-      (p.jugadores||[]).forEach(j=> ensure(j, p.equipo));
+      ensure(p.capitan, p.equipo, p.capitanId, p.equipoId);
+      ensure(p.subcapitan, p.equipo, p.subcapitanId, p.equipoId);
+      (p.jugadores||[]).forEach((j,i)=> ensure(j, p.equipo, p.jugadorIds && p.jugadorIds[i], p.equipoId));
     });
     return Object.values(map).sort((a,b)=>{
       const totA = a.goles + a.asistencias, totB = b.goles + b.asistencias;
@@ -1566,6 +1740,63 @@
           <div class="jugador-stat-card"><div class="num">${j.amarillas}</div><div class="lbl">Amarillas</div></div>
           <div class="jugador-stat-card"><div class="num">${j.rojas}</div><div class="lbl">Rojas</div></div>
           <div class="jugador-stat-card"><div class="num">${j.mvp}</div><div class="lbl">MVPs</div></div>
+        </div>
+      </div>`;
+  }
+
+
+  function jugadorDetailStatsHtml(j){
+    return `
+      <button class="back-btn stats-profile-back" data-back="stats">← Volver a estadísticas</button>
+      <div class="jugador-detail">
+        <div class="jugador-detail-head">
+          <h3>${j.nombre}</h3>
+          <span>${j.equipo || 'Sin equipo asignado'}</span>
+        </div>
+        <div class="jugador-stat-grid">
+          <div class="jugador-stat-card"><div class="num">${j.goles}</div><div class="lbl">Goles</div></div>
+          <div class="jugador-stat-card"><div class="num">${j.asistencias}</div><div class="lbl">Asistencias</div></div>
+          <div class="jugador-stat-card"><div class="num">${j.amarillas}</div><div class="lbl">Amarillas</div></div>
+          <div class="jugador-stat-card"><div class="num">${j.rojas}</div><div class="lbl">Rojas</div></div>
+          <div class="jugador-stat-card"><div class="num">${j.mvp}</div><div class="lbl">MVPs</div></div>
+        </div>
+      </div>`;
+  }
+
+  function teamDetailHtml(l, equipoId, backSub='stats'){
+    const tabla = calcularTablaLiga(l);
+    const idx = tabla.findIndex(x => x.equipoId === equipoId);
+    const f = idx >= 0 ? tabla[idx] : null;
+    const nombre = getEquipoNombre(equipoId);
+    const forma = calcularFormaReciente(l)[equipoId] || [];
+    const inv = calcularVallasInvictas(l).find(x => x.equipoId === equipoId);
+    const plantel = (l.planteles||[]).find(p => (p.equipoId || getEquipoId(p.equipo)) === equipoId);
+    const e = l.estadisticas || {};
+    const goleadores = (e.goleadores||[]).filter(x => (x.equipoId || getEquipoId(x.equipo)) === equipoId).slice().sort((a,b)=>b.cantidad-a.cantidad);
+    const asistidores = (e.asistidores||[]).filter(x => (x.equipoId || getEquipoId(x.equipo)) === equipoId).slice().sort((a,b)=>b.cantidad-a.cantidad);
+    const goleador = goleadores[0];
+    const asistidor = asistidores[0];
+    return `
+      <button class="back-btn stats-profile-back" data-back="${backSub}">← Volver a ${backSub==='tabla'?'tabla':backSub==='fixture'?'fixture':'estadísticas'}</button>
+      <div class="team-detail">
+        <div class="team-detail-head">
+          <h3>${nombre}</h3>
+          <span class="pos">${f ? `${idx+1}° posición` : 'Sin posición'}</span>
+        </div>
+        <div class="team-stat-grid">
+          <div class="team-stat-card"><div class="num">${f ? f.pts : 0}</div><div class="lbl">Puntos</div></div>
+          <div class="team-stat-card"><div class="num">${f ? f.pj : 0}</div><div class="lbl">PJ</div></div>
+          <div class="team-stat-card"><div class="num">${f ? `${f.pg}-${f.pe}-${f.pp}` : '0-0-0'}</div><div class="lbl">G-E-P</div></div>
+          <div class="team-stat-card"><div class="num">${f ? f.gf : 0}</div><div class="lbl">GF</div></div>
+          <div class="team-stat-card"><div class="num">${f ? f.gc : 0}</div><div class="lbl">GC</div></div>
+          <div class="team-stat-card"><div class="num">${f ? `${f.dg>0?'+':''}${f.dg}` : 0}</div><div class="lbl">DG</div></div>
+        </div>
+        <div class="team-detail-extra">
+          <div class="team-form-row"><strong>Últimos 5:</strong> ${formaRecienteHtml(forma)}</div>
+          <div><strong>Vallas invictas:</strong> ${inv ? inv.vallas : 0}</div>
+          ${plantel ? `<div><strong>DT:</strong> ${plantel.capitan.split(' (')[0]} · <strong>Plantel:</strong> ${(plantel.jugadores||[]).length + 2} jugadores</div>` : ''}
+          ${goleador ? `<div><strong>Máximo goleador:</strong> ${goleador.jugador} (${goleador.cantidad})</div>` : ''}
+          ${asistidor ? `<div><strong>Máximo asistidor:</strong> ${asistidor.jugador} (${asistidor.cantidad})</div>` : ''}
         </div>
       </div>`;
   }
@@ -1630,8 +1861,7 @@
         return `<div><h3 class="hist-subhead" style="margin-top:24px;">${titulo}</h3><div class="stats-empty">Todavía no cargamos estos datos.</div></div>`;
       }
       const ordenado = items.slice().sort((a,b)=> b.cantidad - a.cantidad);
-      const plegable = titulo === 'Goleadores' || titulo === 'Asistidores';
-      const tieneMas = plegable && ordenado.length > 5;
+      const tieneMas = ordenado.length > 5;
       return `
         <div>
           <h3 class="hist-subhead" style="margin-top:24px;">${titulo}</h3>
@@ -1639,7 +1869,7 @@
             ${ordenado.map((it,i)=>`
             <div class="rank-row ${rowClass||''}${tieneMas && i >= 5 ? ' rank-extra' : ''}">
               <span class="n">${i+1}</span>
-              <span class="team">${it.jugador}${it.equipo ? ` <span style="color:var(--muted);">· ${it.equipo}</span>` : ''}</span>
+              <span class="team"><button type="button" class="stats-clickable stats-player-link" data-player-id="${it.jugadorId || getJugadorId(it.jugador)}">${it.jugador}</button>${it.equipo ? ` <span style="color:var(--muted);">· </span><button type="button" class="stats-clickable stats-team-link" data-team-id="${it.equipoId || getEquipoId(it.equipo)}">${getEquipoNombre(it.equipoId || getEquipoId(it.equipo), it.equipo)}</button>` : ''}</span>
               <span class="val">${it.cantidad}${valSuffix||''}</span>
             </div>`).join('')}
           </div>
@@ -1655,14 +1885,15 @@
         vallasBlock = `
           <div>
             <h3 class="hist-subhead" style="margin-top:24px;">Vallas menos vencidas</h3>
-            <div class="rank-list">
+            <div class="rank-list ${tabla.length > 5 ? 'rank-collapsible collapsed' : ''}">
               ${tabla.map((f,i)=>`
-              <div class="rank-row">
+              <div class="rank-row${tabla.length > 5 && i >= 5 ? ' rank-extra' : ''}">
                 <span class="n">${i+1}</span>
-                <span class="team">${f.equipo}</span>
+                <span class="team"><button type="button" class="stats-clickable stats-team-link" data-team-id="${f.equipoId}">${f.equipo}</button></span>
                 <span class="val">${f.gc}</span>
               </div>`).join('')}
             </div>
+            ${tabla.length > 5 ? `<button type="button" class="rank-toggle" aria-expanded="false">+ Ver todos</button>` : ''}
           </div>`;
       }
     }
@@ -1675,14 +1906,15 @@
         vallaInvictaBlock = `
           <div>
             <h3 class="hist-subhead" style="margin-top:24px;">Valla invicta</h3>
-            <div class="rank-list">
+            <div class="rank-list ${tablaInv.length > 5 ? 'rank-collapsible collapsed' : ''}">
               ${tablaInv.map((f,i)=>`
-              <div class="rank-row">
+              <div class="rank-row${tablaInv.length > 5 && i >= 5 ? ' rank-extra' : ''}">
                 <span class="n">${i+1}</span>
-                <span class="team">${f.equipo}${l.arqueros && l.arqueros[f.equipo] ? `<span class="team-sub">Arquero: ${l.arqueros[f.equipo]}</span>` : ''}</span>
+                <span class="team"><button type="button" class="stats-clickable stats-team-link" data-team-id="${f.equipoId}">${f.equipo}</button>${((l.arquerosPorId && l.arquerosPorId[f.equipoId]) || (l.arqueros && l.arqueros[f.equipo])) ? `<span class="team-sub">Arquero: ${(l.arquerosPorId && l.arquerosPorId[f.equipoId]) || l.arqueros[f.equipo]}</span>` : ''}</span>
                 <span class="val">${f.vallas} ${f.vallas===1 ? 'partido' : 'partidos'}</span>
               </div>`).join('')}
             </div>
+            ${tablaInv.length > 5 ? `<button type="button" class="rank-toggle" aria-expanded="false">+ Ver todos</button>` : ''}
           </div>`;
       } else {
         vallaInvictaBlock = `<div><h3 class="hist-subhead" style="margin-top:24px;">Valla invicta</h3><div class="stats-empty">Todavía ningún equipo mantuvo la valla invicta.</div></div>`;
@@ -1704,6 +1936,31 @@
       </div>
       ${vallasBlock}
       ${vallaInvictaBlock}`;
+  }
+
+  function renderStatsPanel(panel, l){
+    panel.innerHTML = statsHtml(l);
+
+    const jugadores = buildJugadoresIndex(l);
+    panel.querySelectorAll('.stats-player-link').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const j = jugadores.find(x=>x.id===btn.dataset.playerId);
+        if(!j) return;
+        panel.innerHTML = jugadorDetailStatsHtml(j);
+        const back=panel.querySelector('[data-back="stats"]');
+        if(back) back.addEventListener('click',()=>renderStatsPanel(panel,l));
+      });
+    });
+
+    panel.querySelectorAll('.stats-team-link').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const equipoId=btn.dataset.teamId;
+        if(!equipoId) return;
+        panel.innerHTML = teamDetailHtml(l,equipoId);
+        const back=panel.querySelector('[data-back="stats"]');
+        if(back) back.addEventListener('click',()=>renderStatsPanel(panel,l));
+      });
+    });
   }
 
 
@@ -1731,7 +1988,7 @@
     if(!partes){ alert('Este partido no tiene una fecha válida cargada.'); return; }
     const title=`ArgenLeague — ${p.l} vs ${p.v}`;
     const description=`${l.nombre} · Fecha ${fecha.fecha}. Recordatorio de partido de ArgenLeague.`;
-    const uid=`argenleague-${l.id}-f${fecha.fecha}-${p.l}-${p.v}`.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'@argenleague';
+    const uid=`argenleague-${l.id}-f${fecha.fecha}-${p.lId||getEquipoId(p.l)}-${p.vId||getEquipoId(p.v)}`.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'@argenleague';
     const dtstamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
     const ics=[
       'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ArgenLeague//Fixture//ES','CALSCALE:GREGORIAN','METHOD:PUBLISH',
@@ -1811,7 +2068,7 @@
           <tbody>
             ${filas.map((f,i)=>`
             <tr class="${i<4 ? 'clasifica' : ''}">
-              <td>${i+1}</td><td class="col-equipo">${f.equipo} ${formaRecienteHtml(formas[f.equipo])}</td><td>${f.pj}</td><td>${f.pg}</td><td>${f.pe}</td><td>${f.pp}</td><td>${f.gf}</td><td>${f.gc}</td><td>${f.dg>0?'+':''}${f.dg}</td><td class="pts">${f.pts}</td>
+              <td>${i+1}</td><td class="col-equipo"><button type="button" class="team-profile-link table-team-link" data-team-id="${f.equipoId}" data-origin="tabla">${f.equipo}</button> ${formaRecienteHtml(formas[f.equipoId])}</td><td>${f.pj}</td><td>${f.pg}</td><td>${f.pe}</td><td>${f.pp}</td><td>${f.gf}</td><td>${f.gc}</td><td>${f.dg>0?'+':''}${f.dg}</td><td class="pts">${f.pts}</td>
             </tr>`).join('')}
           </tbody>
         </table>
@@ -1841,9 +2098,9 @@
               </div>` : ''; })()}
               ${fecha.partidos.map((p, partidoIdx) => `
                 <div class="fixture-partido con-acciones">
-                  <span class="fp-equipo fp-local">${p.l}</span>
+                  <button type="button" class="fp-equipo fp-local team-profile-link fixture-team-link" data-team-id="${p.lId || getEquipoId(p.l)}" data-origin="fixture">${p.l}</button>
                   <span class="fp-resultado">${p.gl!=null && p.gv!=null ? `${p.gl} - ${p.gv}${p.wo ? ' <span class="fp-wo">W.O.</span>' : ''}` : p.h}</span>
-                  <span class="fp-equipo fp-visita">${p.v}</span>
+                  <button type="button" class="fp-equipo fp-visita team-profile-link fixture-team-link" data-team-id="${p.vId || getEquipoId(p.v)}" data-origin="fixture">${p.v}</button>
                   <span class="fp-actions">
                     <button type="button" class="fixture-action-btn calendar-btn" data-fecha-idx="${fechaIdx}" data-partido-idx="${partidoIdx}" title="Agregar a mi calendario">📅 <span>Calendario</span></button>
                     ${p.gl!=null && p.gv!=null ? `<button type="button" class="fixture-action-btn share-result-btn" data-fecha-idx="${fechaIdx}" data-partido-idx="${partidoIdx}" title="Compartir resultado como imagen">↗ <span>Compartir</span></button>` : ''}
@@ -1897,7 +2154,7 @@
       </div>
       <div class="liga-subpanel" id="ligaSubTabla">${tablaHtml}</div>
       <div class="liga-subpanel" id="ligaSubFixture" style="display:none;">${fixtureHtml}</div>
-      <div class="liga-subpanel" id="ligaSubStats" style="display:none;">${statsHtml(l)}</div>
+      <div class="liga-subpanel" id="ligaSubStats" style="display:none;"></div>
       <div class="liga-subpanel" id="ligaSubJugadores" style="display:none;"></div>
       <div class="liga-subpanel" id="ligaSubPlanteles" style="display:none;"></div>
       <div class="liga-subpanel" id="ligaSubPremios" style="display:none;">${premiosHtml(l)}</div>
@@ -1915,6 +2172,7 @@
     if(tieneFixture){
       renderPlantelesPanel(detail.querySelector('#ligaSubPlanteles'), l);
       renderJugadoresPanel(detail.querySelector('#ligaSubJugadores'), l);
+      renderStatsPanel(detail.querySelector('#ligaSubStats'), l);
 
       detail.querySelectorAll('.calendar-btn').forEach(btn=>{
         btn.addEventListener('click',()=>{
@@ -2004,6 +2262,27 @@
         }
       }
 
+      // Los nombres de equipos en Tabla y Fixture abren la misma ficha rápida de Estadísticas.
+      detail.querySelectorAll('.team-profile-link[data-origin]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const equipoId=btn.dataset.teamId;
+          const origin=btn.dataset.origin || 'stats';
+          if(!equipoId) return;
+          const statsPanel=detail.querySelector('#ligaSubStats');
+          if(!statsPanel) return;
+          statsPanel.innerHTML=teamDetailHtml(l,equipoId,origin);
+          activarSeccionLiga('stats');
+          const back=statsPanel.querySelector(`[data-back="${origin}"]`);
+          if(back){
+            back.addEventListener('click',()=>{
+              renderStatsPanel(statsPanel,l);
+              activarSeccionLiga(origin);
+            });
+          }
+          requestAnimationFrame(()=>statsPanel.scrollIntoView({behavior:'smooth',block:'start'}));
+        });
+      });
+
       detail.querySelectorAll('.liga-subtab-btn').forEach(btn=>{
         btn.addEventListener('click', ()=>activarSeccionLiga(btn.dataset.sub));
       });
@@ -2078,6 +2357,7 @@
       }
     },
   ];
+  relampagos.forEach(prepararRelampagoIds);
   const relampagoGrid = document.getElementById('relampagoGrid');
   relampagos.forEach(r=>{
     const card = document.createElement('button');
@@ -2126,50 +2406,38 @@
   }
 
   // ---- HISTORIAL (se arma solo a partir de relampagos) ----
-  // ---- alias de nombres de equipo (mismo club, distinta forma de escribirlo entre relámpagos y ligas) ----
-  const ALIAS_EQUIPO = {
-    'Rejunte40':'Rejunte 40',
-    'Rejunte 40':'Rejunte 40',
-    'LechonasGang':'Lechonas Gang',
-    'Lechonas Gang':'Lechonas Gang',
-    'Chapecoense':'Chapecoence',
-    'Chapecoence':'Chapecoence',
-    'FulboChampeta':'Fulbo Champeta',
-    'Fulbo Champeta':'Fulbo Champeta',
-    'Cazachilenos':'Cazachilenos FC',
-    'Cazachilenos FC':'Cazachilenos FC',
-    'Lento5 FC':'Lento 5',
-    'Lento 5':'Lento 5',
-  };
-  function normEquipo(nombre){
-    return ALIAS_EQUIPO[nombre] || nombre;
-  }
+  // El historial usa los mismos IDs internos que Liga y Relámpagos.
+  // nombreEquipoCanonico() mantiene compatibilidad con cargas antiguas.
+  function normEquipo(nombre){ return nombreEquipoCanonico(nombre); }
 
   function buildHistorial(){
     const campeonesList = document.getElementById('campeonesList');
     const golesFavorList = document.getElementById('golesFavorList');
     const golesContraList = document.getElementById('golesContraList');
-    const stats = {}; // equipo -> {pj, gf, gc}
+    const stats = {}; // equipoId -> {pj, gf, gc}
 
-    function addMatch(a, ag, b, bg){
+    function addMatch(a, ag, b, bg, aId=null, bId=null){
       if(ag===null || bg===null) return;
-      a = normEquipo(a); b = normEquipo(b);
-      [[a,ag,bg],[b,bg,ag]].forEach(([team,gf,gc])=>{
-        if(!stats[team]) stats[team] = {pj:0, gf:0, gc:0};
-        stats[team].pj++; stats[team].gf+=gf; stats[team].gc+=gc;
+      const idA = aId || getEquipoId(a), idB = bId || getEquipoId(b);
+      [[idA,ag,bg],[idB,bg,ag]].forEach(([teamId,gf,gc])=>{
+        if(!teamId) return;
+        if(!stats[teamId]) stats[teamId] = {pj:0, gf:0, gc:0};
+        stats[teamId].pj++; stats[teamId].gf+=gf; stats[teamId].gc+=gc;
       });
     }
 
     relampagos.forEach(r=>{
       Object.values(r.bracket).forEach(round=>{
-        round.forEach(m=>addMatch(m.a, m.ag, m.b, m.bg));
+        round.forEach(m=>addMatch(m.a, m.ag, m.b, m.bg, m.aId, m.bId));
       });
       const final = r.bracket.final && r.bracket.final[0];
       if(final && final.ag!==null && final.bg!==null){
-        const winner = normEquipo(final.ag > final.bg ? final.a : final.b);
+        const winnerId = final.ag > final.bg ? (final.aId || getEquipoId(final.a)) : (final.bId || getEquipoId(final.b));
+        const loserId = final.ag > final.bg ? (final.bId || getEquipoId(final.b)) : (final.aId || getEquipoId(final.a));
+        const winner = getEquipoNombre(winnerId, final.ag > final.bg ? final.a : final.b);
         const wg = final.ag > final.bg ? final.ag : final.bg;
         const lg = final.ag > final.bg ? final.bg : final.ag;
-        const loser = normEquipo(final.ag > final.bg ? final.b : final.a);
+        const loser = getEquipoNombre(loserId, final.ag > final.bg ? final.b : final.a);
         const row = document.createElement('div');
         row.className = 'champ-row';
         row.innerHTML = `
@@ -2189,13 +2457,13 @@
         if(!Array.isArray(l.fixture)) return;
         l.fixture.forEach(fecha=>{
           fecha.partidos.forEach(p=>{
-            addMatch(p.l, p.gl, p.v, p.gv);
+            addMatch(p.l, p.gl, p.v, p.gv, p.lId, p.vId);
           });
         });
       });
     }
 
-    const teamStats = Object.entries(stats).map(([team,s])=>({team, ...s}));
+    const teamStats = Object.entries(stats).map(([equipoId,s])=>({equipoId, team:getEquipoNombre(equipoId), ...s}));
 
     teamStats.slice().sort((a,b)=>b.gf-a.gf).forEach((s,i)=>{
       const row = document.createElement('div');
