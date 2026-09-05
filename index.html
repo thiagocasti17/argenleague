@@ -236,6 +236,13 @@
     padding:10px 18px;border-radius:6px;text-decoration:none;flex-shrink:0;
   }
 
+
+  .champ-tournament-link{cursor:pointer;transition:border-color .18s ease,background .18s ease,transform .18s ease;}
+  .champ-tournament-link:hover{border-color:var(--accent-dim);background:rgba(255,255,255,.025);transform:translateY(-1px);}
+  .champ-tournament-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .champ-tournament-link .torneo{text-decoration-thickness:1px;text-underline-offset:3px;}
+  .champ-tournament-link:hover .torneo{text-decoration:underline;}
+
   /* ===== LISTA de tarjetas (ligas / relampago) ===== */
   .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
   .item-card{
@@ -980,7 +987,7 @@
       </div>
     </div>
 
-    <div class="note">Se arma automáticamente con los resultados de ligas y relámpagos cargados. Todavía no incluye la Liga de Clubes Pro porque no arrancó, ni goleadores individuales.</div>
+    <div class="note">Se actualiza automáticamente con los resultados de ligas y relámpagos cargados.</div>
   </section>
 
   <!-- ===== ARGENCOINS ===== -->
@@ -1866,8 +1873,10 @@
     const e = l.estadisticas || {};
     const goleadores = (e.goleadores||[]).filter(x => (x.equipoId || getEquipoId(x.equipo)) === equipoId).slice().sort((a,b)=>b.cantidad-a.cantidad);
     const asistidores = (e.asistidores||[]).filter(x => (x.equipoId || getEquipoId(x.equipo)) === equipoId).slice().sort((a,b)=>b.cantidad-a.cantidad);
+    const mvps = (e.mvp||[]).filter(x => (x.equipoId || getEquipoId(x.equipo)) === equipoId).slice().sort((a,b)=>b.cantidad-a.cantidad);
     const goleador = goleadores[0];
     const asistidor = asistidores[0];
+    const liderMvp = mvps[0];
     return `
       <button class="back-btn stats-profile-back" data-back="${backSub}">← Volver a ${backSub==='tabla'?'tabla':backSub==='fixture'?'fixture':'estadísticas'}</button>
       <div class="team-detail">
@@ -1887,8 +1896,9 @@
           <div class="team-form-row"><strong>Últimos 5:</strong> ${formaRecienteHtml(forma)}</div>
           <div><strong>Vallas invictas:</strong> ${inv ? inv.vallas : 0}</div>
           ${plantel ? `<div><strong>DT:</strong> ${plantel.capitan.split(' (')[0]} · <strong>Plantel:</strong> ${(plantel.jugadores||[]).length + 2} jugadores</div>` : ''}
-          ${goleador ? `<div><strong>Máximo goleador:</strong> ${goleador.jugador} (${goleador.cantidad})</div>` : ''}
-          ${asistidor ? `<div><strong>Máximo asistidor:</strong> ${asistidor.jugador} (${asistidor.cantidad})</div>` : ''}
+          ${goleador ? `<div><strong>Máximo goleador:</strong> ${goleador.jugador} (${goleador.cantidad})</div>` : '<div><strong>Máximo goleador:</strong> Sin datos</div>'}
+          ${asistidor ? `<div><strong>Máximo asistidor:</strong> ${asistidor.jugador} (${asistidor.cantidad})</div>` : '<div><strong>Máximo asistidor:</strong> Sin datos</div>'}
+          ${liderMvp ? `<div><strong>Más MVP:</strong> ${liderMvp.jugador} (${liderMvp.cantidad})</div>` : '<div><strong>Más MVP:</strong> Sin datos</div>'}
         </div>
       </div>`;
   }
@@ -2531,7 +2541,11 @@
         const lg = final.ag > final.bg ? final.bg : final.ag;
         const loser = getEquipoNombre(loserId, final.ag > final.bg ? final.b : final.a);
         const row = document.createElement('div');
-        row.className = 'champ-row';
+        row.className = 'champ-row champ-tournament-link';
+        row.setAttribute('role','button');
+        row.setAttribute('tabindex','0');
+        row.setAttribute('aria-label',`Abrir ${r.nombre}`);
+        row.title = 'Ver torneo';
         row.innerHTML = `
           <svg class="cup" viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 4M17 5h3a3 3 0 0 1-3 4"/></svg>
           <div class="info">
@@ -2539,6 +2553,14 @@
             <div class="team">${winner}</div>
           </div>
           <div class="score">venció ${wg}-${lg} a ${loser}</div>`;
+        const abrirTorneo = ()=>{
+          goTab('relampago');
+          showRelampagoDetail(r);
+        };
+        row.addEventListener('click', abrirTorneo);
+        row.addEventListener('keydown', e=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrirTorneo(); }
+        });
         campeonesList.appendChild(row);
       }
     });
@@ -2745,5 +2767,269 @@
   <span>Discord</span>
 </a>
 
+
+<div class="site-updated" aria-label="Última actualización">Actualizado: 4/9/2026</div>
+
+<style id="argen-update-v15-styles">
+  /* Fecha actual */
+  .fixture-current-banner{display:flex;align-items:center;gap:7px;margin:0 0 12px;padding:10px 13px;border:1px solid var(--accent-dim);border-radius:8px;background:rgba(79,166,232,.07);font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;color:var(--line)}
+  .fixture-current-banner .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(79,166,232,.10)}
+  .fixture-current-banner strong{color:var(--accent)}
+  .fixture-current-label{background:rgba(79,166,232,.08)}
+
+  /* Estado de partido */
+  .fp-resultado{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;line-height:1.15}
+  .match-status{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.45px;text-transform:uppercase;padding:2px 6px;border-radius:999px;font-weight:700}
+  .match-status.finalizado{color:#8fa1b9;background:rgba(143,161,185,.10)}
+  .match-status.proximo{color:var(--accent);background:rgba(79,166,232,.10)}
+  .match-status.en-juego{color:#70d58b;background:rgba(112,213,139,.12)}
+
+  /* Líder */
+  .tabla-posiciones tr.lider{background:rgba(232,190,79,.045)}
+  .tabla-posiciones tr.lider td:first-child{box-shadow:inset 3px 0 0 rgba(232,190,79,.8)}
+  .leader-crown{display:inline-block;margin-right:5px;font-size:12px;filter:saturate(.75)}
+
+  /* Historial: filtros + records */
+  .hist-mini-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 20px}
+  .hist-mini-tab{border:1px solid var(--border);background:var(--panel);color:var(--muted);border-radius:999px;padding:7px 13px;cursor:pointer;font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.3px;transition:.15s}
+  .hist-mini-tab:hover,.hist-mini-tab.active{border-color:var(--accent-dim);color:var(--accent);background:var(--panel-2)}
+  .hist-records{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:0 0 28px}
+  .hist-record-card{border:1px solid var(--border);background:var(--panel);border-radius:8px;padding:13px;min-width:0}
+  .hist-record-card .k{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.55px;margin-bottom:7px}
+  .hist-record-card .v{font-family:'Oswald',sans-serif;color:var(--line);font-size:14px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+  .hist-record-card .s{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:5px}
+  .hist-filter-group[hidden]{display:none!important}
+  .hist-player-cols{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+
+  /* Sin datos uniforme */
+  .nice-empty,.stats-empty,.jugadores-empty{padding:22px 16px!important;text-align:center!important;border:1px dashed var(--border)!important;border-radius:8px!important;background:rgba(255,255,255,.012)!important;color:var(--muted)!important;font-size:12.5px!important;line-height:1.5!important}
+  .nice-empty::before,.stats-empty::before,.jugadores-empty::before{content:'—';display:block;color:var(--steel);font-family:'JetBrains Mono',monospace;margin-bottom:5px}
+
+  /* Última actualización */
+  .site-updated{max-width:1120px;margin:24px auto 0;padding:20px 24px 28px;border-top:1px solid var(--border);color:var(--steel);font-family:'JetBrains Mono',monospace;font-size:10px;text-align:center;letter-spacing:.3px}
+
+  /* Ficha: jerarquía del jugador destacado */
+  .team-detail-extra .team-highlight-label{margin-top:9px;padding-top:9px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+  @media(max-width:760px){
+    .hist-records{grid-template-columns:1fr 1fr}
+    .hist-player-cols{grid-template-columns:1fr;gap:8px}
+    .fixture-current-banner{font-size:13px}
+  }
+  @media(max-width:420px){
+    .hist-records{grid-template-columns:1fr}
+    .site-updated{padding-left:16px;padding-right:16px}
+  }
+</style>
+<script id="argen-update-v15-script">
+(function(){
+  'use strict';
+
+  function completedMatch(p){ return p && p.gl != null && p.gv != null; }
+
+  function allLoadedMatches(){
+    const out=[];
+    try{
+      (typeof ligas!=='undefined' ? ligas : []).forEach(l=>{
+        (l.fixture||[]).forEach(f=>(f.partidos||[]).forEach(p=>{
+          if(!completedMatch(p)) return;
+          out.push({a:p.l,b:p.v,ag:+p.gl,bg:+p.gv,aId:p.lId||getEquipoId(p.l),bId:p.vId||getEquipoId(p.v),wo:!!p.wo,source:l.nombre||'Liga'});
+        }));
+      });
+      (typeof relampagos!=='undefined' ? relampagos : []).forEach(r=>{
+        Object.values(r.bracket||{}).forEach(round=>(round||[]).forEach(m=>{
+          if(m.ag==null||m.bg==null) return;
+          out.push({a:m.a,b:m.b,ag:+m.ag,bg:+m.bg,aId:m.aId||getEquipoId(m.a),bId:m.bId||getEquipoId(m.b),wo:!!m.wo,source:r.nombre||'Relámpago'});
+        }));
+      });
+    }catch(e){ console.warn('No se pudieron construir récords:',e); }
+    return out;
+  }
+
+  function aggregatePlayerStat(field){
+    const map=new Map();
+    try{
+      (typeof ligas!=='undefined' ? ligas : []).forEach(l=>{
+        const arr=(l.estadisticas&&l.estadisticas[field])||[];
+        arr.forEach(x=>{
+          const id=x.jugadorId || (typeof getJugadorId==='function' ? getJugadorId(x.jugador) : String(x.jugador||'').toLowerCase());
+          const name=x.jugador || id;
+          const prev=map.get(id)||{id,name,cantidad:0};
+          prev.cantidad += Number(x.cantidad)||0;
+          if(name) prev.name=name;
+          map.set(id,prev);
+        });
+      });
+    }catch(e){}
+    return [...map.values()].sort((a,b)=>b.cantidad-a.cantidad || a.name.localeCompare(b.name));
+  }
+
+  function aggregateCleanSheets(){
+    const map=new Map();
+    allLoadedMatches().forEach(m=>{
+      if(m.wo) return;
+      if(m.bg===0){ const id=m.aId||m.a; map.set(id,(map.get(id)||0)+1); }
+      if(m.ag===0){ const id=m.bId||m.b; map.set(id,(map.get(id)||0)+1); }
+    });
+    return [...map.entries()].map(([id,cantidad])=>({id,nombre:(typeof getEquipoNombre==='function'?getEquipoNombre(id,id):id),cantidad})).sort((a,b)=>b.cantidad-a.cantidad);
+  }
+
+  function enhanceCurrentRound(root=document){
+    root.querySelectorAll('.fixture-list').forEach(list=>{
+      const actual=list.querySelector('.fixture-jornada.actual');
+      if(!actual) return;
+      const n=actual.dataset.fecha || (actual.querySelector('.fixture-jornada-title')?.textContent.match(/Fecha\s+(\d+)/i)||[])[1];
+      if(!list.previousElementSibling || !list.previousElementSibling.classList.contains('fixture-current-banner')){
+        const banner=document.createElement('div');
+        banner.className='fixture-current-banner';
+        banner.innerHTML=`<span class="dot"></span><span>Fecha ${n||''} <strong>· Actual</strong></span>`;
+        list.parentNode.insertBefore(banner,list);
+      }
+      const label=actual.querySelector('.fixture-current-label');
+      if(label) label.textContent='ACTUAL';
+    });
+  }
+
+  function enhanceMatchStatuses(root=document){
+    root.querySelectorAll('.fixture-partido').forEach(row=>{
+      const result=row.querySelector('.fp-resultado');
+      if(!result || result.querySelector('.match-status')) return;
+      const raw=result.textContent.trim();
+      const finalizado=/\b\d+\s*-\s*\d+\b/.test(raw);
+      const badge=document.createElement('span');
+      badge.className='match-status '+(finalizado?'finalizado':'proximo');
+      badge.textContent=finalizado?'Finalizado':'Próximo';
+      result.appendChild(badge);
+    });
+  }
+
+  function enhanceLeaders(root=document){
+    root.querySelectorAll('.tabla-posiciones tbody').forEach(tb=>{
+      const first=tb.querySelector('tr');
+      if(!first) return;
+      first.classList.add('lider');
+      const btn=first.querySelector('.col-equipo .team-profile-link');
+      if(btn && !btn.querySelector('.leader-crown')){
+        btn.insertAdjacentHTML('afterbegin','<span class="leader-crown" aria-label="Líder">👑</span>');
+      }
+    });
+  }
+
+  function niceEmpty(root=document){
+    root.querySelectorAll('.rank-list, .champ-list').forEach(list=>{
+      if(list.children.length===0 && !list.dataset.emptyDone){
+        list.dataset.emptyDone='1';
+        list.innerHTML='<div class="nice-empty">Todavía no hay datos disponibles.</div>';
+      }
+    });
+    root.querySelectorAll('.stats-empty').forEach(el=>{
+      if(!el.textContent.trim()) el.textContent='Todavía no hay datos disponibles.';
+    });
+  }
+
+  function buildHistoryEnhancements(){
+    const sec=document.getElementById('historial');
+    if(!sec || sec.dataset.enhanced==='1') return;
+    sec.dataset.enhanced='1';
+    const head=sec.querySelector('.section-head');
+    const search=sec.querySelector('.search-wrap');
+    const searchEmpty=document.getElementById('histSearchEmpty');
+    const campeones=document.getElementById('campeonesList');
+    const goals=document.querySelector('#historial .goals-cols');
+    if(!head || !campeones || !goals) return;
+
+    // Locate headings that belong to current content.
+    const champHead=campeones.previousElementSibling;
+
+    // Controls
+    const tabs=document.createElement('div');
+    tabs.className='hist-mini-tabs';
+    tabs.innerHTML='<button class="hist-mini-tab active" data-hf="clubes">Clubes</button><button class="hist-mini-tab" data-hf="jugadores">Jugadores</button><button class="hist-mini-tab" data-hf="titulos">Títulos</button>';
+    if(search) sec.insertBefore(tabs,search);
+    else head.insertAdjacentElement('afterend',tabs);
+
+    // Quick records
+    const matches=allLoadedMatches();
+    let mayor=null, masGoles=null;
+    matches.forEach(m=>{
+      const diff=Math.abs(m.ag-m.bg), total=m.ag+m.bg;
+      if(!mayor || diff>mayor.diff || (diff===mayor.diff && total>mayor.total)) mayor={...m,diff,total};
+      if(!masGoles || total>masGoles.total) masGoles={...m,total};
+    });
+    const mvpTop=aggregatePlayerStat('mvp')[0];
+    const csTop=aggregateCleanSheets()[0];
+    const records=document.createElement('div');
+    records.className='hist-records';
+    records.innerHTML=`
+      <div class="hist-record-card"><div class="k">Mayor goleada</div><div class="v">${mayor?`${mayor.a} ${mayor.ag}-${mayor.bg} ${mayor.b}`:'Sin datos'}</div><div class="s">${mayor?`Diferencia de ${mayor.diff}`:'—'}</div></div>
+      <div class="hist-record-card"><div class="k">Más goles en un partido</div><div class="v">${masGoles?`${masGoles.a} ${masGoles.ag}-${masGoles.bg} ${masGoles.b}`:'Sin datos'}</div><div class="s">${masGoles?`${masGoles.total} goles`:'—'}</div></div>
+      <div class="hist-record-card"><div class="k">Más MVP</div><div class="v">${mvpTop?mvpTop.name:'Sin datos'}</div><div class="s">${mvpTop?`${mvpTop.cantidad} MVP`:'—'}</div></div>
+      <div class="hist-record-card"><div class="k">Más vallas invictas</div><div class="v">${csTop?csTop.nombre:'Sin datos'}</div><div class="s">${csTop?`${csTop.cantidad} partidos`:'—'}</div></div>`;
+    tabs.insertAdjacentElement('afterend',records);
+
+    // Wrap Clubes
+    const clubs=document.createElement('div'); clubs.className='hist-filter-group'; clubs.dataset.hgroup='clubes';
+    if(search) clubs.appendChild(search);
+    if(searchEmpty) clubs.appendChild(searchEmpty);
+    clubs.appendChild(goals);
+    records.insertAdjacentElement('afterend',clubs);
+
+    // Títulos group
+    const titles=document.createElement('div'); titles.className='hist-filter-group'; titles.dataset.hgroup='titulos'; titles.hidden=true;
+    if(champHead) titles.appendChild(champHead);
+    titles.appendChild(campeones);
+    clubs.insertAdjacentElement('afterend',titles);
+
+    // Jugadores group: useful historical player rankings without another nav section.
+    const players=document.createElement('div'); players.className='hist-filter-group'; players.dataset.hgroup='jugadores'; players.hidden=true;
+    const topMvp=aggregatePlayerStat('mvp');
+    const topGoals=aggregatePlayerStat('goleadores');
+    function rank(title,arr,suffix){
+      if(!arr.length) return `<div><h3 class="hist-subhead">${title}</h3><div class="nice-empty">Todavía no hay datos disponibles.</div></div>`;
+      return `<div><h3 class="hist-subhead">${title}</h3><div class="rank-list ${arr.length>5?'rank-collapsible collapsed':''}">${arr.map((x,i)=>`<div class="rank-row${i>=5?' rank-extra':''}"><span class="n">${i+1}</span><span class="team">${x.name}</span><span class="val">${x.cantidad}${suffix}</span></div>`).join('')}</div>${arr.length>5?'<button type="button" class="rank-toggle" aria-expanded="false">+ Ver todos</button>':''}</div>`;
+    }
+    players.innerHTML=`<div class="hist-player-cols">${rank('MVP acumulados',topMvp,'')}${rank('Goleadores cargados',topGoals,'')}</div>`;
+    titles.insertAdjacentElement('afterend',players);
+
+    tabs.addEventListener('click',e=>{
+      const b=e.target.closest('.hist-mini-tab'); if(!b) return;
+      tabs.querySelectorAll('.hist-mini-tab').forEach(x=>x.classList.toggle('active',x===b));
+      sec.querySelectorAll('.hist-filter-group').forEach(g=>g.hidden=g.dataset.hgroup!==b.dataset.hf);
+    });
+  }
+
+  function addTeamHighlightLabel(root=document){
+    root.querySelectorAll('.team-detail-extra').forEach(extra=>{
+      if(extra.querySelector('.team-highlight-label')) return;
+      const divs=[...extra.children];
+      const target=divs.find(d=>/Máximo goleador:/i.test(d.textContent));
+      if(target){
+        const lab=document.createElement('div'); lab.className='team-highlight-label'; lab.textContent='Jugadores destacados';
+        extra.insertBefore(lab,target);
+      }
+    });
+  }
+
+  function applyAll(){
+    enhanceCurrentRound();
+    enhanceMatchStatuses();
+    enhanceLeaders();
+    niceEmpty();
+    addTeamHighlightLabel();
+  }
+
+  // Initial app already rendered by the preceding script.
+  buildHistoryEnhancements();
+  applyAll();
+
+  // Liga content is rendered dynamically when changing sub-tabs.
+  let queued=false;
+  const obs=new MutationObserver(()=>{
+    if(queued) return; queued=true;
+    requestAnimationFrame(()=>{ queued=false; applyAll(); });
+  });
+  obs.observe(document.body,{childList:true,subtree:true});
+})();
+</script>
 </body>
 </html>
