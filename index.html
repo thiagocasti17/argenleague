@@ -1190,6 +1190,11 @@
   registrarAliasJugador('Izuk', JUGADOR_IZUHX_ID);
   registrarAliasJugador('Izux-T', JUGADOR_IZUHX_ID);
 
+  // Alias del mismo jugador de Cazachilenos usado con distintas escrituras.
+  const JUGADOR_L_IGLESIAS_ID = getJugadorId('L.Iglesias');
+  registrarAliasJugador('Iglesias', JUGADOR_L_IGLESIAS_ID);
+  registrarAliasJugador('LeoIglesias14', JUGADOR_L_IGLESIAS_ID);
+
   function prepararLigaIds(l){
     l.equipos = (l.equipos||[]).map(eq=>nombreEquipoCanonico(eq));
     l.equiposIds = l.equipos.map(getEquipoId);
@@ -1379,13 +1384,13 @@
         ]},
         {fecha:9, dia:'Viernes', fechaTxt:'04/09/2026', hora:'23:00', libre:'Fulbo Champeta', partidos:[
           {l:'Rejunte 40', v:'Cazachilenos FC', h:'23:00', gl:2, gv:3},
-          {l:'Lechonas Gang', v:'Lento 5', h:'23:00', gl:null, gv:null},
-          {l:'Chapecoence', v:'Agentes Libres', h:'23:00', gl:null, gv:null},
+          {l:'Lechonas Gang', v:'Lento 5', h:'23:00', gl:3, gv:0},
+          {l:'Chapecoence', v:'Agentes Libres', h:'23:00', gl:3, gv:0},
         ]},
         {fecha:10, dia:'Viernes', fechaTxt:'04/09/2026', hora:'23:45', libre:'Agentes Libres', partidos:[
-          {l:'Fulbo Champeta', v:'Rejunte 40', h:'23:45', gl:null, gv:null},
-          {l:'Lechonas Gang', v:'Cazachilenos FC', h:'23:45', gl:null, gv:null},
-          {l:'Lento 5', v:'Chapecoence', h:'23:45', gl:null, gv:null},
+          {l:'Fulbo Champeta', v:'Rejunte 40', h:'23:45', gl:1, gv:1},
+          {l:'Lechonas Gang', v:'Cazachilenos FC', h:'23:45', gl:3, gv:3},
+          {l:'Lento 5', v:'Chapecoence', h:'23:45', gl:0, gv:3},
         ]},
         {fecha:11, dia:'Sábado', fechaTxt:'05/09/2026', hora:'23:00', libre:'Lento 5', partidos:[
           {l:'Rejunte 40', v:'Lechonas Gang', h:'23:00', gl:null, gv:null},
@@ -1419,26 +1424,29 @@
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:3},
           {jugador:'C.Robert', equipo:'Chapecoence', cantidad:1},
           {jugador:'M.Rocha', equipo:'Fulbo Champeta', cantidad:2},
-          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:15},
+          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:16},
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:3},
-          {jugador:'Bandana', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Bandana', equipo:'Cazachilenos FC', cantidad:2},
+          {jugador:'L.Iglesias', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Lopez', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Titan', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:3},
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:2},
           {jugador:'Castolo', equipo:'Fulbo Champeta', cantidad:2},
+          {jugador:'Bebecita', equipo:'Fulbo Champeta', cantidad:1},
           {jugador:'Flecha', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Izuhx', equipo:'Rejunte 40', cantidad:2},
           {jugador:'SrFox', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Sibak', equipo:'Rejunte 40', cantidad:1},
           {jugador:'E.Nene', equipo:'Lento 5', cantidad:2},
-          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:11},
-          {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:3},
+          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:12},
+          {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:5},
           {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Juanse', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Dioseslaclave32', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Bananin', equipo:'Rejunte 40', cantidad:3},
+          {jugador:'Y.Hernandez', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:2},
           {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Roooddrrii', equipo:'Chapecoence', cantidad:1},
@@ -1451,9 +1459,9 @@
           {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:3},
           {jugador:'Kone', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Bandana', equipo:'Cazachilenos FC', cantidad:5},
-          {jugador:'Iglesias', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'L.Iglesias', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:1},
-          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:3},
+          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:4},
           {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:4},
           {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:5},
@@ -1482,12 +1490,17 @@
           {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Titan', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:1},
-          {jugador:'Chila', equipo:'Chapecoence', cantidad:1},
+          {jugador:'Chila', equipo:'Cazachilenos FC', cantidad:2},
           {jugador:'SrFox', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Wi', equipo:'Rejunte 40', cantidad:1},
+          {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:2},
+          {jugador:'Sixseven', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Shaggy', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Castolo', equipo:'Fulbo Champeta', cantidad:1},
         ],
         rojas:[
-          // {jugador:'Nombre Apellido', equipo:'Nombre del equipo', cantidad:1},
+          {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:1},
         ],
         mvp:[
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
@@ -1499,6 +1512,7 @@
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:1},
           {jugador:'Flecha', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Chila', equipo:'Cazachilenos FC', cantidad:1},
         ],
       }
     }
@@ -2768,7 +2782,7 @@
 </a>
 
 
-<div class="site-updated" aria-label="Última actualización">Actualizado: 4/9/2026</div>
+<div class="site-updated" aria-label="Última actualización">Actualizado: 5/9/2026</div>
 
 <style id="argen-update-v15-styles">
   /* Fecha actual */
