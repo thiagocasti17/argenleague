@@ -1047,99 +1047,449 @@
 
     <div class="coins-intro">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5-1.3 2-3 2-3 .6-3 2 1.3 2.5 3 2.5 3-1.1 3-2.5"/></svg>
-      <p>Los <b>ArgenCoins (AC)</b> son la moneda interna de ArgenLeague: se ganan participando de los torneos y se canjean por beneficios dentro de la comunidad.</p>
+      <p>Los <b>ArgenCoins (AC)</b> premian la participación y el rendimiento dentro de ArgenLeague. Clubes Pro y 1v1 tienen economías y beneficios separados.</p>
     </div>
 
-    <h3 class="hist-subhead">Saldo por equipo</h3>
-    <div class="rank-list" id="coinBalanceList"></div>
-    <div class="empty-state" id="coinBalanceEmpty" style="display:none;margin-bottom:12px;">
-      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5-1.3 2-3 2-3 .6-3 2 1.3 2.5 3 2.5 3-1.1 3-2.5"/></svg></div>
-      <h3>Todavía no cargamos saldos</h3>
-      <p>Apenas nos pases la lista de equipos con su saldo actual de ArgenCoins, se va a ver acá.</p>
+    <div class="coins-mode-tabs" role="tablist" aria-label="Tipo de ArgenCoins">
+      <button class="coins-mode-btn active" type="button" data-coin-panel="clubes">⚽ Clubes Pro</button>
+      <button class="coins-mode-btn" type="button" data-coin-panel="uno">🎮 1v1</button>
     </div>
 
-    <h3 class="hist-subhead" style="margin-top:36px;">Cómo ganar ArgenCoins</h3>
-    <div class="coin-list">
-      <div class="coin-row"><div class="info"><h4>Participación en Torneo Relámpago</h4><p>Al disputar todas las fechas del torneo.</p></div><span class="coin-badge">+1 AC</span></div>
-      <div class="coin-row"><div class="info"><h4>Inscripción a Liga Oficial</h4><p>Al abonar y disputar la temporada completa.</p></div><span class="coin-badge">+2 AC</span></div>
-      <div class="coin-row"><div class="info"><h4>Campeón de Torneo Relámpago</h4><p>Bonus extra por salir campeón del relámpago.</p></div><span class="coin-badge">+2 AC</span></div>
-      <div class="coin-row"><div class="info"><h4>Subcampeón de Liga Oficial</h4><p>Bonus extra por salir subcampeón de la liga.</p></div><span class="coin-badge">+2 AC</span></div>
-      <div class="coin-row"><div class="info"><h4>Campeón de Liga Oficial</h4><p>Bonus extra por salir campeón de la liga.</p></div><span class="coin-badge">+5 AC</span></div>
-    </div>
-
-    <h3 class="hist-subhead" style="margin-top:40px;">Catálogo de canje</h3>
-    <ol class="redeem-list">
-      <li class="redeem-item" data-item="Cambio de ID / Nickname Oficial" data-cost="3 AC"><div class="ri-body"><div class="ri-head"><h4>Cambio de ID / Nickname Oficial</h4><span class="coin-badge">3 AC</span></div><p>Actualización del Gamertag / EA ID registrado fuera del período habitual de mercado.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Pase Libre VIP" data-cost="4 AC"><div class="ri-body"><div class="ri-head"><h4>Pase Libre VIP</h4><span class="coin-badge">4 AC</span></div><p>Destaca la ficha de un jugador fijándola al principio del canal #busco-equipo.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Prórroga Express (20 min extra)" data-cost="6 AC"><div class="ri-body"><div class="ri-head"><h4>Prórroga Express (20 min extra)</h4><span class="coin-badge">6 AC</span></div><p>Otorga 20 minutos de tolerancia adicionales sobre la hora oficial del partido antes de aplicar W.O.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Fichaje Extra / Fuera de Término" data-cost="6 AC"><div class="ri-body"><div class="ri-head"><h4>Fichaje Extra / Fuera de Término</h4><span class="coin-badge">6 AC</span></div><p>Permite agregar un cupo adicional al plantel o habilitar un pase rápido fuera de fecha.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Limpieza de Amarillas" data-cost="7 AC"><div class="ri-body"><div class="ri-head"><h4>Limpieza de Amarillas</h4><span class="coin-badge">7 AC</span></div><p>Elimina la acumulación de tarjetas amarillas de un jugador antes de la suspensión. No aplica a rojas directas.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Robo de Cupo / Expropiación Express" data-cost="9 AC"><div class="ri-body"><div class="ri-head"><h4>Robo de Cupo / Expropiación Express</h4><span class="coin-badge">9 AC</span></div><p>Permite ingresar a un torneo relámpago con cupos llenos, desplazando al último anotado que no tenga Pase VIP. Ejecutable hasta 2 horas antes del inicio; el equipo desplazado no recibe sanción.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Rol VIP en Discord (1 mes)" data-cost="10 AC"><div class="ri-body"><div class="ri-head"><h4>Rol VIP en Discord (1 mes)</h4><span class="coin-badge">10 AC</span></div><p>Otorga rol de jerarquía alta en el servidor con color especial y acceso a canal exclusivo.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Transmisión / Casteo a Pedido" data-cost="10 AC"><div class="ri-body"><div class="ri-head"><h4>Transmisión / Casteo a Pedido</h4><span class="coin-badge">10 AC</span></div><p>Asegura la transmisión en vivo con relatores oficiales del partido elegido.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Elegir Horario del Partido" data-cost="12 AC"><div class="ri-body"><div class="ri-head"><h4>Elegir Horario del Partido</h4><span class="coin-badge">12 AC</span></div><p>Fija el horario del encuentro sin depender del rival. Requiere aviso previo de 24 horas.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Diseño de Placa Matchday / Kit de Redes" data-cost="12 AC"><div class="ri-body"><div class="ri-head"><h4>Diseño de Placa Matchday / Kit de Redes</h4><span class="coin-badge">12 AC</span></div><p>Gráfica profesional personalizada con la plantilla oficial y el escudo del club.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Clip de Jugada Especial (edit corto)" data-cost="12 AC"><div class="ri-body"><div class="ri-head"><h4>Clip de Jugada Especial (edit corto)</h4><span class="coin-badge">12 AC</span></div><p>Video editado en formato vertical (Reel/TikTok) de la mejor jugada del equipo.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="Wildcard de Reprogramación" data-cost="15 AC"><div class="ri-body"><div class="ri-head"><h4>Wildcard de Reprogramación</h4><span class="coin-badge">15 AC</span></div><p>Permite postergar y cambiar de día un partido oficial sin sufrir sanciones. Requiere aviso previo de 24 horas.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-      <li class="redeem-item" data-item="50% de Descuento en la Liga Oficial" data-cost="30 AC"><div class="ri-body"><div class="ri-head"><h4>50% de Descuento en la Liga Oficial</h4><span class="coin-badge">30 AC</span></div><p>El Premio Mayor: media beca en el costo de la inscripción para la siguiente temporada oficial.</p><button class="redeem-btn" type="button">Canjear</button><div class="redeem-form"><input type="text" class="redeem-input" placeholder="Nombre de tu equipo"><button class="redeem-send" type="button">Generar comprobante</button><span class="redeem-status"></span></div></div></li>
-    </ol>
-
-    <h3 class="hist-subhead" style="margin-top:40px;">Tienda en pesos ($ ARS)</h3>
-    <div class="note" style="margin-top:0;margin-bottom:24px;">Tope máximo de compra: <b style="color:var(--line);">20 AC por club al mes</b>, para preservar la competitividad.</div>
-
-    <p class="tienda-sublabel">Packs de ArgenCoins (carga rápida)</p>
-    <div class="pack-grid">
-      <div class="pack-card">
-        <div class="pack-ac">5 AC</div>
-        <div class="pack-price">$2.000 <span>ARS</span></div>
-        <p class="pack-uso">Uso: resolver prórrogas express o fichajes fuera de término rápidamente.</p>
-        <a class="pack-btn" href="https://discord.gg/wMeWWEmbNd" target="_blank" rel="noopener">Pedir por Discord →</a>
+    <!-- ===== CLUBES PRO ===== -->
+    <div class="coins-mode-panel active" id="coinsPanelClubes" data-coin-panel-content="clubes">
+      <div class="coins-mode-header">
+        <div><span class="coins-mode-kicker">ARGENCOINS</span><h3>Clubes Pro</h3></div>
+        <span class="coins-mode-tag">Saldo del club</span>
       </div>
-      <div class="pack-card">
-        <span class="pack-off">10% OFF</span>
-        <div class="pack-ac">12 AC</div>
-        <div class="pack-price">$4.300 <span>ARS</span></div>
-        <p class="pack-uso">Uso: elegir horario de partido, casteo asegurado en vivo o kit de redes.</p>
-        <a class="pack-btn" href="https://discord.gg/wMeWWEmbNd" target="_blank" rel="noopener">Pedir por Discord →</a>
+
+      <h3 class="hist-subhead">Saldo por equipo</h3>
+      <div class="rank-list" id="coinBalanceList"></div>
+      <div class="empty-state" id="coinBalanceEmpty" style="display:none;margin-bottom:12px;">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5-1.3 2-3 2-3 .6-3 2 1.3 2.5 3 2.5 3-1.1 3-2.5"/></svg></div>
+        <h3>Todavía no cargamos saldos</h3>
+        <p>Los saldos de los clubes van a aparecer acá.</p>
       </div>
-      <div class="pack-card">
-        <span class="pack-off">12% OFF</span>
-        <div class="pack-ac">20 AC</div>
-        <div class="pack-price">$7.000 <span>ARS</span></div>
-        <p class="pack-uso">Uso: aporte mayor de saldo para acumular hacia el descuento de liga o comodines de alto valor.</p>
-        <a class="pack-btn" href="https://discord.gg/wMeWWEmbNd" target="_blank" rel="noopener">Pedir por Discord →</a>
+
+      <h3 class="hist-subhead" style="margin-top:36px;">Cómo ganar AC — Clubes Pro</h3>
+      <div class="coin-list">
+        <div class="coin-row"><div class="info"><h4>Participación en Torneo Relámpago</h4><p>Al disputar el torneo.</p></div><span class="coin-badge">+1 AC</span></div>
+        <div class="coin-row"><div class="info"><h4>Inscripción a Liga Oficial</h4><p>Al disputar la temporada.</p></div><span class="coin-badge">+2 AC</span></div>
+        <div class="coin-row"><div class="info"><h4>Campeón de Torneo Relámpago</h4><p>Bonus extra por salir campeón.</p></div><span class="coin-badge">+2 AC</span></div>
+        <div class="coin-row"><div class="info"><h4>Subcampeón de Liga Oficial</h4><p>Bonus extra por finalizar segundo.</p></div><span class="coin-badge">+2 AC</span></div>
+        <div class="coin-row"><div class="info"><h4>Campeón de Liga Oficial</h4><p>Bonus extra por salir campeón.</p></div><span class="coin-badge">+5 AC</span></div>
+      </div>
+
+      <h3 class="hist-subhead" style="margin-top:40px;">Tienda — Clubes Pro</h3>
+      <div class="tienda-sublabel">🃏 Ventajas competitivas y administrativas</div>
+      <ol class="redeem-list">
+      <li class="redeem-item" data-item="Limpieza de Amarilla" data-cost="4 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Limpieza de Amarilla</h4><span class="coin-badge">4 AC</span></div>
+          <p>Elimina 1 amarilla acumulada de un jugador antes de que genere una suspensión.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="+15 min de Tolerancia" data-cost="4 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>+15 min de Tolerancia</h4><span class="coin-badge">4 AC</span></div>
+          <p>Extiende 15 minutos el margen reglamentario para presentarse a un partido oficial.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Protesta Extraordinaria" data-cost="5 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Protesta Extraordinaria</h4><span class="coin-badge">5 AC</span></div>
+          <p>Permite presentar un reclamo fuera del plazo habitual. El canje habilita la revisión, pero no garantiza un fallo favorable.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Prioridad de Inscripción" data-cost="5 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Prioridad de Inscripción</h4><span class="coin-badge">5 AC</span></div>
+          <p>Reserva anticipadamente un cupo en un Torneo Relámpago con plazas limitadas.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Seguro Disciplinario" data-cost="6 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Seguro Disciplinario</h4><span class="coin-badge">6 AC</span></div>
+          <p>Antes de una fecha se designa 1 jugador. Si recibe una amarilla en esa fecha, no suma para suspensión acumulativa. Máximo 1 uso por torneo.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Fichaje Extra / Fuera de Término" data-cost="7 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Fichaje Extra / Fuera de Término</h4><span class="coin-badge">7 AC</span></div>
+          <p>Permite realizar 1 incorporación o reemplazo de jugador fuera de la ventana habitual de fichajes.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Wildcard de Reprogramación" data-cost="10 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Wildcard de Reprogramación</h4><span class="coin-badge">10 AC</span></div>
+          <p>Permite postergar y cambiar de día un partido oficial sin sanción. Requiere aviso previo con un mínimo de 24 horas.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Cupo Extra de Plantel" data-cost="10 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Cupo Extra de Plantel</h4><span class="coin-badge">10 AC</span></div>
+          <p>Permite inscribir 1 jugador adicional por encima del límite reglamentario hasta finalizar el torneo.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Partido con CLQ" data-cost="10 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Partido con CLQ</h4><span class="coin-badge">10 AC</span></div>
+          <p>Habilita la posición Cualquiera (CLQ) en 1 partido oficial. Máximo 1 uso por torneo.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Indulto de Expulsión" data-cost="12 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Indulto de Expulsión</h4><span class="coin-badge">12 AC</span></div>
+          <p>La tarjeta roja permanece registrada, pero se elimina la suspensión posterior. Máximo 1 uso por torneo y no aplica a sanciones graves de conducta.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+      </ol>
+
+      <div class="tienda-sublabel" style="margin-top:34px;">💰 Beneficios económicos</div>
+      <ol class="redeem-list">
+      <li class="redeem-item" data-item="15% de descuento" data-cost="17 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>15% de descuento</h4><span class="coin-badge">17 AC</span></div>
+          <p>15% de descuento en la próxima inscripción paga del club.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="25% de descuento en Relámpago" data-cost="20 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>25% de descuento en Relámpago</h4><span class="coin-badge">20 AC</span></div>
+          <p>25% de descuento para la próxima inscripción a un Torneo Relámpago pago.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="25% de descuento en próxima Liga" data-cost="23 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>25% de descuento en próxima Liga</h4><span class="coin-badge">23 AC</span></div>
+          <p>25% de descuento en la próxima inscripción a Liga Oficial. Es el canje económico más importante de la tienda.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+      </ol>
+
+      <div class="tienda-sublabel" style="margin-top:34px;">📣 Club y contenido</div>
+      <ol class="redeem-list">
+      <li class="redeem-item" data-item="Boost de Visibilidad" data-cost="6 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Boost de Visibilidad</h4><span class="coin-badge">6 AC</span></div>
+          <p>El club aparece destacado durante 7 días e incluye una historia/publicación oficial o convocatoria con @everyone en Discord.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Transmisión / Casteo a Pedido" data-cost="8 AC" data-coin-mode="club">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Transmisión / Casteo a Pedido</h4><span class="coin-badge">8 AC</span></div>
+          <p>Otorga prioridad para que un partido oficial elegido sea transmitido o comentado por ArgenLeague.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre de tu equipo">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+      </ol>
+
+      <div class="coins-rules-box">
+        <strong>Condiciones Clubes Pro</strong>
+        <p>La Wildcard de Reprogramación requiere un mínimo de 24 horas de anticipación. Los beneficios que deban declararse antes de un partido deben solicitarse antes de su inicio. Los descuentos no son acumulables entre sí.</p>
       </div>
     </div>
 
-    <p class="tienda-sublabel" style="margin-top:32px;">Servicios directos y contenido (pagos únicos)</p>
-    <ul class="price-list">
-      <li class="price-item">
-        <div class="ri-body"><div class="ri-head"><h4>Fichaje Fuera de Término</h4><span class="price-badge">$1.800 ARS</span></div><p>Habilita la incorporación de un jugador al plantel fuera del mercado oficial.</p></div>
-      </li>
-      <li class="price-item">
-        <div class="ri-body"><div class="ri-head"><h4>Prórroga Express 20 Minutos</h4><span class="price-badge">$2.000 ARS</span></div><p>Otorga 20 minutos adicionales de tolerancia antes del W.O.</p></div>
-      </li>
-      <li class="price-item">
-        <div class="ri-body"><div class="ri-head"><h4>Pase VIP Discord para el Club (1 mes)</h4><span class="price-badge">$3.000 ARS</span></div><p>Canal de voz exclusivo con el logo del club e íconos/colores destacados.</p></div>
-      </li>
-      <li class="price-item">
-        <div class="ri-body"><div class="ri-head"><h4>Transmisión / Casteo Asegurado</h4><span class="price-badge">$3.500 ARS</span></div><p>Garantiza la transmisión en vivo del partido con relatores oficiales.</p></div>
-      </li>
-      <li class="price-item">
-        <div class="ri-body"><div class="ri-head"><h4>Kit Gráfico de Redes (Matchday + Resultado)</h4><span class="price-badge">$4.000 ARS</span></div><p>Placas profesionales personalizadas para publicar en Instagram antes y después del partido.</p></div>
-      </li>
-      <li class="price-item">
-        <div class="ri-body"><div class="ri-head"><h4>Edit Corto de Jugada / Golazo (Reel / TikTok)</h4><span class="price-badge">$4.000 ARS</span></div><p>Video vertical profesional editado con música, efectos y relatos de la mejor jugada.</p></div>
-      </li>
-    </ul>
-    <a class="pack-btn" style="display:inline-block;margin-bottom:8px;" href="https://discord.gg/wMeWWEmbNd" target="_blank" rel="noopener">Pedir por Discord →</a>
+    <!-- ===== 1V1 ===== -->
+    <div class="coins-mode-panel" id="coinsPanel1v1" data-coin-panel-content="uno">
+      <div class="coins-mode-header">
+        <div><span class="coins-mode-kicker">ARGENCOINS</span><h3>1v1</h3></div>
+        <span class="coins-mode-tag">Saldo individual</span>
+      </div>
 
-    <h3 class="hist-subhead" style="margin-top:40px;">Reglas y condiciones</h3>
+      <h3 class="hist-subhead">Saldo por jugador</h3>
+      <div class="rank-list" id="coinPlayerBalanceList"></div>
+      <div class="empty-state" id="coinPlayerBalanceEmpty" style="display:none;margin-bottom:12px;">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5-1.3 2-3 2-3 .6-3 2 1.3 2.5 3 2.5 3-1.1 3-2.5"/></svg></div>
+        <h3>Todavía no cargamos saldos 1v1</h3>
+        <p>Los ArgenCoins individuales van a aparecer acá cuando empiecen a disputarse los torneos 1v1.</p>
+      </div>
+
+      <h3 class="hist-subhead" style="margin-top:36px;">Cómo ganar AC — 1v1</h3>
+      <div class="coin-earn-columns">
+        <div class="coin-earn-card">
+          <div class="tienda-sublabel">🆓 Torneo gratuito</div>
+          <div class="coin-list">
+            <div class="coin-row"><div class="info"><h4>Participar</h4><p>Por disputar el torneo 1v1.</p></div><span class="coin-badge">+1 AC</span></div>
+            <div class="coin-row"><div class="info"><h4>Subcampeón</h4><p>Bonus adicional al premio de participación.</p></div><span class="coin-badge">+2 AC</span></div>
+            <div class="coin-row"><div class="info"><h4>Campeón</h4><p>Bonus adicional al premio de participación.</p></div><span class="coin-badge">+3 AC</span></div>
+          </div>
+        </div>
+        <div class="coin-earn-card">
+          <div class="tienda-sublabel">💳 Torneo pago</div>
+          <div class="coin-list">
+            <div class="coin-row"><div class="info"><h4>Participar</h4><p>Por disputar el torneo 1v1 pago.</p></div><span class="coin-badge">+3 AC</span></div>
+            <div class="coin-row"><div class="info"><h4>Subcampeón</h4><p>Bonus adicional al premio de participación.</p></div><span class="coin-badge">+2 AC</span></div>
+            <div class="coin-row"><div class="info"><h4>Campeón</h4><p>Bonus adicional al premio de participación.</p></div><span class="coin-badge">+4 AC</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">Totales de referencia: campeón gratis = <b style="color:var(--line)">4 AC</b> · subcampeón gratis = <b style="color:var(--line)">3 AC</b> · campeón pago = <b style="color:var(--line)">7 AC</b> · subcampeón pago = <b style="color:var(--line)">5 AC</b>.</div>
+
+      <h3 class="hist-subhead" style="margin-top:40px;">Tienda — 1v1</h3>
+      <div class="tienda-sublabel">🎮 Competencia y organización</div>
+      <ol class="redeem-list">
+      <li class="redeem-item" data-item="Tiempo Extra de Espera" data-cost="4 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Tiempo Extra de Espera</h4><span class="coin-badge">4 AC</span></div>
+          <p>Otorga +15 minutos de tolerancia para presentarse a un partido 1v1.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Prioridad de Horario" data-cost="5 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Prioridad de Horario</h4><span class="coin-badge">5 AC</span></div>
+          <p>Permite elegir primero entre las franjas horarias disponibles definidas por la organización.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Prioridad de Inscripción" data-cost="5 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Prioridad de Inscripción</h4><span class="coin-badge">5 AC</span></div>
+          <p>Reserva anticipadamente un cupo en un torneo 1v1 con plazas limitadas.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Wildcard de Reprogramación" data-cost="10 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Wildcard de Reprogramación</h4><span class="coin-badge">10 AC</span></div>
+          <p>Permite mover un partido de día u horario con aviso previo y aprobación de la organización.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Wildcard de Cupo Lleno" data-cost="12 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Wildcard de Cupo Lleno</h4><span class="coin-badge">12 AC</span></div>
+          <p>Habilita un cupo administrativo reservado aunque el torneo haya alcanzado su límite normal. Su disponibilidad es limitada por torneo.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+      </ol>
+
+      <div class="tienda-sublabel" style="margin-top:34px;">💰 Beneficios económicos</div>
+      <ol class="redeem-list">
+      <li class="redeem-item" data-item="15% de descuento en torneo 1v1" data-cost="17 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>15% de descuento en torneo 1v1</h4><span class="coin-badge">17 AC</span></div>
+          <p>15% de descuento en la próxima inscripción paga a un torneo 1v1.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="25% de descuento en torneo 1v1" data-cost="23 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>25% de descuento en torneo 1v1</h4><span class="coin-badge">23 AC</span></div>
+          <p>25% de descuento en la próxima inscripción paga a un torneo 1v1.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+      </ol>
+
+      <div class="tienda-sublabel" style="margin-top:34px;">📣 Perfil y comunidad</div>
+      <ol class="redeem-list">
+      <li class="redeem-item" data-item="Rango Especial en Discord" data-cost="5 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Rango Especial en Discord</h4><span class="coin-badge">5 AC</span></div>
+          <p>Rango exclusivo para el jugador durante un período determinado.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Placa Personalizada" data-cost="6 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Placa Personalizada</h4><span class="coin-badge">6 AC</span></div>
+          <p>Diseño oficial de ArgenLeague personalizado para el jugador.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Jugador Destacado — 7 días" data-cost="7 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Jugador Destacado — 7 días</h4><span class="coin-badge">7 AC</span></div>
+          <p>El jugador aparece destacado en el Inicio de ArgenLeague durante una semana.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+
+      <li class="redeem-item" data-item="Partido Destacado / Casteado" data-cost="8 AC" data-coin-mode="1v1">
+        <div class="ri-body">
+          <div class="ri-head"><h4>Partido Destacado / Casteado</h4><span class="coin-badge">8 AC</span></div>
+          <p>Da prioridad para que uno de sus partidos sea anunciado, transmitido o comentado por ArgenLeague.</p>
+          <button class="redeem-btn" type="button">Canjear</button>
+          <div class="redeem-form">
+            <input type="text" class="redeem-input" placeholder="Nombre / usuario del jugador">
+            <button class="redeem-send" type="button">Generar comprobante</button>
+            <span class="redeem-status"></span>
+          </div>
+        </div>
+      </li>
+      </ol>
+
+      <div class="coins-rules-box">
+        <strong>Condiciones 1v1</strong>
+        <p>La reprogramación requiere aviso previo y aprobación de la organización. La Wildcard de Cupo Lleno depende de la disponibilidad de cupos administrativos y puede limitarse por torneo. Los descuentos no son acumulables entre sí.</p>
+      </div>
+    </div>
+
+    <h3 class="hist-subhead" style="margin-top:40px;">Reglas generales de ArgenCoins</h3>
     <ul class="rules-list">
-      <li class="rule"><div><h3>Anticipación obligatoria</h3><p>Los beneficios de Elegir Horario (12 AC) y Wildcard de Reprogramación (15 AC) requieren solicitud previa con un mínimo de 24 horas.</p></div></li>
-      <li class="rule"><div><h3>Cláusula de inactividad</h3><p>Si un club pasa 60 días consecutivos sin participar en torneos oficiales o relámpagos, su saldo acumulado vence y se reinicia a cero.</p></div></li>
+      <li class="rule"><div><h3>Cláusula de inactividad</h3><p>Si un club o jugador pasa 60 días consecutivos sin participar en competencias de su modalidad, su saldo acumulado puede vencer y reiniciarse a cero.</p></div></li>
       <li class="rule"><div><h3>Reset por edición</h3><p>Todos los saldos vuelven a cero con el lanzamiento oficial de cada nueva entrega del juego (EA SPORTS FC 28).</p></div></li>
-      <li class="rule"><div><h3>Supercopa de Campeones</h3><p>Todos los campeones de Torneos Relámpago clasifican a la Supercopa. Si un campeón repite título, el cupo pasa al Subcampeón del relámpago; si el subcampeón también ya está clasificado, la plaza se otorga por Tabla General de ArgenCoins.</p></div></li>
+      <li class="rule"><div><h3>Validación del canje</h3><p>Todo canje queda sujeto a la validación de ArgenLeague y a las condiciones particulares indicadas en cada beneficio.</p></div></li>
     </ul>
   </section>
 
@@ -1444,14 +1794,14 @@
           {l:'Lento 5', v:'Chapecoence', h:'23:45', gl:0, gv:3},
         ]},
         {fecha:11, dia:'Sábado', fechaTxt:'05/09/2026', hora:'23:00', libre:'Lento 5', partidos:[
-          {l:'Rejunte 40', v:'Lechonas Gang', h:'23:00', gl:null, gv:null},
-          {l:'Agentes Libres', v:'Fulbo Champeta', h:'23:00', gl:null, gv:null},
-          {l:'Cazachilenos FC', v:'Chapecoence', h:'23:00', gl:null, gv:null},
+          {l:'Rejunte 40', v:'Lechonas Gang', h:'23:00', gl:0, gv:3},
+          {l:'Agentes Libres', v:'Fulbo Champeta', h:'23:00', gl:0, gv:3},
+          {l:'Cazachilenos FC', v:'Chapecoence', h:'23:00', gl:2, gv:4},
         ]},
         {fecha:12, dia:'Sábado', fechaTxt:'05/09/2026', hora:'23:45', libre:'Cazachilenos FC', partidos:[
-          {l:'Agentes Libres', v:'Rejunte 40', h:'23:45', gl:null, gv:null},
+          {l:'Agentes Libres', v:'Rejunte 40', h:'23:45', gl:0, gv:3},
           {l:'Chapecoence', v:'Lechonas Gang', h:'23:45', gl:null, gv:null},
-          {l:'Fulbo Champeta', v:'Lento 5', h:'23:45', gl:null, gv:null},
+          {l:'Fulbo Champeta', v:'Lento 5', h:'23:45', gl:3, gv:0},
         ]},
         {fecha:13, dia:'Domingo', fechaTxt:'06/09/2026', hora:'23:00', libre:'Lechonas Gang', partidos:[
           {l:'Rejunte 40', v:'Chapecoence', h:'23:00', gl:null, gv:null},
@@ -1472,7 +1822,7 @@
       // a medida que tengas los datos. "vallas menos vencidas" se calcula solo con el fixture.
       estadisticas:{
         goleadores:[
-          {jugador:'chucky3412', equipo:'Chapecoence', cantidad:3},
+          {jugador:'chucky3412', equipo:'Chapecoence', cantidad:4},
           {jugador:'C.Robert', equipo:'Chapecoence', cantidad:1},
           {jugador:'M.Rocha', equipo:'Fulbo Champeta', cantidad:2},
           {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:16},
@@ -1490,7 +1840,7 @@
           {jugador:'SrFox', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Sibak', equipo:'Rejunte 40', cantidad:1},
           {jugador:'E.Nene', equipo:'Lento 5', cantidad:2},
-          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:12},
+          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:13},
           {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:5},
           {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Juanse', equipo:'Lechonas Gang', cantidad:1},
@@ -1502,8 +1852,11 @@
           {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Roooddrrii', equipo:'Chapecoence', cantidad:1},
           {jugador:'Tatogartuaxd', equipo:'Chapecoence', cantidad:1},
-          {jugador:'El Beto', equipo:'Chapecoence', cantidad:2},
-        ],
+          {jugador:'El Beto', equipo:'Chapecoence', cantidad:5},
+        
+          {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:2},
+          {jugador:'Chupi', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'El Enano', equipo:'Cazachilenos FC', cantidad:1},],
         asistidores:[
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
           {jugador:'Lopez', equipo:'Cazachilenos FC', cantidad:6},
@@ -1514,9 +1867,9 @@
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:4},
           {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:4},
-          {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:3},
           {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:5},
-          {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:5},
+          {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:6},
           {jugador:'Solocrimen32', equipo:'Lechonas Gang', cantidad:3},
           {jugador:'Fraan2021', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:1},
@@ -1526,7 +1879,9 @@
           {jugador:'Tatogartuaxd', equipo:'Chapecoence', cantidad:1},
           {jugador:'Bebecita', equipo:'Fulbo Champeta', cantidad:1},
           {jugador:'M.Rocha', equipo:'Fulbo Champeta', cantidad:1},
-        ],
+        
+          {jugador:'El Beto', equipo:'Chapecoence', cantidad:1},
+          {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:2},],
         amarillas:[
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:1},
           {jugador:'Gabo', equipo:'Rejunte 40', cantidad:1},
@@ -1549,7 +1904,10 @@
           {jugador:'Shaggy', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Castolo', equipo:'Fulbo Champeta', cantidad:1},
-        ],
+        
+          {jugador:'Roooddrrii', equipo:'Chapecoence', cantidad:1},
+          {jugador:'El Beto', equipo:'Chapecoence', cantidad:1},
+          {jugador:'J.Lopez', equipo:'Cazachilenos FC', cantidad:1},],
         rojas:[
           {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:1},
         ],
@@ -1564,7 +1922,9 @@
           {jugador:'Flecha', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Chila', equipo:'Cazachilenos FC', cantidad:1},
-        ],
+        
+          {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'El Beto', equipo:'Chapecoence', cantidad:1},],
       }
     }
   ];
@@ -2757,24 +3117,47 @@
     histSearchEmpty.style.display = (q && !anyVisible) ? 'block' : 'none';
   });
 
-  // ---- ARGENCOINS: saldo por equipo ----
+  // ---- ARGENCOINS: Clubes Pro + 1v1 ----
   const coinBalances = [
     // { team:'Lechonas Gang', balance:8 },
   ];
-  const coinBalanceList = document.getElementById('coinBalanceList');
-  const coinBalanceEmpty = document.getElementById('coinBalanceEmpty');
-  if(coinBalances.length === 0){
-    coinBalanceEmpty.style.display = 'block';
-  } else {
-    coinBalances.slice().sort((a,b)=>b.balance-a.balance).forEach((s,i)=>{
+  const coinPlayerBalances = [
+    // { player:'Usuario', balance:4 },
+  ];
+
+  function renderCoinBalances(data, listId, emptyId, key){
+    const list = document.getElementById(listId);
+    const empty = document.getElementById(emptyId);
+    if(!list || !empty) return;
+    list.innerHTML = '';
+    if(data.length === 0){
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    data.slice().sort((a,b)=>b.balance-a.balance).forEach((s,i)=>{
       const row = document.createElement('div');
       row.className = 'rank-row';
-      row.innerHTML = `<span class="n">${i+1}</span><span class="team">${s.team}</span><span class="val">${s.balance} AC</span>`;
-      coinBalanceList.appendChild(row);
+      row.innerHTML = `<span class="n">${i+1}</span><span class="team">${s[key]}</span><span class="val">${s.balance} AC</span>`;
+      list.appendChild(row);
     });
   }
 
-  // ---- ARGENCOINS: comprobante de canje (para sacar captura y mandar por Discord) ----
+  renderCoinBalances(coinBalances, 'coinBalanceList', 'coinBalanceEmpty', 'team');
+  renderCoinBalances(coinPlayerBalances, 'coinPlayerBalanceList', 'coinPlayerBalanceEmpty', 'player');
+
+  // Selector Clubes Pro / 1v1
+  document.querySelectorAll('.coins-mode-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const panel = btn.dataset.coinPanel;
+      document.querySelectorAll('.coins-mode-btn').forEach(b=>b.classList.toggle('active', b===btn));
+      document.querySelectorAll('.coins-mode-panel').forEach(p=>{
+        p.classList.toggle('active', p.dataset.coinPanelContent===panel);
+      });
+    });
+  });
+
+  // Comprobantes de canje
   document.querySelectorAll('.redeem-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const form = btn.nextElementSibling;
@@ -2786,24 +3169,35 @@
     return 'AC-' + Math.random().toString(36).slice(2,7).toUpperCase();
   }
 
+  function escapeHtml(value){
+    return String(value).replace(/[&<>"']/g, c=>({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[c]));
+  }
+
   document.querySelectorAll('.redeem-send').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const item = btn.closest('.redeem-item');
       const form = item.querySelector('.redeem-form');
       const input = item.querySelector('.redeem-input');
       const status = item.querySelector('.redeem-status');
-      const equipo = input.value.trim();
+      const identidad = input.value.trim();
       const nombre = item.dataset.item;
       const costo = item.dataset.cost;
+      const mode = item.dataset.coinMode || 'club';
 
-      if(!equipo){
-        status.textContent = 'Escribí el nombre de tu equipo antes de generar el comprobante.';
+      const label = mode === '1v1' ? 'Jugador' : 'Equipo';
+      const balances = mode === '1v1' ? coinPlayerBalances : coinBalances;
+      const key = mode === '1v1' ? 'player' : 'team';
+
+      if(!identidad){
+        status.textContent = `Escribí el ${mode === '1v1' ? 'nombre / usuario del jugador' : 'nombre de tu equipo'} antes de generar el comprobante.`;
         status.className = 'redeem-status error';
         return;
       }
 
       const costoNum = parseInt(costo, 10) || 0;
-      const registro = coinBalances.find(s => s.team.toLowerCase() === equipo.toLowerCase());
+      const registro = balances.find(s => String(s[key]).toLowerCase() === identidad.toLowerCase());
       const saldoActual = registro ? registro.balance : 0;
 
       if(saldoActual < costoNum){
@@ -2821,12 +3215,12 @@
       receipt.className = 'receipt';
       receipt.innerHTML = `
         <div class="receipt-head">
-          <span>Comprobante de canje</span>
+          <span>Comprobante de canje · ${mode === '1v1' ? '1v1' : 'Clubes Pro'}</span>
           <span class="receipt-code">${codigo}</span>
         </div>
-        <div class="receipt-row"><span>Equipo</span><span>${equipo}</span></div>
-        <div class="receipt-row"><span>Beneficio</span><span>${nombre}</span></div>
-        <div class="receipt-row"><span>Costo</span><span>${costo}</span></div>
+        <div class="receipt-row"><span>${label}</span><span>${escapeHtml(identidad)}</span></div>
+        <div class="receipt-row"><span>Beneficio</span><span>${escapeHtml(nombre)}</span></div>
+        <div class="receipt-row"><span>Costo</span><span>${escapeHtml(costo)}</span></div>
         <div class="receipt-row"><span>Fecha</span><span>${fecha} (ARG)</span></div>
         <div class="receipt-note">📸 Sacale una captura a este comprobante y mandala por Discord para confirmar tu canje.</div>`;
 
@@ -3127,5 +3521,50 @@
   obs.observe(document.body,{childList:true,subtree:true});
 })();
 </script>
+
+<style id="argencoins-modes-v1">
+  .coins-mode-tabs{
+    display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:24px 0 26px;
+    padding:5px;background:var(--panel);border:1px solid var(--border);border-radius:10px;
+  }
+  .coins-mode-btn{
+    border:0;background:transparent;color:var(--muted);padding:11px 14px;border-radius:7px;
+    font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:.35px;
+    cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;
+  }
+  .coins-mode-btn:hover{color:var(--line);}
+  .coins-mode-btn.active{
+    color:var(--accent);background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--accent-dim);
+  }
+  .coins-mode-panel{display:none;}
+  .coins-mode-panel.active{display:block;}
+  .coins-mode-header{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    margin-bottom:22px;padding-bottom:15px;border-bottom:1px solid var(--border);
+  }
+  .coins-mode-header h3{margin:2px 0 0;font-family:'Anton',sans-serif;font-size:27px;font-weight:400;letter-spacing:.4px;}
+  .coins-mode-kicker{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:.8px;}
+  .coins-mode-tag{
+    font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--steel);border:1px solid var(--border);
+    background:var(--panel);padding:5px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.4px;
+  }
+  .coin-earn-columns{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .coin-earn-card{min-width:0;}
+  .coins-rules-box{
+    margin-top:32px;padding:15px 17px;background:rgba(79,166,232,.045);
+    border:1px solid var(--border);border-radius:8px;
+  }
+  .coins-rules-box strong{
+    display:block;margin-bottom:5px;font-family:'Oswald',sans-serif;font-size:13px;color:var(--line);
+  }
+  .coins-rules-box p{margin:0;color:var(--muted);font-size:12px;line-height:1.55;}
+  @media(max-width:680px){
+    .coins-mode-tabs{position:sticky;top:62px;z-index:12;background:rgba(13,21,36,.96);backdrop-filter:blur(8px);}
+    .coins-mode-btn{font-size:12px;padding:10px 8px;}
+    .coin-earn-columns{grid-template-columns:1fr;}
+    .coins-mode-header{align-items:flex-end;}
+    .coins-mode-header h3{font-size:24px;}
+  }
+</style>
 </body>
 </html>
