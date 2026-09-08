@@ -414,7 +414,40 @@
   .premio-bonus p{margin:0;color:var(--line);font-size:13px;line-height:1.55;}
 
   /* ===== EQUIPO IDEAL ===== */
-  .ideal-team-wrap{margin-bottom:22px;}
+  .ideal-team-wrap{margin-bottom:10px;}
+  .stats-ideal-section{
+    margin:0 0 26px;padding:15px;border:1px solid var(--border);border-radius:10px;background:var(--panel);
+  }
+  .stats-ideal-title{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .stats-ideal-title>span{font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--accent);}
+  .stats-ideal-title small{font-size:9.5px;color:var(--muted);}
+  .ideal-team-collapsible{
+    border:1px solid var(--border);border-radius:9px;background:var(--panel-2);overflow:hidden;
+  }
+  .ideal-team-collapsible + .ideal-team-collapsible{margin-top:8px;}
+  .ideal-team-summary{
+    list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:13px 14px;cursor:pointer;user-select:none;
+  }
+  .ideal-team-summary::-webkit-details-marker{display:none;}
+  .ideal-summary-main{display:flex;align-items:center;gap:9px;min-width:0;}
+  .ideal-summary-star{font-size:15px;line-height:1;}
+  .ideal-team-summary h3{
+    margin:0;font-family:'Oswald',sans-serif;font-size:15px;font-weight:650;color:var(--line);
+  }
+  .ideal-summary-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .ideal-formation{
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--accent);
+    border:1px solid var(--accent-dim);border-radius:999px;padding:3px 7px;
+  }
+  .ideal-summary-chevron{
+    color:var(--muted);font-size:17px;line-height:1;transition:transform .18s ease;
+  }
+  .ideal-team-collapsible[open] .ideal-summary-chevron{transform:rotate(180deg);}
+  .ideal-team-content{padding:0 10px 10px;}
   .ideal-team-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:10px;}
   .ideal-team-head h3{margin:0;font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--line);}
   .ideal-team-head span{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--accent);border:1px solid var(--accent-dim);border-radius:999px;padding:4px 8px;white-space:nowrap;}
@@ -429,6 +462,12 @@
   .ideal-line[data-count='1']{grid-template-columns:minmax(150px,220px);}
   .ideal-line[data-count='2']{grid-template-columns:repeat(2,minmax(120px,190px));}
   .ideal-line[data-count='3']{grid-template-columns:repeat(3,minmax(100px,165px));}
+  .ideal-line[data-count='4']{grid-template-columns:repeat(4,minmax(90px,150px));}
+  .ideal-line[data-tipo='ofensivos']{
+    width:90%;grid-template-columns:minmax(120px,180px) minmax(120px,180px);
+    justify-content:space-between;
+  }
+  .ideal-team-note{margin:3px 0 0;font-size:10.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
   .ideal-player{min-width:0;text-align:center;background:rgba(7,16,25,.88);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:9px 8px;box-shadow:0 5px 16px rgba(0,0,0,.18);}
   .ideal-player-pos{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--accent);letter-spacing:.6px;margin-bottom:3px;}
   .ideal-player-name{display:block;font-family:'Oswald',sans-serif;font-size:13px;font-weight:650;color:var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -436,11 +475,22 @@
   @media (max-width:560px){
     .ideal-team-head{align-items:center;}
     .ideal-team-head h3{font-size:16px;}
+    .stats-ideal-section{padding:10px;}
+    .stats-ideal-title{align-items:flex-start;flex-direction:column;gap:2px;}
+    .ideal-team-summary{padding:11px 10px;}
+    .ideal-team-summary h3{font-size:13.5px;}
+    .ideal-formation{font-size:8.5px;}
+    .ideal-summary-star{font-size:13px;}
     .ideal-pitch{padding:16px 7px 13px;}
     .ideal-line{gap:5px;margin:9px auto;}
     .ideal-line[data-count='1']{grid-template-columns:minmax(125px,180px);}
     .ideal-line[data-count='2']{grid-template-columns:repeat(2,minmax(100px,145px));}
     .ideal-line[data-count='3']{grid-template-columns:repeat(3,minmax(0,1fr));width:100%;}
+    .ideal-line[data-count='4']{grid-template-columns:repeat(4,minmax(0,1fr));width:100%;}
+    .ideal-line[data-tipo='ofensivos']{
+      width:96%;grid-template-columns:minmax(100px,140px) minmax(100px,140px);
+      justify-content:space-between;
+    }
     .ideal-player{padding:7px 4px;}
     .ideal-player-name{font-size:11.5px;}
     .ideal-player-team{font-size:8.5px;}
@@ -842,6 +892,40 @@
   .final-preview-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);font-weight:800;}
   .final-preview strong{font-family:'Oswald',sans-serif;font-size:13px;color:var(--line);}
   .final-preview>span:last-child{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);}
+
+  
+  .champion-banner{
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;
+    margin:0 0 18px;padding:18px 14px;border:1px solid rgba(79,166,232,.55);
+    border-radius:10px;background:rgba(79,166,232,.08);
+  }
+  .champion-kicker{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:var(--accent);letter-spacing:.8px;}
+  .champion-banner strong{font-family:'Anton',sans-serif;font-size:31px;letter-spacing:.5px;color:var(--line);font-weight:400;}
+  .champion-banner>span:last-child{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
+  .fase-final-section-title{
+    margin:14px 0 9px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;
+    letter-spacing:.8px;color:var(--muted);
+  }
+  .final-title-row{margin-top:20px;color:var(--accent);}
+  .semi-score{
+    font-family:'Anton',sans-serif;font-size:20px;color:var(--line);white-space:nowrap;
+    min-width:44px;text-align:center;
+  }
+  .aggregate-result{
+    display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 12px;
+    border-top:1px solid var(--border);background:rgba(79,166,232,.04);text-align:center;
+  }
+  .aggregate-result>span:first-child{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:.6px;}
+  .aggregate-result strong{font-family:'Oswald',sans-serif;font-size:15px;color:var(--line);}
+  .winner-pill{
+    font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--accent);
+    border:1px solid var(--accent-dim);border-radius:999px;padding:3px 8px;
+  }
+  .final-card-complete{
+    border:1px solid rgba(79,166,232,.45);border-radius:9px;background:rgba(8,14,24,.6);overflow:hidden;
+  }
+  .final-aggregate{background:rgba(79,166,232,.085);}
+  .champion-pill{font-weight:800;}
 
   @media(max-width:700px){
     .semis-grid{grid-template-columns:1fr;}
@@ -1729,8 +1813,8 @@
     {
       id:'clubes-pro',
       nombre:'Liga de Clubes Pro',
-      estado:'en-curso',
-      estadoLabel:'En juego',
+      estado:'finalizado',
+      estadoLabel:'Finalizado',
       descripcion:'Primera liga de clubes de ArgenLeague, formato 11 vs 11. 7 equipos compitiendo a dos ruedas.',
       meta:'7 equipos · Fecha 1 jugada',
       cupoOcupado:7,
@@ -1761,6 +1845,34 @@
           ]},
           {tipo:'defensa', jugadores:[
             {pos:'DEF', jugador:'Saanty10', equipo:'Lechonas Gang'}
+          ]},
+          {tipo:'arquero', jugadores:[
+            {pos:'ARQ', jugador:'Lucario3438458', equipo:'Lechonas Gang'}
+          ]}
+        ]
+      },
+      equipoIdealSegundaRonda:{
+        titulo:'Equipo Ideal — Segunda Ronda',
+        formacion:'4-2-2-2',
+        nota:'No se contaron los playoffs.',
+        lineas:[
+          {tipo:'delanteros', jugadores:[
+            {pos:'DC', jugador:'Orangutan', equipo:'Cazachilenos FC'},
+            {pos:'DC', jugador:'El Beto', equipo:'Chapecoence'}
+          ]},
+          {tipo:'ofensivos', jugadores:[
+            {pos:'MI', jugador:'Emilion', equipo:'Lechonas Gang'},
+            {pos:'MD', jugador:'Lopez', equipo:'Cazachilenos FC'}
+          ]},
+          {tipo:'medios', jugadores:[
+            {pos:'MC', jugador:'Valzig TV', equipo:'Chapecoence'},
+            {pos:'MC', jugador:'Chucky3412', equipo:'Chapecoence'}
+          ]},
+          {tipo:'defensa', jugadores:[
+            {pos:'LI', jugador:'Facu Moyano', equipo:'Chapecoence'},
+            {pos:'DFC', jugador:'Saanty10', equipo:'Lechonas Gang'},
+            {pos:'DFC', jugador:'Chila', equipo:'Cazachilenos FC'},
+            {pos:'LD', jugador:'L. Iglesias', equipo:'Cazachilenos FC'}
           ]},
           {tipo:'arquero', jugadores:[
             {pos:'ARQ', jugador:'Lucario3438458', equipo:'Lechonas Gang'}
@@ -1889,24 +2001,35 @@
       playoffs:{
         fechaTxt:'07/09/2026',
         dia:'Lunes',
-        etiqueta:'HOY',
+        etiqueta:'FINALIZADO',
         semifinales:[
           {
             serie:'Semifinal 1',
             sembrados:'1° vs 4°',
-            ida:{l:'Fulbo Champeta', v:'Lechonas Gang', h:'23:00'},
-            vuelta:{l:'Lechonas Gang', v:'Fulbo Champeta', h:'23:30'},
-            defineLocal:'Lechonas Gang'
+            ida:{l:'Fulbo Champeta', v:'Lechonas Gang', h:'23:00', gl:0, gv:6},
+            vuelta:{l:'Lechonas Gang', v:'Fulbo Champeta', h:'23:30', gl:6, gv:0},
+            defineLocal:'Lechonas Gang',
+            agregado:'Lechonas Gang 12 - 0 Fulbo Champeta',
+            ganador:'Lechonas Gang'
           },
           {
             serie:'Semifinal 2',
             sembrados:'2° vs 3°',
-            ida:{l:'Cazachilenos FC', v:'Chapecoence', h:'23:00'},
-            vuelta:{l:'Chapecoence', v:'Cazachilenos FC', h:'23:30'},
-            defineLocal:'Chapecoence'
+            ida:{l:'Cazachilenos FC', v:'Chapecoence', h:'23:00', gl:3, gv:0},
+            vuelta:{l:'Chapecoence', v:'Cazachilenos FC', h:'23:30', gl:3, gv:1},
+            defineLocal:'Chapecoence',
+            agregado:'Cazachilenos FC 4 - 3 Chapecoence',
+            ganador:'Cazachilenos FC'
           }
         ],
-        final:{estado:'Martes 08/09/2026'}
+        final:{
+          fechaTxt:'08/09/2026',
+          dia:'Martes',
+          ida:{l:'Cazachilenos FC', v:'Lechonas Gang', h:'23:00', gl:1, gv:2},
+          vuelta:{l:'Lechonas Gang', v:'Cazachilenos FC', h:'23:30', gl:1, gv:1},
+          agregado:'Lechonas Gang 3 - 2 Cazachilenos FC',
+          campeon:'Lechonas Gang'
+        }
       },
       // Estadísticas de jugadores: cargá acá goleadores, asistidores, amarillas y rojas
       // a medida que tengas los datos. "vallas menos vencidas" se calcula solo con el fixture.
@@ -1915,12 +2038,12 @@
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:5},
           {jugador:'C.Robert', equipo:'Chapecoence', cantidad:1},
           {jugador:'M.Rocha', equipo:'Fulbo Champeta', cantidad:2},
-          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:18},
+          {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:19},
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:3},
-          {jugador:'Bandana', equipo:'Cazachilenos FC', cantidad:2},
+          {jugador:'Bandana', equipo:'Cazachilenos FC', cantidad:3},
           {jugador:'L.Iglesias', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Lopez', equipo:'Cazachilenos FC', cantidad:1},
-          {jugador:'Titan', equipo:'Cazachilenos FC', cantidad:3},
+          {jugador:'Titan', equipo:'Cazachilenos FC', cantidad:4},
           {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:4},
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:2},
           {jugador:'Castolo', equipo:'Fulbo Champeta', cantidad:2},
@@ -1930,7 +2053,7 @@
           {jugador:'SrFox', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Sibak', equipo:'Rejunte 40', cantidad:1},
           {jugador:'E.Nene', equipo:'Lento 5', cantidad:2},
-          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:13},
+          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:23},
           {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:6},
           {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Juanse', equipo:'Lechonas Gang', cantidad:1},
@@ -1938,8 +2061,8 @@
           {jugador:'Dioseslaclave32', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'Bananin', equipo:'Rejunte 40', cantidad:3},
           {jugador:'Y.Hernandez', equipo:'Rejunte 40', cantidad:1},
-          {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:2},
-          {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:5},
+          {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:2},
           {jugador:'Roooddrrii', equipo:'Chapecoence', cantidad:1},
           {jugador:'Tatogartuaxd', equipo:'Chapecoence', cantidad:4},
           {jugador:'El Beto', equipo:'Chapecoence', cantidad:8},
@@ -1947,7 +2070,8 @@
           {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:2},
           {jugador:'Chupi', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'El Enano', equipo:'Cazachilenos FC', cantidad:1},
-          {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:1},],
+          {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:1},
+          {jugador:'Matiezeee', equipo:'Lechonas Gang', cantidad:1},],
         asistidores:[
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
           {jugador:'Lopez', equipo:'Cazachilenos FC', cantidad:6},
@@ -1956,15 +2080,15 @@
           {jugador:'Bandana', equipo:'Cazachilenos FC', cantidad:5},
           {jugador:'L.Iglesias', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:1},
-          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:5},
-          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:4},
-          {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:3},
+          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:7},
+          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:5},
+          {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:6},
           {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:5},
           {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:7},
           {jugador:'Solocrimen32', equipo:'Lechonas Gang', cantidad:3},
           {jugador:'Fraan2021', equipo:'Lechonas Gang', cantidad:1},
-          {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:1},
-          {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:3},
+          {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:6},
           {jugador:'Castellon', equipo:'Rejunte 40', cantidad:2},
           {jugador:'Izuhx', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Tatogartuaxd', equipo:'Chapecoence', cantidad:3},
@@ -1972,7 +2096,8 @@
           {jugador:'M.Rocha', equipo:'Fulbo Champeta', cantidad:1},
         
           {jugador:'El Beto', equipo:'Chapecoence', cantidad:6},
-          {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:3},],
+          {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:3},
+          {jugador:'El Wachy', equipo:'Lechonas Gang', cantidad:1},],
         amarillas:[
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:1},
           {jugador:'Gabo', equipo:'Rejunte 40', cantidad:1},
@@ -2005,18 +2130,21 @@
         mvp:[
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
           {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:4},
-          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:2},
+          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:3},
           {jugador:'Bananin', equipo:'Rejunte 40', cantidad:1},
-          {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:2},
+          {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:3},
           {jugador:'Castellon', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:1},
           {jugador:'Flecha', equipo:'Lechonas Gang', cantidad:1},
-          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:2},
           {jugador:'Chila', equipo:'Cazachilenos FC', cantidad:1},
         
           {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:1},
           {jugador:'El Beto', equipo:'Chapecoence', cantidad:2},
-          {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:1},],
+          {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:1},
+          {jugador:'T.Bernier', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Chupi', equipo:'Cazachilenos FC', cantidad:1},
+          {jugador:'El Wachy', equipo:'Lechonas Gang', cantidad:1},],
       }
     }
   ];
@@ -2028,7 +2156,8 @@
     const total = l.fixture.length;
     const jugadas = l.fixture.filter(fecha => fecha.partidos.every(p => p.gl!=null && p.gv!=null)).length;
     if(jugadas >= total){
-      if(l.playoffs && Array.isArray(l.playoffs.semifinales)) return `${equiposTxt} · Semifinales en juego`;
+      if(l.playoffs && l.playoffs.final && l.playoffs.final.campeon) return `${equiposTxt} · Campeón: ${l.playoffs.final.campeon}`;
+      if(l.playoffs && Array.isArray(l.playoffs.semifinales)) return `${equiposTxt} · Fase Final`;
       return `${equiposTxt} · Fixture completo`;
     }
     if(jugadas === 0) return `${equiposTxt} · Fecha 1 arranca pronto`;
@@ -2223,28 +2352,45 @@
     };
   }
 
-  // ---- equipo ideal de una ronda ----
-  function equipoIdealHtml(l){
-    const ideal=l.equipoIdealPrimeraRonda;
+  // ---- equipos ideales por ronda ----
+  function equipoIdealCardHtml(ideal){
     if(!ideal || !Array.isArray(ideal.lineas) || !ideal.lineas.length) return '';
     return `
-      <div class="ideal-team-wrap">
-        <div class="ideal-team-head">
-          <h3>⭐ ${ideal.titulo}</h3>
-          <span>Formación ${ideal.formacion || ''}</span>
+      <details class="ideal-team-wrap ideal-team-collapsible">
+        <summary class="ideal-team-summary">
+          <div class="ideal-summary-main">
+            <span class="ideal-summary-star">⭐</span>
+            <div>
+              <h3>${ideal.titulo}</h3>
+              ${ideal.nota ? `<p class="ideal-team-note">${ideal.nota}</p>` : ''}
+            </div>
+          </div>
+          <div class="ideal-summary-right">
+            <span class="ideal-formation">Formación ${ideal.formacion || ''}</span>
+            <span class="ideal-summary-chevron">⌄</span>
+          </div>
+        </summary>
+        <div class="ideal-team-content">
+          <div class="ideal-pitch">
+            ${ideal.lineas.map(linea=>`
+              <div class="ideal-line" data-count="${linea.jugadores.length}" data-tipo="${linea.tipo || ''}">
+                ${linea.jugadores.map(j=>`
+                  <div class="ideal-player" title="${j.jugador} · ${j.equipo}">
+                    <span class="ideal-player-pos">${j.pos}</span>
+                    <span class="ideal-player-name">${j.jugador}</span>
+                    <span class="ideal-player-team">${j.equipo}</span>
+                  </div>`).join('')}
+              </div>`).join('')}
+          </div>
         </div>
-        <div class="ideal-pitch">
-          ${ideal.lineas.map(linea=>`
-            <div class="ideal-line" data-count="${linea.jugadores.length}">
-              ${linea.jugadores.map(j=>`
-                <div class="ideal-player" title="${j.jugador} · ${j.equipo}">
-                  <span class="ideal-player-pos">${j.pos}</span>
-                  <span class="ideal-player-name">${j.jugador}</span>
-                  <span class="ideal-player-team">${j.equipo}</span>
-                </div>`).join('')}
-            </div>`).join('')}
-        </div>
-      </div>`;
+      </details>`;
+  }
+
+  function equipoIdealHtml(l){
+    return [
+      equipoIdealCardHtml(l.equipoIdealPrimeraRonda),
+      equipoIdealCardHtml(l.equipoIdealSegundaRonda)
+    ].filter(Boolean).join('');
   }
 
   // ---- arma el HTML de la pestaña Premios de una liga ----
@@ -2257,7 +2403,6 @@
       </div>`;
     }
     return `
-      ${equipoIdealHtml(l)}
       <div class="premios-list">
         ${l.premios.map(p => `
           <div class="premio-row ${p.top ? 'premio-top' : ''}">
@@ -2549,6 +2694,14 @@
 
     const e = l.estadisticas || {};
     return `
+      ${equipoIdealHtml(l) ? `
+        <div class="stats-ideal-section">
+          <div class="stats-ideal-title">
+            <span>⭐ EQUIPOS IDEALES</span>
+            <small>Seleccionados por ronda</small>
+          </div>
+          ${equipoIdealHtml(l)}
+        </div>` : ''}
       <div class="stats-cols">
         ${rankBlock('Goleadores', e.goleadores, '', '')}
         ${rankBlock('Asistidores', e.asistidores, '', '')}
@@ -2737,19 +2890,23 @@
           </div>`;
         }).join('')}
         ${l.playoffs && Array.isArray(l.playoffs.semifinales) ? `
-          <div class="fixture-jornada fixture-playoffs fase-final-destacada open">
+          <div class="fixture-jornada fixture-playoffs fase-final-destacada open finalizada">
             <button type="button" class="fixture-jornada-head fase-final-head" aria-expanded="true">
               <span>
                 <span class="fase-final-kicker">PLAYOFFS · ${l.playoffs.etiqueta || ''}</span>
-                <span class="fixture-jornada-title fase-final-title">Fase Final — Semifinales <span class="fixture-current-label">ACTUAL</span></span>
-                <span class="fase-final-date">${l.playoffs.dia} ${l.playoffs.fechaTxt} · Ida y vuelta</span>
+                <span class="fixture-jornada-title fase-final-title">Fase Final</span>
+                <span class="fase-final-date">Semifinales: ${l.playoffs.dia} ${l.playoffs.fechaTxt} · Final: ${l.playoffs.final?.dia || ''} ${l.playoffs.final?.fechaTxt || ''}</span>
               </span>
               <span class="fixture-chevron" aria-hidden="true">⌄</span>
             </button>
             <div class="fixture-jornada-body fase-final-body">
-              <div class="fase-final-note">
-                Los cruces se definieron por posición en la tabla. El equipo mejor ubicado <b>define la serie como local</b> en el partido de vuelta.
+              <div class="champion-banner">
+                <span class="champion-kicker">🏆 CAMPEÓN DE PLAYOFFS</span>
+                <strong>${l.playoffs.final?.campeon || 'A confirmar'}</strong>
+                <span>${l.playoffs.final?.agregado || ''}</span>
               </div>
+
+              <div class="fase-final-section-title">SEMIFINALES · IDA Y VUELTA</div>
               <div class="semis-grid">
                 ${l.playoffs.semifinales.map(s => `
                   <article class="semi-card">
@@ -2758,30 +2915,54 @@
                       <span class="semi-seed">${s.sembrados}</span>
                     </div>
                     <div class="semi-match">
-                      <span class="semi-leg">IDA · ${s.ida.h}</span>
-                      <div class="semi-teams">
+                      <span class="semi-leg">IDA</span>
+                      <div class="semi-teams scored">
                         <button type="button" class="team-profile-link semi-team" data-team-id="${getEquipoId(s.ida.l)}" data-origin="fixture">${s.ida.l}</button>
-                        <span class="semi-vs">vs</span>
+                        <span class="semi-score">${s.ida.gl} - ${s.ida.gv}</span>
                         <button type="button" class="team-profile-link semi-team" data-team-id="${getEquipoId(s.ida.v)}" data-origin="fixture">${s.ida.v}</button>
                       </div>
                     </div>
                     <div class="semi-match vuelta">
-                      <span class="semi-leg">VUELTA · ${s.vuelta.h}</span>
-                      <div class="semi-teams">
-                        <button type="button" class="team-profile-link semi-team local-define" data-team-id="${getEquipoId(s.vuelta.l)}" data-origin="fixture">${s.vuelta.l}</button>
-                        <span class="semi-vs">vs</span>
+                      <span class="semi-leg">VUELTA</span>
+                      <div class="semi-teams scored">
+                        <button type="button" class="team-profile-link semi-team" data-team-id="${getEquipoId(s.vuelta.l)}" data-origin="fixture">${s.vuelta.l}</button>
+                        <span class="semi-score">${s.vuelta.gl} - ${s.vuelta.gv}</span>
                         <button type="button" class="team-profile-link semi-team" data-team-id="${getEquipoId(s.vuelta.v)}" data-origin="fixture">${s.vuelta.v}</button>
                       </div>
-                      <span class="define-badge">Define de local: ${s.defineLocal}</span>
+                    </div>
+                    <div class="aggregate-result">
+                      <span>GLOBAL</span>
+                      <strong>${s.agregado}</strong>
+                      <span class="winner-pill">Clasificó ${s.ganador}</span>
                     </div>
                   </article>
                 `).join('')}
               </div>
-              <div class="final-preview">
-                <span class="final-preview-label">GRAN FINAL</span>
-                <strong>Ganador Semifinal 1 vs Ganador Semifinal 2</strong>
-                <span>${l.playoffs.final?.estado || 'A confirmar'}</span>
-              </div>
+
+              <div class="fase-final-section-title final-title-row">GRAN FINAL · ${l.playoffs.final?.dia || ''} ${l.playoffs.final?.fechaTxt || ''}</div>
+              <article class="final-card-complete">
+                <div class="semi-match">
+                  <span class="semi-leg">IDA</span>
+                  <div class="semi-teams scored">
+                    <button type="button" class="team-profile-link semi-team" data-team-id="${getEquipoId(l.playoffs.final.ida.l)}" data-origin="fixture">${l.playoffs.final.ida.l}</button>
+                    <span class="semi-score">${l.playoffs.final.ida.gl} - ${l.playoffs.final.ida.gv}</span>
+                    <button type="button" class="team-profile-link semi-team" data-team-id="${getEquipoId(l.playoffs.final.ida.v)}" data-origin="fixture">${l.playoffs.final.ida.v}</button>
+                  </div>
+                </div>
+                <div class="semi-match vuelta">
+                  <span class="semi-leg">VUELTA</span>
+                  <div class="semi-teams scored">
+                    <button type="button" class="team-profile-link semi-team local-define" data-team-id="${getEquipoId(l.playoffs.final.vuelta.l)}" data-origin="fixture">${l.playoffs.final.vuelta.l}</button>
+                    <span class="semi-score">${l.playoffs.final.vuelta.gl} - ${l.playoffs.final.vuelta.gv}</span>
+                    <button type="button" class="team-profile-link semi-team" data-team-id="${getEquipoId(l.playoffs.final.vuelta.v)}" data-origin="fixture">${l.playoffs.final.vuelta.v}</button>
+                  </div>
+                </div>
+                <div class="aggregate-result final-aggregate">
+                  <span>RESULTADO GLOBAL</span>
+                  <strong>${l.playoffs.final.agregado}</strong>
+                  <span class="winner-pill champion-pill">🏆 ${l.playoffs.final.campeon}</span>
+                </div>
+              </article>
             </div>
           </div>` : ''}
       </div>` : '';
@@ -3259,7 +3440,11 @@
 
   // ---- ARGENCOINS: Clubes Pro + 1v1 ----
   const coinBalances = [
-    // { team:'Lechonas Gang', balance:8 },
+    { team:'Lechonas Gang', balance:7 },
+    { team:'Cazachilenos FC', balance:4 },
+    { team:'Chapecoence', balance:2 },
+    { team:'Fulbo Champeta', balance:2 },
+    { team:'Rejunte 40', balance:2 },
   ];
   const coinPlayerBalances = [
     // { player:'Usuario', balance:4 },
@@ -3398,7 +3583,7 @@
 </a>
 
 
-<div class="site-updated" aria-label="Última actualización">Actualizado: 7/9/2026</div>
+<div class="site-updated" aria-label="Última actualización">Actualizado: 8/9/2026</div>
 
 <style id="argen-update-v15-styles">
   /* Fecha actual */
