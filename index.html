@@ -3247,6 +3247,24 @@
         final:[{a:'Lechonas Gang', ag:12, b:'Cazachilenos FC', bg:4}]
       }
     },
+    {
+      id:'r6', nombre:'Relámpago — Chapecoence campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      descripcion:'Relámpago gratuito de Clubes Pro con 6 equipos. Chapecoence y La Balsa ingresaron directamente en semifinales.',
+      meta:'Relámpago gratis · 6 equipos · Clubes Pro',
+      bracket:{
+        cuartos:[
+          {a:'Cazachilenos FC', ag:4, b:'Fernettt FC', bg:0},
+          {a:'Jogo com Aura', ag:3, b:'Lechonas Gang', bg:10},
+        ],
+        semis:[
+          {a:'Chapecoence', ag:6, b:'La Balsa', bg:0},
+          {a:'Lechonas Gang', ag:2, b:'Cazachilenos FC', bg:3},
+        ],
+        final:[
+          {a:'Chapecoence', ag:2, b:'Cazachilenos FC', bg:0}
+        ]
+      }
+    },
   ];
   relampagos.forEach(prepararRelampagoIds);
   const relampagoGrid = document.getElementById('relampagoGrid');
@@ -3495,11 +3513,14 @@
 
   // ---- ARGENCOINS: Clubes Pro + 1v1 ----
   const coinBalances = [
-    { team:'Lechonas Gang', balance:7 },
-    { team:'Cazachilenos FC', balance:4 },
-    { team:'Chapecoence', balance:2 },
+    { team:'Lechonas Gang', balance:8 },
+    { team:'Cazachilenos FC', balance:5 },
+    { team:'Chapecoence', balance:5 },
     { team:'Fulbo Champeta', balance:2 },
     { team:'Rejunte 40', balance:2 },
+    { team:'La Balsa', balance:1 },
+    { team:'Fernettt FC', balance:1 },
+    { team:'Jogo com Aura', balance:1 },
   ];
   const coinPlayerBalances = [
     // { player:'Usuario', balance:4 },
@@ -3638,7 +3659,7 @@
 </a>
 
 
-<div class="site-updated" aria-label="Última actualización">Actualizado: 8/9/2026</div>
+<div class="site-updated" aria-label="Última actualización">Actualizado: 10/9/2026</div>
 
 <style id="argen-update-v15-styles">
   /* Fecha actual */
