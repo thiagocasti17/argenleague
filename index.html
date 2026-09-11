@@ -1815,8 +1815,9 @@
       nombre:'Liga de Clubes Pro',
       estado:'finalizado',
       estadoLabel:'Finalizado',
-      descripcion:'Primera liga de clubes de ArgenLeague, formato 11 vs 11. 7 equipos compitiendo a dos ruedas.',
-      meta:'7 equipos · Fecha 1 jugada',
+      fechaFin:'08/09/2026',
+      descripcion:'Primera liga de clubes de ArgenLeague, formato 11 vs 11. 7 equipos compitiendo a dos ruedas. Finalizada el 08/09/2026.',
+      meta:'7 equipos · Finalizada el 08/09/2026',
       cupoOcupado:7,
       cupoTotal:7,
       reglamentoUrl:'https://docs.google.com/document/d/1ru0Yt-FOYexJbndgDn-oE-PMaSRlJmfLkA8tYdFkAqw/edit?usp=sharing',
@@ -2183,7 +2184,7 @@
     const total = l.fixture.length;
     const jugadas = l.fixture.filter(fecha => fecha.partidos.every(p => p.gl!=null && p.gv!=null)).length;
     if(jugadas >= total){
-      if(l.playoffs && l.playoffs.final && l.playoffs.final.campeon) return `${equiposTxt} · Campeón: ${l.playoffs.final.campeon}`;
+      if(l.playoffs && l.playoffs.final && l.playoffs.final.campeon) return `${equiposTxt} · Campeón: ${l.playoffs.final.campeon}${l.fechaFin ? ` · ${l.fechaFin}` : ''}`;
       if(l.playoffs && Array.isArray(l.playoffs.semifinales)) return `${equiposTxt} · Fase Final`;
       return `${equiposTxt} · Fixture completo`;
     }
@@ -3171,7 +3172,7 @@
   // ---- RELAMPAGO ----
   const relampagos = [
     {
-      id:'r5-1v1', nombre:'Relámpago 1v1 — Francia campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      id:'r5-1v1', orden:5, modalidad:'1v1', costo:'GRATIS', fecha:'08/09/2026', nombre:'Relámpago 1v1 — Francia campeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'Primer Relámpago 1v1 de ArgenLeague, disputado desde cuartos de final con 8 jugadores.',
       meta:'1v1 · 8 jugadores · desde cuartos de final',
       inscripcionesAbiertas:false,
@@ -3192,7 +3193,7 @@
       }
     },
     {
-      id:'r7-1v1', nombre:'Relámpago 1v1 — Lucario343 campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      id:'r7-1v1', orden:7, modalidad:'1v1', costo:'GRATIS', fecha:'10/09/2026', nombre:'Relámpago 1v1 — Lucario343 campeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'Relámpago 1v1 gratuito disputado desde semifinales con 4 jugadores.',
       meta:'1v1 · GRATIS · 4 jugadores · desde semifinales',
       inscripcionesAbiertas:false,
@@ -3207,7 +3208,7 @@
       }
     },
     {
-      id:'r1', nombre:'Relámpago — Lechonas Gang campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      id:'r1', orden:1, modalidad:'clubes', fecha:'17/08/2026', nombre:'Relámpago — Lechonas Gang campeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'Semis y final del relámpago. Lechonas Gang se quedó con el título en una final durísima.', meta:'Relámpago a 4 equipos, arrancó directo desde semis',
       bracket:{
         semis:[
@@ -3218,7 +3219,7 @@
       }
     },
     {
-      id:'r2', nombre:'Relámpago — Chapecoence campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      id:'r2', orden:2, modalidad:'clubes', fecha:'20/08/2026', nombre:'Relámpago — Chapecoence campeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'Chapecoence arrasó en la final tras pasar dos semis parejas.', meta:'Relámpago a 4 equipos, arrancó directo desde semis',
       bracket:{
         semis:[
@@ -3229,7 +3230,7 @@
       }
     },
     {
-      id:'r3', nombre:'Relámpago — Aston Birra campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      id:'r3', orden:3, modalidad:'clubes', fecha:'23/08/2026', nombre:'Relámpago — Aston Birra campeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'El más grande hasta ahora: 8 equipos desde cuartos de final. Aston Birra se lo llevó en una final a puro gol.', meta:'Relámpago a 8 equipos, desde cuartos de final',
       bracket:{
         cuartos:[
@@ -3246,7 +3247,7 @@
       }
     },
     {
-      id:'r4', nombre:'Relámpago — Lechonas Gang bicampeón', estado:'finalizado', estadoLabel:'Finalizado',
+      id:'r4', orden:4, modalidad:'clubes', fecha:'26/08/2026', nombre:'Relámpago — Lechonas Gang bicampeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'El más parejo hasta ahora en cuartos, pero Lechonas Gang se despachó con un baile en la final.', meta:'Relámpago a 8 equipos, desde cuartos de final',
       bracket:{
         cuartos:[
@@ -3263,7 +3264,7 @@
       }
     },
     {
-      id:'r6', nombre:'Relámpago — Chapecoence campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      id:'r6', orden:6, modalidad:'clubes', costo:'GRATIS', fecha:'09/09/2026', nombre:'Relámpago — Chapecoence campeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'Relámpago gratuito de Clubes Pro con 6 equipos. Chapecoence y La Balsa ingresaron directamente en semifinales.',
       meta:'Relámpago gratis · 6 equipos · Clubes Pro',
       bracket:{
@@ -3282,18 +3283,58 @@
     },
   ];
   relampagos.forEach(prepararRelampagoIds);
+
+  function esRelampago1v1(r){
+    return r.modalidad === '1v1' || /1v1/i.test(r.nombre||'') || /1v1/i.test(r.meta||'');
+  }
+
+  function participantesRelampago(r){
+    const set = new Set();
+    Object.values(r.bracket||{}).forEach(round=>{
+      (round||[]).forEach(m=>{ if(m.a) set.add(m.a); if(m.b) set.add(m.b); });
+    });
+    return [...set];
+  }
+
+  function ganadorRelampago(r){
+    const final = r.bracket && r.bracket.final && r.bracket.final[0];
+    if(!final || final.ag==null || final.bg==null) return '';
+    const raw = final.ag > final.bg ? final.a : final.b;
+    if(esRelampago1v1(r)){
+      const match = String(raw).match(/\(([^)]+)\)\s*$/);
+      return match ? match[1] : raw;
+    }
+    return raw;
+  }
+
+  function usuario1v1(raw){
+    const m = String(raw||'').match(/\(([^)]+)\)\s*$/);
+    return m ? m[1] : String(raw||'');
+  }
+
   const relampagoGrid = document.getElementById('relampagoGrid');
-  relampagos.forEach(r=>{
-    const card = document.createElement('button');
-    card.className = 'item-card';
-    card.innerHTML = `
-      <span class="status ${r.estado}">${r.estadoLabel}</span>
-      <h3>${r.nombre}</h3>
-      <p>${r.descripcion}</p>
-      <div class="meta">${r.meta}</div>`;
-    card.addEventListener('click', ()=>showRelampagoDetail(r));
-    relampagoGrid.appendChild(card);
-  });
+  [...relampagos]
+    .sort((a,b)=>(b.orden||0)-(a.orden||0))
+    .forEach(r=>{
+      const card = document.createElement('button');
+      card.className = 'item-card relampago-card-v15';
+      const uno = esRelampago1v1(r);
+      const participantes = participantesRelampago(r).length;
+      const campeon = ganadorRelampago(r) || 'Sin definir';
+      const unidad = uno ? (participantes===1?'jugador':'jugadores') : (participantes===1?'equipo':'equipos');
+      const fecha = r.fecha || 'Fecha no registrada';
+      const modalidad = uno ? '🎮 1v1' : '⚽ CLUBES PRO';
+      const costo = r.costo ? ` · ${r.costo}` : '';
+      card.innerHTML = `
+        <div class="rel-card-kicker">
+          <span>${modalidad}${costo}</span>
+          <span class="rel-card-date">${fecha}</span>
+        </div>
+        <h3>${campeon} <span class="rel-card-champion">campeón</span></h3>
+        <div class="rel-card-meta">${participantes} ${unidad} · ${r.estadoLabel}</div>`;
+      card.addEventListener('click', ()=>showRelampagoDetail(r));
+      relampagoGrid.appendChild(card);
+    });
   function buildRound(title, matches){
     const div = document.createElement('div');
     div.className = 'round';
@@ -3331,7 +3372,7 @@
       <button class="back-btn" id="backRelampago">← Volver a relámpagos</button>
       <div class="section-head"><h2>${r.nombre}</h2><span class="tag">${r.estadoLabel}</span></div>
       <div class="bracket" id="bracketDetail"></div>
-      <div class="note">${r.meta}.</div>`;
+      <div class="note">${r.fecha ? `Fecha: ${r.fecha} · ` : ''}${r.meta}.</div>`;
     document.getElementById('backRelampago').addEventListener('click', ()=>{
       detail.style.display = 'none';
       document.getElementById('relampago-list').style.display = 'block';
@@ -3354,7 +3395,7 @@
     const campeonesList = document.getElementById('campeonesList');
     const golesFavorList = document.getElementById('golesFavorList');
     const golesContraList = document.getElementById('golesContraList');
-    const stats = {}; // equipoId -> {pj, gf, gc}
+    const stats = {}; // SOLO Clubes Pro: equipoId -> {pj, gf, gc}
 
     function addMatch(a, ag, b, bg, aId=null, bId=null){
       if(ag===null || bg===null) return;
@@ -3366,78 +3407,77 @@
       });
     }
 
+    function titleRow({tipo, campeon, detalle, fecha, onOpen, mode}){
+      const row = document.createElement('div');
+      row.className = 'champ-row champ-tournament-link';
+      row.dataset.historyMode = mode;
+      row.setAttribute('role','button');
+      row.setAttribute('tabindex','0');
+      row.title = 'Ver torneo';
+      row.innerHTML = `
+        <svg class="cup" viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 4M17 5h3a3 3 0 0 1-3 4"/></svg>
+        <div class="info">
+          <div class="torneo">${tipo}${fecha ? ` · ${fecha}` : ''}</div>
+          <div class="team">${campeon}</div>
+        </div>
+        <div class="score">${detalle || 'campeón'}</div>`;
+      if(onOpen){
+        row.addEventListener('click', onOpen);
+        row.addEventListener('keydown', e=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); onOpen(); }
+        });
+      }
+      campeonesList.appendChild(row);
+    }
+
+    // Relámpagos: los 1v1 tienen títulos propios, pero NO entran en GF/GC de clubes.
     relampagos.forEach(r=>{
-      Object.values(r.bracket).forEach(round=>{
-        round.forEach(m=>addMatch(m.a, m.ag, m.b, m.bg, m.aId, m.bId));
-      });
+      const uno = esRelampago1v1(r);
+      if(!uno){
+        Object.values(r.bracket||{}).forEach(round=>{
+          (round||[]).forEach(m=>addMatch(m.a, m.ag, m.b, m.bg, m.aId, m.bId));
+        });
+      }
+
       const final = r.bracket.final && r.bracket.final[0];
       if(final && final.ag!==null && final.bg!==null){
-        const winnerId = final.ag > final.bg ? (final.aId || getEquipoId(final.a)) : (final.bId || getEquipoId(final.b));
-        const loserId = final.ag > final.bg ? (final.bId || getEquipoId(final.b)) : (final.aId || getEquipoId(final.a));
-        const winner = getEquipoNombre(winnerId, final.ag > final.bg ? final.a : final.b);
+        const winnerRaw = final.ag > final.bg ? final.a : final.b;
+        const loserRaw = final.ag > final.bg ? final.b : final.a;
+        const winner = uno ? usuario1v1(winnerRaw) : getEquipoNombre(getEquipoId(winnerRaw), winnerRaw);
+        const loser = uno ? usuario1v1(loserRaw) : getEquipoNombre(getEquipoId(loserRaw), loserRaw);
         const wg = final.ag > final.bg ? final.ag : final.bg;
         const lg = final.ag > final.bg ? final.bg : final.ag;
-        const loser = getEquipoNombre(loserId, final.ag > final.bg ? final.b : final.a);
-        const row = document.createElement('div');
-        row.className = 'champ-row champ-tournament-link';
-        row.setAttribute('role','button');
-        row.setAttribute('tabindex','0');
-        row.setAttribute('aria-label',`Abrir ${r.nombre}`);
-        row.title = 'Ver torneo';
-        row.innerHTML = `
-          <svg class="cup" viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 4M17 5h3a3 3 0 0 1-3 4"/></svg>
-          <div class="info">
-            <div class="torneo">${r.nombre.replace('Relámpago — ','Relámpago · ').replace(' campeón','')}</div>
-            <div class="team">${winner}</div>
-          </div>
-          <div class="score">venció ${wg}-${lg} a ${loser}</div>`;
-        const abrirTorneo = ()=>{
-          goTab('relampago');
-          showRelampagoDetail(r);
-        };
-        row.addEventListener('click', abrirTorneo);
-        row.addEventListener('keydown', e=>{
-          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrirTorneo(); }
+
+        titleRow({
+          tipo: uno ? '🎮 Relámpago 1v1' : '⚡ Relámpago Clubes Pro',
+          campeon:winner,
+          detalle:`venció ${wg}-${lg} a ${loser}`,
+          fecha:r.fecha || '',
+          mode:uno ? 'uno' : 'clubes',
+          onOpen:()=>{ goTab('relampago'); showRelampagoDetail(r); }
         });
-        campeonesList.appendChild(row);
       }
     });
 
-    // suma también los partidos jugados en las ligas (ej. Liga de Clubes Pro)
+    // Liga: partidos + título de campeón.
     if(typeof ligas !== 'undefined'){
       ligas.forEach(l=>{
-        if(!Array.isArray(l.fixture)) return;
-        l.fixture.forEach(fecha=>{
-          fecha.partidos.forEach(p=>{
-            addMatch(p.l, p.gl, p.v, p.gv, p.lId, p.vId);
+        if(Array.isArray(l.fixture)){
+          l.fixture.forEach(fecha=>{
+            (fecha.partidos||[]).forEach(p=>addMatch(p.l, p.gl, p.v, p.gv, p.lId, p.vId));
           });
-        });
+        }
 
-        // Si la liga ya tiene campeón definido, también se agrega al historial de títulos.
         const finalLiga = l.playoffs && l.playoffs.final;
         if(finalLiga && finalLiga.campeon){
-          const row = document.createElement('div');
-          row.className = 'champ-row champ-tournament-link';
-          row.setAttribute('role','button');
-          row.setAttribute('tabindex','0');
-          row.setAttribute('aria-label',`Abrir ${l.nombre}`);
-          row.title = 'Ver liga';
-          row.innerHTML = `
-            <svg class="cup" viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 4M17 5h3a3 3 0 0 1-3 4"/></svg>
-            <div class="info">
-              <div class="torneo">${l.nombre}</div>
-              <div class="team">${finalLiga.campeon}</div>
-            </div>
-            <div class="score">${finalLiga.agregado ? `campeón · ${finalLiga.agregado}` : 'campeón'}</div>`;
-          const abrirLiga = ()=>{
-            goTab('ligas');
-            showLigaDetail(l);
-          };
-          row.addEventListener('click', abrirLiga);
-          row.addEventListener('keydown', e=>{
-            if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrirLiga(); }
+          titleRow({
+            tipo:'🏆 Liga de Clubes Pro',
+            campeon:finalLiga.campeon,
+            detalle:finalLiga.agregado ? `campeón · ${finalLiga.agregado}` : 'campeón',
+            fecha:finalLiga.fechaTxt || '',
+            mode:'clubes',
+            onOpen:()=>{ goTab('ligas'); showLigaDetail(l); }
           });
-          campeonesList.appendChild(row);
         }
       });
     }
@@ -3544,7 +3584,43 @@
     { player:'tthiagoo_07', balance:1 },
   ];
 
-  function renderCoinBalances(data, listId, emptyId, key){
+  const coinMovements = {
+    'Lechonas Gang':[
+      {amount:2, label:'Inscripción a Liga Oficial'},
+      {amount:5, label:'Campeón de Liga Oficial'},
+      {amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}
+    ],
+    'Cazachilenos FC':[
+      {amount:2, label:'Inscripción a Liga Oficial'},
+      {amount:2, label:'Subcampeón de Liga Oficial'},
+      {amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}
+    ],
+    'Chapecoence':[
+      {amount:2, label:'Inscripción a Liga Oficial'},
+      {amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'},
+      {amount:2, label:'Campeón de Relámpago gratis', date:'09/09/2026'}
+    ],
+    'Fulbo Champeta':[{amount:2, label:'Inscripción a Liga Oficial'}],
+    'Rejunte 40':[{amount:2, label:'Inscripción a Liga Oficial'}],
+    'La Balsa':[{amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}],
+    'Fernettt FC':[{amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}],
+    'Jogo com Aura':[{amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}]
+  };
+
+  const coinPlayerMovements = {
+    'Lucario343':[
+      {amount:1, label:'Participación Relámpago 1v1 gratis', date:'10/09/2026'},
+      {amount:3, label:'Campeón Relámpago 1v1 gratis', date:'10/09/2026'}
+    ],
+    'thiagokpo17':[
+      {amount:1, label:'Participación Relámpago 1v1 gratis', date:'10/09/2026'},
+      {amount:2, label:'Subcampeón Relámpago 1v1 gratis', date:'10/09/2026'}
+    ],
+    'JEDAY_-504':[{amount:1, label:'Participación Relámpago 1v1 gratis', date:'10/09/2026'}],
+    'tthiagoo_07':[{amount:1, label:'Participación Relámpago 1v1 gratis', date:'10/09/2026'}]
+  };
+
+  function renderCoinBalances(data, listId, emptyId, key, movements){
     const list = document.getElementById(listId);
     const empty = document.getElementById(emptyId);
     if(!list || !empty) return;
@@ -3554,16 +3630,39 @@
       return;
     }
     empty.style.display = 'none';
+
     data.slice().sort((a,b)=>b.balance-a.balance).forEach((s,i)=>{
-      const row = document.createElement('div');
-      row.className = 'rank-row';
-      row.innerHTML = `<span class="n">${i+1}</span><span class="team">${s[key]}</span><span class="val">${s.balance} AC</span>`;
-      list.appendChild(row);
+      const entry=document.createElement('div');
+      entry.className='coin-balance-entry';
+
+      const row=document.createElement('button');
+      row.type='button';
+      row.className='rank-row coin-balance-toggle';
+      row.setAttribute('aria-expanded','false');
+      row.innerHTML=`<span class="n">${i+1}</span><span class="team">${s[key]} <small>ver movimientos</small></span><span class="val">${s.balance} AC <span class="coin-chevron">⌄</span></span>`;
+
+      const detail=document.createElement('div');
+      detail.className='coin-movement-list';
+      const items=(movements && movements[s[key]]) || [];
+      detail.innerHTML=items.length ? items.map(m=>`
+        <div class="coin-movement-row">
+          <span><b>+${m.amount} AC</b> ${m.label}</span>
+          <span>${m.date||''}</span>
+        </div>`).join('') : '<div class="coin-movement-row"><span>Sin movimientos detallados.</span></div>';
+
+      row.addEventListener('click',()=>{
+        const open=entry.classList.toggle('open');
+        row.setAttribute('aria-expanded',open?'true':'false');
+      });
+
+      entry.appendChild(row);
+      entry.appendChild(detail);
+      list.appendChild(entry);
     });
   }
 
-  renderCoinBalances(coinBalances, 'coinBalanceList', 'coinBalanceEmpty', 'team');
-  renderCoinBalances(coinPlayerBalances, 'coinPlayerBalanceList', 'coinPlayerBalanceEmpty', 'player');
+  renderCoinBalances(coinBalances, 'coinBalanceList', 'coinBalanceEmpty', 'team', coinMovements);
+  renderCoinBalances(coinPlayerBalances, 'coinPlayerBalanceList', 'coinPlayerBalanceEmpty', 'player', coinPlayerMovements);
 
   // Selector Clubes Pro / 1v1
   document.querySelectorAll('.coins-mode-btn').forEach(btn=>{
@@ -3746,6 +3845,7 @@
         }));
       });
       (typeof relampagos!=='undefined' ? relampagos : []).forEach(r=>{
+        if(esRelampago1v1(r)) return;
         Object.values(r.bracket||{}).forEach(round=>(round||[]).forEach(m=>{
           if(m.ag==null||m.bg==null) return;
           out.push({a:m.a,b:m.b,ag:+m.ag,bg:+m.bg,aId:m.aId||getEquipoId(m.a),bId:m.bId||getEquipoId(m.b),wo:!!m.wo,source:r.nombre||'Relámpago'});
@@ -3840,6 +3940,7 @@
     const sec=document.getElementById('historial');
     if(!sec || sec.dataset.enhanced==='1') return;
     sec.dataset.enhanced='1';
+
     const head=sec.querySelector('.section-head');
     const search=sec.querySelector('.search-wrap');
     const searchEmpty=document.getElementById('histSearchEmpty');
@@ -3847,17 +3948,34 @@
     const goals=document.querySelector('#historial .goals-cols');
     if(!head || !campeones || !goals) return;
 
-    // Locate headings that belong to current content.
     const champHead=campeones.previousElementSibling;
 
-    // Controls
+    // Selector principal: Clubes Pro / 1v1
+    const modeTabs=document.createElement('div');
+    modeTabs.className='hist-mode-tabs';
+    modeTabs.innerHTML=`
+      <button class="hist-mode-btn active" type="button" data-history-mode="clubes">⚽ Clubes Pro</button>
+      <button class="hist-mode-btn" type="button" data-history-mode="uno">🎮 1v1</button>`;
+    head.insertAdjacentElement('afterend',modeTabs);
+
+    const clubPane=document.createElement('div');
+    clubPane.className='hist-mode-pane active';
+    clubPane.dataset.historyPane='clubes';
+
+    const unoPane=document.createElement('div');
+    unoPane.className='hist-mode-pane';
+    unoPane.dataset.historyPane='uno';
+
+    modeTabs.insertAdjacentElement('afterend',unoPane);
+    modeTabs.insertAdjacentElement('afterend',clubPane);
+
+    // ---------------- Clubes Pro ----------------
     const tabs=document.createElement('div');
     tabs.className='hist-mini-tabs';
-    tabs.innerHTML='<button class="hist-mini-tab active" data-hf="clubes">Clubes</button><button class="hist-mini-tab" data-hf="jugadores">Jugadores</button><button class="hist-mini-tab" data-hf="titulos">Títulos</button>';
-    if(search) sec.insertBefore(tabs,search);
-    else head.insertAdjacentElement('afterend',tabs);
+    tabs.innerHTML='<button class="hist-mini-tab active" data-hf="clubes">Equipos</button><button class="hist-mini-tab" data-hf="jugadores">Jugadores</button><button class="hist-mini-tab" data-hf="titulos">Títulos</button>';
+    clubPane.appendChild(tabs);
 
-    // Quick records
+    // Récords de Clubes Pro exclusivamente.
     const matches=allLoadedMatches();
     let mayor=null, masGoles=null;
     matches.forEach(m=>{
@@ -3874,23 +3992,35 @@
       <div class="hist-record-card"><div class="k">Más goles en un partido</div><div class="v">${masGoles?`${masGoles.a} ${masGoles.ag}-${masGoles.bg} ${masGoles.b}`:'Sin datos'}</div><div class="s">${masGoles?`${masGoles.total} goles`:'—'}</div></div>
       <div class="hist-record-card"><div class="k">Más MVP</div><div class="v">${mvpTop?mvpTop.name:'Sin datos'}</div><div class="s">${mvpTop?`${mvpTop.cantidad} MVP`:'—'}</div></div>
       <div class="hist-record-card"><div class="k">Más vallas invictas</div><div class="v">${csTop?csTop.nombre:'Sin datos'}</div><div class="s">${csTop?`${csTop.cantidad} partidos`:'—'}</div></div>`;
-    tabs.insertAdjacentElement('afterend',records);
+    clubPane.appendChild(records);
 
-    // Wrap Clubes
-    const clubs=document.createElement('div'); clubs.className='hist-filter-group'; clubs.dataset.hgroup='clubes';
+    const clubs=document.createElement('div');
+    clubs.className='hist-filter-group';
+    clubs.dataset.hgroup='clubes';
     if(search) clubs.appendChild(search);
     if(searchEmpty) clubs.appendChild(searchEmpty);
     clubs.appendChild(goals);
-    records.insertAdjacentElement('afterend',clubs);
+    clubPane.appendChild(clubs);
 
-    // Títulos group
-    const titles=document.createElement('div'); titles.className='hist-filter-group'; titles.dataset.hgroup='titulos'; titles.hidden=true;
-    if(champHead) titles.appendChild(champHead);
-    titles.appendChild(campeones);
-    clubs.insertAdjacentElement('afterend',titles);
+    const clubTitles=document.createElement('div');
+    clubTitles.className='champ-list';
+    [...campeones.querySelectorAll('.champ-row')].filter(r=>r.dataset.historyMode==='clubes').forEach(r=>clubTitles.appendChild(r));
 
-    // Jugadores group: useful historical player rankings without another nav section.
-    const players=document.createElement('div'); players.className='hist-filter-group'; players.dataset.hgroup='jugadores'; players.hidden=true;
+    const titles=document.createElement('div');
+    titles.className='hist-filter-group';
+    titles.dataset.hgroup='titulos';
+    titles.hidden=true;
+    const clubTitleHead=document.createElement('h3');
+    clubTitleHead.className='hist-subhead';
+    clubTitleHead.textContent='Títulos de Clubes Pro';
+    titles.appendChild(clubTitleHead);
+    titles.appendChild(clubTitles);
+    clubPane.appendChild(titles);
+
+    const players=document.createElement('div');
+    players.className='hist-filter-group';
+    players.dataset.hgroup='jugadores';
+    players.hidden=true;
     const topMvp=aggregatePlayerStat('mvp');
     const topGoals=aggregatePlayerStat('goleadores');
     function rank(title,arr,suffix){
@@ -3898,13 +4028,82 @@
       return `<div><h3 class="hist-subhead">${title}</h3><div class="rank-list ${arr.length>5?'rank-collapsible collapsed':''}">${arr.map((x,i)=>`<div class="rank-row${i>=5?' rank-extra':''}"><span class="n">${i+1}</span><span class="team">${x.name}</span><span class="val">${x.cantidad}${suffix}</span></div>`).join('')}</div>${arr.length>5?'<button type="button" class="rank-toggle" aria-expanded="false">+ Ver todos</button>':''}</div>`;
     }
     players.innerHTML=`<div class="hist-player-cols">${rank('MVP acumulados',topMvp,'')}${rank('Goleadores cargados',topGoals,'')}</div>`;
-    titles.insertAdjacentElement('afterend',players);
+    clubPane.appendChild(players);
 
     tabs.addEventListener('click',e=>{
       const b=e.target.closest('.hist-mini-tab'); if(!b) return;
       tabs.querySelectorAll('.hist-mini-tab').forEach(x=>x.classList.toggle('active',x===b));
-      sec.querySelectorAll('.hist-filter-group').forEach(g=>g.hidden=g.dataset.hgroup!==b.dataset.hf);
+      clubPane.querySelectorAll('.hist-filter-group').forEach(g=>g.hidden=g.dataset.hgroup!==b.dataset.hf);
+      records.style.display = b.dataset.hf==='clubes' ? '' : 'none';
     });
+
+    // ---------------- 1v1 ----------------
+    const unoTabs=document.createElement('div');
+    unoTabs.className='hist-mini-tabs';
+    unoTabs.innerHTML='<button class="hist-mini-tab active" data-uhf="jugadores">Jugadores</button><button class="hist-mini-tab" data-uhf="titulos">Títulos</button>';
+    unoPane.appendChild(unoTabs);
+
+    // Estadísticas puras de 1v1.
+    const pmap=new Map();
+    function pEnsure(name){
+      if(!pmap.has(name)) pmap.set(name,{name,pj:0,pg:0,gf:0,gc:0,titulos:0});
+      return pmap.get(name);
+    }
+    (relampagos||[]).filter(esRelampago1v1).forEach(r=>{
+      Object.values(r.bracket||{}).forEach(round=>(round||[]).forEach(m=>{
+        if(m.ag==null || m.bg==null) return;
+        const a=usuario1v1(m.a), b=usuario1v1(m.b);
+        const pa=pEnsure(a), pb=pEnsure(b);
+        pa.pj++; pb.pj++; pa.gf+=+m.ag; pa.gc+=+m.bg; pb.gf+=+m.bg; pb.gc+=+m.ag;
+        if(m.ag>m.bg) pa.pg++; else if(m.bg>m.ag) pb.pg++;
+      }));
+      const fin=r.bracket && r.bracket.final && r.bracket.final[0];
+      if(fin && fin.ag!=null && fin.bg!=null){
+        pEnsure(usuario1v1(fin.ag>fin.bg?fin.a:fin.b)).titulos++;
+      }
+    });
+    const unoStats=[...pmap.values()].sort((a,b)=>b.titulos-a.titulos || b.pg-a.pg || b.gf-a.gf || a.name.localeCompare(b.name));
+
+    const unoPlayers=document.createElement('div');
+    unoPlayers.className='hist-uno-group';
+    unoPlayers.dataset.uhgroup='jugadores';
+    unoPlayers.innerHTML=`
+      <h3 class="hist-subhead">Historial de jugadores 1v1</h3>
+      <div class="hist-1v1-table">
+        <div class="hist-1v1-head"><span>Jugador</span><span>PJ</span><span>PG</span><span>GF</span><span>GC</span><span>🏆</span></div>
+        ${unoStats.length ? unoStats.map((p,i)=>`
+          <div class="hist-1v1-row">
+            <span><b>${i+1}.</b> ${p.name}</span><span>${p.pj}</span><span>${p.pg}</span><span>${p.gf}</span><span>${p.gc}</span><span>${p.titulos}</span>
+          </div>`).join('') : '<div class="nice-empty">Todavía no hay datos 1v1.</div>'}
+      </div>`;
+    unoPane.appendChild(unoPlayers);
+
+    const unoTitlesList=document.createElement('div');
+    unoTitlesList.className='champ-list';
+    [...campeones.querySelectorAll('.champ-row')].filter(r=>r.dataset.historyMode==='uno').forEach(r=>unoTitlesList.appendChild(r));
+
+    const unoTitles=document.createElement('div');
+    unoTitles.className='hist-uno-group';
+    unoTitles.dataset.uhgroup='titulos';
+    unoTitles.hidden=true;
+    unoTitles.innerHTML='<h3 class="hist-subhead">Títulos 1v1</h3>';
+    unoTitles.appendChild(unoTitlesList);
+    unoPane.appendChild(unoTitles);
+
+    unoTabs.addEventListener('click',e=>{
+      const b=e.target.closest('.hist-mini-tab'); if(!b) return;
+      unoTabs.querySelectorAll('.hist-mini-tab').forEach(x=>x.classList.toggle('active',x===b));
+      unoPane.querySelectorAll('.hist-uno-group').forEach(g=>g.hidden=g.dataset.uhgroup!==b.dataset.uhf);
+    });
+
+    modeTabs.addEventListener('click',e=>{
+      const b=e.target.closest('.hist-mode-btn'); if(!b) return;
+      modeTabs.querySelectorAll('.hist-mode-btn').forEach(x=>x.classList.toggle('active',x===b));
+      sec.querySelectorAll('.hist-mode-pane').forEach(p=>p.classList.toggle('active',p.dataset.historyPane===b.dataset.historyMode));
+    });
+
+    if(champHead) champHead.remove();
+    campeones.remove();
   }
 
   function addTeamHighlightLabel(root=document){
@@ -3985,5 +4184,77 @@
     .coins-mode-header h3{font-size:24px;}
   }
 </style>
+
+<style id="argen-v15-history-relampago-upgrade">
+  /* Relámpagos */
+  .relampago-card-v15{text-align:left;}
+  .rel-card-kicker{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;
+    font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;letter-spacing:.55px;
+    color:var(--accent);text-transform:uppercase;
+  }
+  .rel-card-date{color:var(--muted);font-weight:500;letter-spacing:.2px;text-transform:none;}
+  .relampago-card-v15 h3{margin-bottom:8px;}
+  .rel-card-champion{font-size:.72em;color:var(--muted);font-weight:500;}
+  .rel-card-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
+
+  /* Historial por modalidad */
+  .hist-mode-tabs{
+    display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:0 0 18px;padding:5px;
+    border:1px solid var(--border);border-radius:10px;background:var(--panel);
+  }
+  .hist-mode-btn{
+    border:0;background:transparent;color:var(--muted);padding:11px;border-radius:7px;
+    font-family:'Oswald',sans-serif;font-size:13px;font-weight:650;cursor:pointer;
+  }
+  .hist-mode-btn.active{background:var(--panel-2);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent-dim);}
+  .hist-mode-pane{display:none;}
+  .hist-mode-pane.active{display:block;}
+  .hist-mode-pane .hist-mini-tabs{margin-top:0;}
+
+  .hist-1v1-table{
+    overflow:hidden;border:1px solid var(--border);border-radius:9px;background:var(--panel);
+  }
+  .hist-1v1-head,.hist-1v1-row{
+    display:grid;grid-template-columns:minmax(150px,1fr) repeat(5,52px);align-items:center;
+    gap:5px;padding:10px 12px;
+  }
+  .hist-1v1-head{
+    font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.45px;background:var(--panel-2);
+  }
+  .hist-1v1-row{
+    border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--line);
+  }
+  .hist-1v1-row span:not(:first-child),.hist-1v1-head span:not(:first-child){text-align:center;}
+  .hist-1v1-row b{color:var(--muted);font-weight:500;}
+
+  /* ArgenCoins: movimientos */
+  .coin-balance-entry{border-bottom:1px solid var(--border);}
+  .coin-balance-entry:last-child{border-bottom:0;}
+  .coin-balance-entry .rank-row{border-bottom:0;}
+  .coin-balance-toggle{width:100%;border:0;background:transparent;text-align:left;cursor:pointer;color:inherit;}
+  .coin-balance-toggle .team small{
+    display:block;margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;color:var(--muted);
+  }
+  .coin-chevron{display:inline-block;margin-left:4px;color:var(--muted);transition:transform .15s ease;}
+  .coin-balance-entry.open .coin-chevron{transform:rotate(180deg);}
+  .coin-movement-list{display:none;padding:0 12px 10px 42px;}
+  .coin-balance-entry.open .coin-movement-list{display:block;}
+  .coin-movement-row{
+    display:flex;justify-content:space-between;gap:12px;padding:7px 0;
+    border-top:1px dashed var(--border);font-size:10px;color:var(--muted);
+  }
+  .coin-movement-row b{color:var(--accent);font-family:'JetBrains Mono',monospace;}
+
+  @media(max-width:620px){
+    .rel-card-kicker{align-items:flex-start;flex-direction:column;gap:3px;}
+    .hist-1v1-head,.hist-1v1-row{grid-template-columns:minmax(105px,1fr) repeat(5,34px);padding:9px 7px;font-size:9px;}
+    .hist-1v1-head{font-size:7.5px;}
+    .coin-movement-list{padding-left:28px;}
+    .coin-movement-row{flex-direction:column;gap:2px;}
+  }
+</style>
+
 </body>
 </html>
