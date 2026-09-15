@@ -556,6 +556,24 @@
   }
 
   .coin-list{background:var(--panel);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .coin-rank-toggle{
+    display:block;
+    margin:10px auto 0;
+    width:auto;
+    min-width:120px;
+    background:none;
+    border:0;
+    color:var(--accent);
+    font-family:'Oswald',sans-serif;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    padding:6px 10px;
+    cursor:pointer;
+  }
+  .coin-rank-toggle:hover{text-decoration:underline;}
+
   .coin-row{
     display:flex;align-items:center;justify-content:space-between;gap:16px;
     padding:14px 18px;border-bottom:1px solid var(--border);
@@ -3264,6 +3282,21 @@
       }
     },
     {
+      id:'r8', orden:8, modalidad:'clubes', costo:'PAGO', fecha:'14/09/2026', nombre:'Relámpago — Las Palmas campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      descripcion:'Relámpago pago de Clubes Pro disputado desde semifinales con 4 equipos. Las Palmas se consagró campeón.',
+      meta:'Relámpago pago · 4 equipos · Clubes Pro',
+      inscripcionesAbiertas:false,
+      bracket:{
+        semis:[
+          {a:'Lechonas Gang', ag:6, b:'Chapecoence', bg:3},
+          {a:'Las Palmas', ag:13, b:'La Balsa', bg:1},
+        ],
+        final:[
+          {a:'Las Palmas', ag:5, b:'Lechonas Gang', bg:2}
+        ]
+      }
+    },
+    {
       id:'r6', orden:6, modalidad:'clubes', costo:'GRATIS', fecha:'09/09/2026', nombre:'Relámpago — Chapecoence campeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'Relámpago gratuito de Clubes Pro con 6 equipos. Chapecoence y La Balsa ingresaron directamente en semifinales.',
       meta:'Relámpago gratis · 6 equipos · Clubes Pro',
@@ -3411,6 +3444,7 @@
       const row = document.createElement('div');
       row.className = 'champ-row champ-tournament-link';
       row.dataset.historyMode = mode;
+      row.dataset.historyDate = fecha || '';
       row.setAttribute('role','button');
       row.setAttribute('tabindex','0');
       row.title = 'Ver torneo';
@@ -3568,12 +3602,13 @@
 
   // ---- ARGENCOINS: Clubes Pro + 1v1 ----
   const coinBalances = [
-    { team:'Lechonas Gang', balance:8 },
+    { team:'Lechonas Gang', balance:11 },
+    { team:'Chapecoence', balance:7 },
     { team:'Cazachilenos FC', balance:5 },
-    { team:'Chapecoence', balance:5 },
+    { team:'Las Palmas', balance:5 },
+    { team:'La Balsa', balance:3 },
     { team:'Fulbo Champeta', balance:2 },
     { team:'Rejunte 40', balance:2 },
-    { team:'La Balsa', balance:1 },
     { team:'Fernettt FC', balance:1 },
     { team:'Jogo com Aura', balance:1 },
   ];
@@ -3588,7 +3623,9 @@
     'Lechonas Gang':[
       {amount:2, label:'Inscripción a Liga Oficial'},
       {amount:5, label:'Campeón de Liga Oficial'},
-      {amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}
+      {amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'},
+      {amount:2, label:'Participación en Relámpago pago', date:'14/09/2026'},
+      {amount:1, label:'Subcampeón de Relámpago pago', date:'14/09/2026'}
     ],
     'Cazachilenos FC':[
       {amount:2, label:'Inscripción a Liga Oficial'},
@@ -3598,11 +3635,19 @@
     'Chapecoence':[
       {amount:2, label:'Inscripción a Liga Oficial'},
       {amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'},
-      {amount:2, label:'Campeón de Relámpago gratis', date:'09/09/2026'}
+      {amount:2, label:'Campeón de Relámpago gratis', date:'09/09/2026'},
+      {amount:2, label:'Participación en Relámpago pago', date:'14/09/2026'}
     ],
     'Fulbo Champeta':[{amount:2, label:'Inscripción a Liga Oficial'}],
     'Rejunte 40':[{amount:2, label:'Inscripción a Liga Oficial'}],
-    'La Balsa':[{amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}],
+    'La Balsa':[
+      {amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'},
+      {amount:2, label:'Participación en Relámpago pago', date:'14/09/2026'}
+    ],
+    'Las Palmas':[
+      {amount:2, label:'Participación en Relámpago pago', date:'14/09/2026'},
+      {amount:3, label:'Campeón de Relámpago pago', date:'14/09/2026'}
+    ],
     'Fernettt FC':[{amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}],
     'Jogo com Aura':[{amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'}]
   };
@@ -3624,14 +3669,20 @@
     const list = document.getElementById(listId);
     const empty = document.getElementById(emptyId);
     if(!list || !empty) return;
+
     list.innerHTML = '';
+    const oldToggle = list.parentElement ? list.parentElement.querySelector('.coin-rank-toggle') : null;
+    if(oldToggle) oldToggle.remove();
+
     if(data.length === 0){
       empty.style.display = 'block';
       return;
     }
     empty.style.display = 'none';
 
-    data.slice().sort((a,b)=>b.balance-a.balance).forEach((s,i)=>{
+    const sorted = data.slice().sort((a,b)=>b.balance-a.balance);
+
+    sorted.forEach((s,i)=>{
       const entry=document.createElement('div');
       entry.className='coin-balance-entry';
 
@@ -3657,8 +3708,38 @@
 
       entry.appendChild(row);
       entry.appendChild(detail);
+
+      // Top 5 real: ocultar por JS para evitar conflictos de CSS.
+      if(i >= 5){
+        entry.style.display = 'none';
+        entry.dataset.coinExtra = 'true';
+      }
+
       list.appendChild(entry);
     });
+
+    if(sorted.length > 5){
+      const toggle=document.createElement('button');
+      toggle.type='button';
+      toggle.className='coin-rank-toggle';
+      toggle.textContent='+ Ver todos';
+      toggle.setAttribute('aria-expanded','false');
+
+      let expanded=false;
+
+      toggle.addEventListener('click',()=>{
+        expanded=!expanded;
+
+        list.querySelectorAll('[data-coin-extra="true"]').forEach(entry=>{
+          entry.style.display = expanded ? 'block' : 'none';
+        });
+
+        toggle.textContent=expanded ? '− Ver menos' : '+ Ver todos';
+        toggle.setAttribute('aria-expanded',expanded ? 'true' : 'false');
+      });
+
+      list.insertAdjacentElement('afterend',toggle);
+    }
   }
 
   renderCoinBalances(coinBalances, 'coinBalanceList', 'coinBalanceEmpty', 'team', coinMovements);
@@ -4004,7 +4085,15 @@
 
     const clubTitles=document.createElement('div');
     clubTitles.className='champ-list';
-    [...campeones.querySelectorAll('.champ-row')].filter(r=>r.dataset.historyMode==='clubes').forEach(r=>clubTitles.appendChild(r));
+    function histDateValue(row){
+      const raw=(row.dataset.historyDate||'').trim();
+      const m=raw.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      return m ? new Date(+m[3], +m[2]-1, +m[1]).getTime() : 0;
+    }
+    [...campeones.querySelectorAll('.champ-row')]
+      .filter(r=>r.dataset.historyMode==='clubes')
+      .sort((a,b)=>histDateValue(b)-histDateValue(a))
+      .forEach(r=>clubTitles.appendChild(r));
 
     const titles=document.createElement('div');
     titles.className='hist-filter-group';
