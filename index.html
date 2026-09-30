@@ -1408,11 +1408,8 @@ body.v2-preview .tag{border-radius:999px}
 .ac-daily-mini p{font-size:11.5px;color:var(--muted);margin:0 0 9px}
 .ac-daily-status{font:700 9px 'JetBrains Mono',monospace;color:var(--v2-gold);margin:10px 0}
 .ac-daily-mini.violet .ac-daily-status{color:var(--v2-violet)}
-.ac-beta-reset{
-  display:block;margin:8px auto 0;border:0;background:none;color:#59677b;font:700 8px 'JetBrains Mono',monospace;
-  cursor:pointer
-}
-.ac-beta-reset:hover{color:var(--muted)}
+
+
 
 .ac-earn-strip{
   display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px
@@ -2086,7 +2083,7 @@ body.v2-preview .tag{border-radius:999px}
 .profile-info-list div:last-child{border-bottom:0}
 .profile-info-list span{font-size:9.5px;color:var(--muted)}
 .profile-info-list b{font:700 9px 'JetBrains Mono',monospace;text-align:right}
-.profile-beta-note{font-size:9px!important;color:#647289!important;line-height:1.5!important;margin:12px 0 0!important}
+.profile-sync-note{font-size:9px!important;color:#647289!important;line-height:1.5!important;margin:12px 0 0!important}
 .profile-activity{margin-top:12px}
 .profile-activity-list{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
 .profile-activity-row{
@@ -2710,7 +2707,7 @@ body.v2-preview .v2-notification-panel::before{
 .production-empty-state>span{font-size:27px;margin-bottom:8px}
 .production-empty-state h4{font:600 18px 'Oswald',sans-serif;margin:0}
 .production-empty-state p{max-width:470px;margin:6px auto 0;color:var(--muted);font-size:10px;line-height:1.55}
-.ac-beta-reset{display:none!important}
+
 .shop-rotation-index{
   display:inline-block;margin-left:7px;color:var(--muted);font:700 6.5px 'JetBrains Mono',monospace;
 }
@@ -3205,7 +3202,7 @@ body.v2-preview .v2-notification-panel::before{
 <div><span>ID interno</span><b id="profileInfoId">—</b></div>
 <div><span>Estado</span><b>Activo</b></div>
 </div>
-<p class="profile-beta-note">Tu identidad queda vinculada a tu cuenta de ArgenLeague mediante Supabase.</p>
+<p class="profile-sync-note">Tu identidad queda vinculada a tu cuenta de ArgenLeague mediante Supabase.</p>
 </article>
 <article class="profile-block profile-achievements-block">
 <div class="profile-block-head"><div><span>PROGRESIÓN</span><h3>Logros e insignias</h3></div></div>
@@ -3362,7 +3359,7 @@ body.v2-preview .v2-notification-panel::before{
 <div class="ac-inner-panel" data-ac-content="inventario">
 <div class="ac-panel-head">
 <div><span class="ac-section-kicker">MI COLECCIÓN</span><h3>Inventario — Clubes Pro</h3></div>
-<span class="tag">guardado en este dispositivo</span>
+<span class="tag">sincronizado con tu cuenta</span>
 </div>
 <p class="ac-panel-copy">Acá aparecen tus sobres disponibles y los beneficios obtenidos. Los beneficios permanecen como <b>Disponibles</b> hasta que los uses.</p>
 <div class="v2-inventory-summary" data-inventory-summary="club"></div>
@@ -3469,7 +3466,7 @@ body.v2-preview .v2-notification-panel::before{
 <div class="ac-inner-panel" data-ac-content="inventario">
 <div class="ac-panel-head">
 <div><span class="ac-section-kicker">MI COLECCIÓN</span><h3>Inventario — 1v1</h3></div>
-<span class="tag">guardado en este dispositivo</span>
+<span class="tag">sincronizado con tu cuenta</span>
 </div>
 <p class="ac-panel-copy">Acá aparecen tus sobres disponibles y los beneficios obtenidos. Los beneficios permanecen como <b>Disponibles</b> hasta que los uses.</p>
 <div class="v2-inventory-summary" data-inventory-summary="1v1"></div>
@@ -7535,22 +7532,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 <h3>Continuar con Google</h3>
 <p>Ingresá con tu cuenta de Google para acceder a tu identidad vinculada de ArgenLeague.</p>
 <button class="ga-primary" id="gaGoogleLogin" type="button">Continuar con Google</button>
-<div class="ga-config-warning" hidden="" id="gaConfigWarning">No se pudo conectar con Supabase. El acceso online no está disponible.</div><div class="ga-local-fallback" hidden="" id="gaLocalFallback">
-<span class="ga-kicker">MODO LOCAL</span>
-<p>Supabase todavía no está conectado. Podés probar cuentas, vinculaciones y permisos localmente en este navegador.</p>
-<label>
-<span>Nombre</span>
-<input id="gaLocalName" placeholder="Ej: Thiago" type="text"/>
-</label>
-<label>
-<span>Email</span>
-<input id="gaLocalEmail" placeholder="tu@gmail.com" type="email"/>
-</label>
-<button class="ga-primary" id="gaLocalLogin" type="button">Entrar en modo local</button>
-<small>Esto no autentica contra Google. Cuando conectemos Supabase, el mismo botón vuelve a usar Google real.</small>
-</div>
-</div>
-<div class="ga-view" hidden="" id="gaAccountView">
+<div class="ga-config-warning" hidden="" id="gaConfigWarning">No se pudo conectar con Supabase. El acceso online no está disponible.</div></div><div class="ga-view" hidden="" id="gaAccountView">
 <div class="ga-account-head">
 <div class="ga-big-avatar" id="gaBigAvatar">U</div>
 <div>
@@ -7644,7 +7626,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     CONFIG.SUPABASE_URL &&
     CONFIG.SUPABASE_PUBLISHABLE_KEY &&
     !String(CONFIG.SUPABASE_URL).startsWith('PEGAR_') &&
-    !String(CONFIG.SUPABASE_PUBLISHABLE_KEY).startsWith('PEGAR_');
+    !String(CONFIG.SUPABASE_PUBLISHABLE_KEY).startsWith('PEGAR_') &&
+    !!window.supabase?.createClient;
 
   const sb = configured
     ? window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_PUBLISHABLE_KEY)
@@ -7738,8 +7721,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   async function signInGoogle(){
     if(!sb){
       show(q('#gaConfigWarning'),true);
-      show(q('#gaLocalFallback'),true);
-      q('#gaLocalEmail')?.focus();
+      show(q('#gaLocalFallback'),false);
+      q('#gaConfigWarning').textContent='El inicio de sesión no está disponible en este momento. Probá nuevamente en unos minutos.';
       return;
     }
     const redirectTo=window.location.origin+window.location.pathname;
@@ -8393,8 +8376,6 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   q('#adminAcApply')?.addEventListener('click',adminAdjustAc);
   q('#adminPackGrant')?.addEventListener('click',adminGrantPack);
   q('#gaGoogleLogin')?.addEventListener('click',signInGoogle);
-  q('#gaLocalLogin')?.addEventListener('click',signInLocal);
-  q('#gaLocalEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter')signInLocal()});
   q('#gaLogout')?.addEventListener('click',signOut);
   q('#gaClose')?.addEventListener('click',closeModal);
   q('#gaModal')?.addEventListener('click',e=>{if(e.target===q('#gaModal'))closeModal()});
@@ -8437,7 +8418,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     sb.auth.onAuthStateChange(async ()=>{ await refreshAll(); });
   }else{
     show(q('#gaConfigWarning'),true);
-    q('#gaGoogleLogin').textContent='Continuar';
+    show(q('#gaLocalFallback'),false);
+    if(q('#gaConfigWarning')) q('#gaConfigWarning').textContent='El inicio de sesión no está disponible en este momento.';
+    q('#gaGoogleLogin').textContent='Reintentar';
   }
 
   await refreshAll();
