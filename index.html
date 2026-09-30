@@ -641,7 +641,7 @@
 
   /* ===== BOTÓN FLOTANTE DE DISCORD ===== */
   .float-discord{
-    position:fixed;bottom:22px;right:22px;z-index:60;
+    position:fixed;bottom:22px;left:22px;right:auto;z-index:60;
     display:flex;align-items:center;gap:8px;
     background:var(--accent);color:#071019;text-decoration:none;
     padding:13px 18px;border-radius:30px;
@@ -1318,12 +1318,7 @@ body.v2-preview .redeem-item{
 body.v2-preview .section-head h2{font-size:25px}
 body.v2-preview .tag{border-radius:999px}
 
-.v2-preview-flag{
-  position:fixed;right:15px;bottom:15px;z-index:80;
-  padding:7px 10px;border-radius:999px;
-  font:800 8px 'JetBrains Mono',monospace;letter-spacing:.8px;
-  color:#071019;background:var(--accent);box-shadow:0 10px 30px rgba(0,0,0,.25)
-}
+
 .v2-photo-credit{
   font:600 7px 'JetBrains Mono',monospace;color:#5d6878;text-align:right;margin-top:8px
 }
@@ -2125,6 +2120,8 @@ body.v2-preview .tag{border-radius:999px}
   .profile-cover h2{font-size:38px}
 }
 </style><style id="argenleague-google-link-style">
+.google-auth-btn[hidden],.google-account-btn[hidden]{display:none!important;}
+
 .google-auth-nav{margin-left:auto;display:flex;align-items:center;gap:8px}.google-auth-btn,.google-account-btn{border:1px solid rgba(255,255,255,.13);border-radius:10px;background:#fff;color:#151515;min-height:38px;padding:7px 10px;display:flex;align-items:center;gap:8px;cursor:pointer}.google-g{width:23px;height:23px;border-radius:50%;display:grid;place-items:center;font:800 13px Arial;color:#4285f4;background:#fff;border:1px solid #ddd}#googleAuthBtnLabel{font:600 10px Arial}.google-account-btn{background:#0c1521;color:var(--line);border-color:var(--border);padding:5px 9px}.google-account-avatar,.ga-big-avatar{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#4285f4,#2257a5);color:#fff;font:700 11px Arial}.google-account-copy{text-align:left;line-height:1.05}.google-account-copy b{display:block;font:600 9px 'Oswald',sans-serif}.google-account-copy small{display:block;color:var(--muted);font:700 6.5px 'JetBrains Mono',monospace;margin-top:3px}.profiles-account-panel{margin:0 0 15px}.profiles-account-state{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;border:1px solid rgba(66,133,244,.24);border-radius:15px;padding:16px;background:radial-gradient(circle at 0 50%,rgba(66,133,244,.08),transparent 25%),#090f19}.profiles-account-icon{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#4285f4;font:800 22px Arial;border:1px solid #d7d7d7}.profiles-account-icon.linked{background:linear-gradient(145deg,#4285f4,#245cb4);color:#fff;border-color:rgba(255,255,255,.15)}.profiles-account-state h3{font:600 17px 'Oswald',sans-serif;margin:3px 0}.profiles-account-state p{font-size:10.5px;line-height:1.45;color:var(--muted);margin:0}.profiles-account-action{border:1px solid #4285f4;border-radius:9px;background:#4285f4;color:#fff;padding:9px 12px;font:700 9px 'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.45px;cursor:pointer}.profiles-account-action.secondary{background:transparent;color:#8fb7ff}.profile-link-status{z-index:2;align-self:flex-end;border:1px solid rgba(255,255,255,.18);border-radius:9px;background:rgba(5,10,17,.55);color:rgba(255,255,255,.72);padding:10px 13px;font:700 9px 'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.5px}.profile-link-status.mine{color:#061019;background:var(--accent);border-color:var(--accent)}.profile-detail-view.uno .profile-link-status.mine{color:#fff;background:var(--v2-violet);border-color:var(--v2-violet)}.ga-modal{position:fixed;inset:0;z-index:10100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.86);backdrop-filter:blur(7px)}.ga-modal.show{display:flex}.ga-card{width:min(470px,100%);position:relative;border:1px solid #293b50;border-radius:20px;padding:25px;background:linear-gradient(180deg,#0e1825,#070c13);box-shadow:0 35px 100px rgba(0,0,0,.62)}.ga-close{position:absolute;right:14px;top:13px;width:31px;height:31px;border:1px solid var(--border);border-radius:50%;background:#0a111b;color:var(--muted);font-size:19px;cursor:pointer}.ga-google-logo{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;margin-bottom:14px;background:#fff;color:#4285f4;font:800 24px Arial;border:1px solid #ddd}.ga-kicker{font:800 8px 'JetBrains Mono',monospace;color:#7ba7ff;letter-spacing:1px}.ga-view>h3,.ga-account-head h3{font:600 25px 'Oswald',sans-serif;margin:6px 0 4px}.ga-view>p,.ga-account-head p{font-size:10.5px;color:var(--muted);line-height:1.5;margin:0 0 17px}.ga-field{display:block;margin-top:11px}.ga-field>span{display:block;color:var(--muted);font:700 7.5px 'JetBrains Mono',monospace;margin-bottom:5px;text-transform:uppercase}.ga-field input,.ga-field select{width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:9px;background:#0c1521;color:var(--line);padding:10px 11px;font-size:11px;outline:none}.ga-primary,.ga-secondary,.ga-danger{width:100%;border-radius:9px;padding:10px 12px;margin-top:13px;font:700 10px 'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.5px;cursor:pointer}.ga-primary{border:1px solid #4285f4;background:#4285f4;color:#fff}.ga-secondary{border:1px solid var(--border);background:#0c1521;color:var(--line)}.ga-danger{border:1px solid rgba(255,90,90,.26);background:rgba(255,90,90,.07);color:#ff8c8c}.ga-account-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}.ga-big-avatar{width:58px;height:58px;font-size:20px}.ga-link-card,.ga-admin-user{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:12px;padding:13px;background:#0b131e}.ga-link-card.linked{border-color:rgba(98,231,164,.27);background:rgba(98,231,164,.05)}.ga-link-dot{width:9px;height:9px;border-radius:50%;margin-top:4px;flex:0 0 auto;background:#f4c44e;box-shadow:0 0 12px rgba(244,196,78,.35)}.ga-link-card.linked .ga-link-dot{background:#62e7a4;box-shadow:0 0 12px rgba(98,231,164,.35)}.ga-link-card b{display:block;font:600 13px 'Oswald',sans-serif}.ga-link-card p{font-size:9.5px;color:var(--muted);line-height:1.4;margin:3px 0 0}.ga-admin-user{display:block;margin:14px 0 4px}.ga-admin-user span{display:block;color:var(--muted);font-size:8px;margin-bottom:3px}.ga-admin-user b{font:700 10px 'JetBrains Mono',monospace}@media(max-width:960px){.google-auth-nav{margin-left:0}}@media(max-width:650px){.profiles-account-state{grid-template-columns:auto 1fr}.profiles-account-action{grid-column:1/-1;width:100%}}
 </style><style id="argenleague-admin-complete-style">
 /* =========================================================
@@ -6269,10 +6266,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     el.addEventListener('click',()=>filterRelampagos(el.dataset.v2Relampago));
   });
 
-  const flag=document.createElement('div');
-  flag.className='v2-preview-flag';
-  flag.textContent='2.0 · FIXED PREVIEW';
-  document.body.appendChild(flag);
 });
 </script><div aria-hidden="true" class="ac2-modal" id="ac2Modal">
 <div aria-labelledby="ac2ModalTitle" aria-modal="true" class="ac2-modal-card" role="dialog">
@@ -7061,7 +7054,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   const CLUB_PROFILES=[
     'Lechonas Gang','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa',
-    'Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura'
+    'Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura',
+    'Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero'
   ];
 
   const PLAYER_PROFILES=[
