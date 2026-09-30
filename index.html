@@ -3219,7 +3219,6 @@ body.v2-preview .v2-notification-panel::before{
 <p>Un pack gratis cada 24 horas.</p>
 <div class="ac-daily-status" data-daily-status="club">Disponible ahora</div>
 <small class="login-pack-note">Requiere sesión + capitán vinculado</small><button class="ac-action gold" data-pack-mode="club" data-pack-open="daily" type="button">Abrir Pack Diario</button>
-
 </div>
 </div>
 </div>
@@ -3346,7 +3345,6 @@ body.v2-preview .v2-notification-panel::before{
 <h3>Pack Diario 1v1</h3><p>Un pack gratis cada 24 horas.</p>
 <div class="ac-daily-status" data-daily-status="1v1">Disponible ahora</div>
 <small class="login-pack-note">Requiere sesión + jugador 1v1 vinculado</small><button class="ac-action violetbtn" data-pack-mode="1v1" data-pack-open="daily" type="button">Abrir Pack Diario</button>
-
 </div>
 </div>
 </div>
@@ -7645,6 +7643,20 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     },{onConflict:'id'});
   }
 
+
+  function flattenProfileLink(row){
+    const p=Array.isArray(row?.argen_profiles)?row.argen_profiles[0]:row?.argen_profiles;
+    return {
+      id:row?.id,
+      user_id:row?.user_id,
+      profile_id:row?.profile_id,
+      mode:p?.mode||'',
+      profile_name:p?.profile_name||'',
+      role:row?.role||'player',
+      created_at:row?.created_at||null
+    };
+  }
+
   async function loadOwnLinks(){
     if(!session?.user){links=[];return;}
     if(!sb){
@@ -7653,10 +7665,15 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     }
     const {data,error}=await sb
       .from('profile_links')
-      .select('id,user_id,mode,profile_name,role,created_at')
+      .select('id,user_id,profile_id,role,created_at,argen_profiles!profile_links_profile_id_fkey(mode,profile_name)')
       .eq('user_id',session.user.id)
       .order('created_at',{ascending:true});
-    links=error?[]:(data||[]);
+    if(error){
+      console.error('No se pudieron cargar tus vinculaciones:',error);
+      links=[];
+    }else{
+      links=(data||[]).map(flattenProfileLink);
+    }
   }
 
   async function loadCatalog(){
@@ -7671,7 +7688,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     }
     const {data,error}=await sb
       .from('argen_profiles')
-      .select('mode,profile_name,active')
+      .select('id,mode,profile_name,active')
       .eq('active',true)
       .order('profile_name',{ascending:true});
     profileCatalog=error?[]:(data||[]);
@@ -7689,11 +7706,13 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         .select('id,email,display_name,avatar_url,created_at,last_seen_at')
         .order('created_at',{ascending:false}),
       sb.from('profile_links')
-        .select('id,user_id,mode,profile_name,role,created_at')
+        .select('id,user_id,profile_id,role,created_at,argen_profiles!profile_links_profile_id_fkey(mode,profile_name)')
         .order('created_at',{ascending:true})
     ]);
+    if(uerr) console.error('Admin · app_users:',uerr);
+    if(lerr) console.error('Admin · profile_links:',lerr);
     adminAccounts=uerr?[]:(users||[]);
-    adminLinks=lerr?[]:(pls||[]);
+    adminLinks=lerr?[]:(pls||[]).map(flattenProfileLink);
   }
 
   function renderHeader(){
@@ -7969,16 +7988,22 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       return;
     }
 
+    const selectedProfile=profileCatalog.find(p=>p.mode===editMode && p.profile_name===profile);
+    if(!selectedProfile?.id){
+      q('#adminLinkError').textContent='No se encontró el perfil seleccionado en argen_profiles.';
+      show(q('#adminLinkError'),true);
+      return;
+    }
+
     let res;
     if(existing){
       res=await sb.from('profile_links')
-        .update({profile_name:profile,role:editMode==='clubes'?'captain':'player'})
+        .update({profile_id:selectedProfile.id,role:editMode==='clubes'?'captain':'player'})
         .eq('id',existing.id);
     }else{
       res=await sb.from('profile_links').insert({
         user_id:editUserId,
-        mode:editMode,
-        profile_name:profile,
+        profile_id:selectedProfile.id,
         role:editMode==='clubes'?'captain':'player'
       });
     }
@@ -8048,9 +8073,10 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       await upsertCurrentUser();
 
       if(sb){
-        const {data}=await sb.from('app_users')
+        const {data,error}=await sb.from('app_users')
           .select('id,email,display_name,avatar_url,created_at,last_seen_at')
           .eq('id',session.user.id).maybeSingle();
+        if(error) console.error('No se pudo cargar app_users:',error);
         account=data||null;
       }else{
         account=localAccounts().find(a=>a.id===session.user.id)||null;
