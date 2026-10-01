@@ -2893,8 +2893,32 @@ body.v2-preview .v2-notification-panel::before{
   .admin-history-head{align-items:flex-start;flex-direction:column}
   .admin-history-tools{grid-template-columns:1fr}
 }
-</style>
 
+.mission-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 12px}
+.mission-stat-grid:empty{display:none}
+.mission-stat-grid>div{border:1px solid var(--border);border-radius:10px;background:#08101a;padding:10px}
+.mission-stat-grid span{display:block;color:var(--muted);font:800 6px 'JetBrains Mono',monospace}
+.mission-stat-grid b{display:block;margin-top:4px;font:600 18px 'Oswald',sans-serif}
+.mission-complete-card{
+  margin-top:14px;border:1px solid var(--border);border-radius:14px;padding:15px;background:#09111c;
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:12px
+}
+.mission-complete-card.ready{border-color:rgba(244,196,78,.35);background:linear-gradient(135deg,rgba(244,196,78,.055),#09111c)}
+.mission-complete-card.claimed{opacity:.75}
+.mission-complete-card span{font:800 7px 'JetBrains Mono',monospace;color:var(--v2-gold)}
+.mission-complete-card h4{font:600 16px 'Oswald',sans-serif;margin:4px 0 2px}
+.mission-complete-card p{margin:0;color:var(--muted);font-size:8px}
+.mission-complete-reward{font:700 9px 'Oswald',sans-serif;color:var(--line)}
+.mission-complete-card button{
+  border:1px solid var(--v2-gold);background:var(--v2-gold);color:#171004;border-radius:8px;padding:8px 10px;
+  font:700 8px 'Oswald',sans-serif;cursor:pointer
+}
+.mission-complete-card button:disabled{opacity:.38;cursor:not-allowed}
+@media(max-width:760px){
+  .mission-stat-grid{grid-template-columns:repeat(2,1fr)}
+  .mission-complete-card{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body class="v2-preview">
 <nav>
@@ -3246,42 +3270,40 @@ body.v2-preview .v2-notification-panel::before{
 </div>
 <div class="admin-pack-odds-grid" id="adminPackOddsGrid"></div>
 </div>
-
 <div class="admin-history-block">
-  <div class="admin-history-head">
-    <div>
-      <span class="v2-kicker">AUDITORÍA · ECONOMÍA</span>
-      <h2>Historial de sobres y recompensas</h2>
-      <p>Registra entregas, aperturas, premios y uso de beneficios con fecha y hora.</p>
-    </div>
-    <button id="adminHistoryRefresh" type="button">Actualizar</button>
-  </div>
-  <div class="admin-history-tools">
-    <div class="admin2-search">
-      <span>⌕</span>
-      <input id="adminHistorySearch" autocomplete="off" type="search" placeholder="Buscar equipo, jugador o recompensa...">
-    </div>
-    <select id="adminHistoryMode">
-      <option value="">Todas las modalidades</option>
-      <option value="clubes">Clubes Pro</option>
-      <option value="uno">1v1</option>
-    </select>
-    <select id="adminHistoryEvent">
-      <option value="">Todos los eventos</option>
-      <option value="granted">Sobre entregado</option>
-      <option value="opened">Sobre abierto</option>
-      <option value="used">Beneficio usado</option>
-    </select>
-  </div>
-  <div class="admin-history-table-wrap">
-    <table class="admin-history-table">
-      <thead><tr><th>Fecha / hora</th><th>Perfil</th><th>Evento</th><th>Sobre</th><th>Resultado</th></tr></thead>
-      <tbody id="adminHistoryBody"><tr><td colspan="5">Cargando historial...</td></tr></tbody>
-    </table>
-  </div>
-  <div class="admin-history-foot" id="adminHistoryFoot"></div>
+<div class="admin-history-head">
+<div>
+<span class="v2-kicker">AUDITORÍA · ECONOMÍA</span>
+<h2>Historial de sobres y recompensas</h2>
+<p>Registra entregas, aperturas, premios y uso de beneficios con fecha y hora.</p>
 </div>
-
+<button id="adminHistoryRefresh" type="button">Actualizar</button>
+</div>
+<div class="admin-history-tools">
+<div class="admin2-search">
+<span>⌕</span>
+<input autocomplete="off" id="adminHistorySearch" placeholder="Buscar equipo, jugador o recompensa..." type="search"/>
+</div>
+<select id="adminHistoryMode">
+<option value="">Todas las modalidades</option>
+<option value="clubes">Clubes Pro</option>
+<option value="uno">1v1</option>
+</select>
+<select id="adminHistoryEvent">
+<option value="">Todos los eventos</option>
+<option value="granted">Sobre entregado</option>
+<option value="opened">Sobre abierto</option>
+<option value="used">Beneficio usado</option>
+</select>
+</div>
+<div class="admin-history-table-wrap">
+<table class="admin-history-table">
+<thead><tr><th>Fecha / hora</th><th>Perfil</th><th>Evento</th><th>Sobre</th><th>Resultado</th></tr></thead>
+<tbody id="adminHistoryBody"><tr><td colspan="5">Cargando historial...</td></tr></tbody>
+</table>
+</div>
+<div class="admin-history-foot" id="adminHistoryFoot"></div>
+</div>
 <div class="admin2-flow">
 <span class="v2-kicker">FLUJO DE VINCULACIÓN</span>
 <div class="admin2-flow-grid">
@@ -3311,8 +3333,8 @@ body.v2-preview .v2-notification-panel::before{
 <div class="profiles-toolbar">
 <div class="profiles-search-wrap">
 <span>⌕</span>
-<input autocomplete="off" id="profilesSearch" placeholder="Buscar club..." type="search"/>
-</div>
+<input autocomplete="off" id="profilesSearch" placeholder="Buscar club..." type="search">
+</input></div>
 <div class="profiles-selected-chip" id="profilesSelectedChip">Sin identidad seleccionada</div>
 </div>
 <div class="profiles-layout">
@@ -3472,8 +3494,8 @@ body.v2-preview .v2-notification-panel::before{
 <span class="tag">6 misiones activas</span>
 </div>
 <p class="ac-panel-copy">El progreso se actualiza con los resultados oficiales cargados en ArgenLeague. Cada capitán vinculado ve únicamente el avance de su equipo. Los premios de esta primera semana se definirán antes de habilitar el reclamo.</p>
-<div class="mission-profile-state" data-mission-state="clubes">Iniciá sesión como capitán para ver el progreso de tu club.</div>
-<div class="ac-missions-grid" data-mission-list="clubes"></div>
+<div class="mission-profile-state" data-mission-state="clubes">Iniciá sesión como capitán para ver el progreso de tu club.</div><div class="mission-stat-grid" data-mission-summary="clubes"></div>
+<div class="ac-missions-grid" data-mission-list="clubes"></div><div data-mission-completion="clubes"></div>
 </div>
 <div class="ac-inner-panel" data-ac-content="tienda">
 <div class="ac-panel-head">
@@ -3596,8 +3618,8 @@ body.v2-preview .v2-notification-panel::before{
 <span class="tag">4 misiones activas</span>
 </div>
 <p class="ac-panel-copy">El progreso se actualiza con los resultados oficiales cargados en ArgenLeague. Vinculá tu jugador 1v1 para seguir el avance. Los premios de esta primera semana todavía están a definir.</p>
-<div class="mission-profile-state violet" data-mission-state="uno">Iniciá sesión y vinculá tu jugador 1v1 para ver el progreso.</div>
-<div class="ac-missions-grid" data-mission-list="uno"></div>
+<div class="mission-profile-state violet" data-mission-state="uno">Iniciá sesión y vinculá tu jugador 1v1 para ver el progreso.</div><div class="mission-stat-grid" data-mission-summary="uno"></div>
+<div class="ac-missions-grid" data-mission-list="uno"></div><div data-mission-completion="uno"></div>
 </div>
 <div class="ac-inner-panel" data-ac-content="tienda">
 <div class="ac-panel-head"><div><span class="ac-section-kicker">ROTACIÓN ACTUAL</span><h3>Tienda — 1v1</h3></div><span class="tag" data-shop-countdown="">próxima rotación</span></div>
@@ -9382,7 +9404,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 <button class="admin-odds-test" id="adminTestPackAgain" type="button">Abrir otra prueba</button>
 </div>
 </div>
-
 <script id="argenleague-v2-missions-history-script">
 document.addEventListener('DOMContentLoaded',()=>{
   const q=s=>document.querySelector(s);
@@ -9408,7 +9429,53 @@ document.addEventListener('DOMContentLoaded',()=>{
   };
 
   function fallbackRows(mode){
-    return definitions[mode].map(m=>({...m,progress:0,completed_at:null,reward_label:'Premio a definir'}));
+    return definitions[mode].map(m=>({...m,progress:0,completed_at:null,reward_label:'—',claimed_at:null}));
+  }
+
+  function rewardIcon(label){
+    label=String(label||'');
+    if(label.includes('AC'))return '🪙';
+    if(label.toLowerCase().includes('sobre'))return '🎁';
+    if(label.toLowerCase().includes('destacado'))return '⭐';
+    if(label.toLowerCase().includes('placa'))return '📲';
+    return '🎁';
+  }
+
+  function renderSummary(mode,summary,profile){
+    const host=q(`[data-mission-summary="${mode}"]`);
+    if(!host)return;
+    if(!profile){host.innerHTML='';return;}
+    const s=summary||{};
+    host.innerHTML=`
+      <div><span>PJ</span><b>${Number(s.matches_played||0)}</b></div>
+      <div><span>VICTORIAS</span><b>${Number(s.wins||0)}</b></div>
+      <div><span>VALLAS INVICTAS</span><b>${Number(s.clean_sheets||0)}</b></div>
+      <div><span>PARTIDOS 3+ GOLES</span><b>${Number(s.three_plus_goals_matches||0)}</b></div>
+    `;
+  }
+
+  function renderCompletion(mode,data,profile){
+    const host=q(`[data-mission-completion="${mode}"]`);
+    if(!host)return;
+    if(!profile){
+      host.innerHTML='';
+      return;
+    }
+    const allDone=!!data?.all_completed;
+    const claimed=!!data?.claimed_at;
+    const reward=data?.reward_label||'Sobre Relámpago';
+    host.innerHTML=`
+      <div class="mission-complete-card ${allDone?'ready':''} ${claimed?'claimed':''}">
+        <div>
+          <span>🎯 BONUS SEMANAL</span>
+          <h4>Completá todas las misiones</h4>
+          <p>${allDone?'¡Semana completa! Ya podés reclamar el bonus.':'Completá todas las misiones activas para desbloquear el premio final.'}</p>
+        </div>
+        <div class="mission-complete-reward">${rewardIcon(reward)} ${esc(reward)}</div>
+        <button type="button" data-claim-weekly="${mode}" ${(!allDone||claimed)?'disabled':''}>
+          ${claimed?'Reclamado':allDone?'Reclamar bonus':'Bloqueado'}
+        </button>
+      </div>`;
   }
 
   function renderMissions(mode,rows,profile){
@@ -9422,7 +9489,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(state){
       state.classList.toggle('is-linked',!!profile);
       state.textContent=profile
-        ? `${mode==='clubes'?'⚽':'🎮'} ${profile} · progreso sincronizado con resultados oficiales`
+        ? `${mode==='clubes'?'⚽':'🎮'} ${profile} · progreso privado de tu cuenta vinculada`
         : (mode==='clubes'
             ? 'Iniciá sesión como capitán para ver el progreso de tu club.'
             : 'Iniciá sesión y vinculá tu jugador 1v1 para ver el progreso.');
@@ -9432,13 +9499,19 @@ document.addEventListener('DOMContentLoaded',()=>{
       const target=Number(m.target||1);
       const pct=Math.min(100,Math.round(progress/target*100));
       const done=progress>=target;
+      const claimed=!!m.claimed_at;
       return `<article class="ac-mission ${done?'completed':''}">
         <div class="ac-mission-top"><span>${esc(m.icon||'🎯')} MISIÓN SEMANAL</span><b>${progress}/${target}</b></div>
         <h4>${esc(m.title)}</h4>
         <p>${esc(m.description||m.desc||'')}</p>
         <div class="ac-progress"><i style="width:${pct}%"></i></div>
         <div class="ac-mission-status"><small>${pct}% COMPLETADO</small>${done?'<strong>✓ COMPLETA</strong>':''}</div>
-        <span class="ac-mission-reward">🎁 Recompensa: ${esc(m.reward_label||'a definir')}</span>
+        <span class="ac-mission-reward">${rewardIcon(m.reward_label)} ${esc(m.reward_label||'—')}</span>
+        <button class="ac-action ${mode==='clubes'?'gold':'violetbtn'}" type="button"
+          data-claim-mission="${esc(m.mission_id||m.id)}" data-claim-mode="${mode}"
+          ${(!profile||!done||claimed)?'disabled':''}>
+          ${claimed?'Reclamado':done?'Reclamar premio':'En progreso'}
+        </button>
       </article>`;
     }).join('');
   }
@@ -9451,12 +9524,67 @@ document.addEventListener('DOMContentLoaded',()=>{
       ['uno',st.oneProfile||'']
     ];
     for(const [mode,profile] of targets){
-      if(!client||!profile){renderMissions(mode,null,'');continue;}
-      const {data,error}=await client.rpc('get_weekly_missions',{p_mode:mode,p_profile_name:profile});
-      if(error){renderMissions(mode,null,profile);continue;}
-      renderMissions(mode,Array.isArray(data)?data:[],profile);
+      if(!client||!profile){
+        renderMissions(mode,null,'');
+        renderSummary(mode,null,'');
+        renderCompletion(mode,null,'');
+        continue;
+      }
+      const [{data,error},{data:summary},{data:completion}] = await Promise.all([
+        client.rpc('get_weekly_missions',{p_mode:mode,p_profile_name:profile}),
+        client.rpc('get_weekly_mission_summary',{p_mode:mode,p_profile_name:profile}),
+        client.rpc('get_weekly_completion_status',{p_mode:mode,p_profile_name:profile})
+      ]);
+      renderMissions(mode,error?null:(Array.isArray(data)?data:[]),profile);
+      renderSummary(mode,summary||{},profile);
+      renderCompletion(mode,completion||{},profile);
     }
   }
+
+  document.addEventListener('click',async e=>{
+    const btn=e.target.closest('[data-claim-mission]');
+    if(!btn)return;
+    const client=sb();
+    const mode=btn.dataset.claimMode;
+    const mission=btn.dataset.claimMission;
+    const st=window.ARGENLEAGUE_USER_STATE||{};
+    const profile=mode==='clubes'?st.clubProfile:st.oneProfile;
+    if(!client||!profile)return;
+    btn.disabled=true;
+    const {data,error}=await client.rpc('claim_weekly_mission_reward',{
+      p_mission_id:mission,p_mode:mode,p_profile_name:profile
+    });
+    if(error){
+      window.AL_ECONOMY?.showMessage?.('No se pudo reclamar',error.message);
+      btn.disabled=false;
+      return;
+    }
+    window.AL_ECONOMY?.showMessage?.('Misión reclamada',String(data||'Recompensa acreditada'));
+    await window.AL_ECONOMY?.loadAll?.();
+    await loadMissions();
+  });
+
+  document.addEventListener('click',async e=>{
+    const btn=e.target.closest('[data-claim-weekly]');
+    if(!btn)return;
+    const mode=btn.dataset.claimWeekly;
+    const st=window.ARGENLEAGUE_USER_STATE||{};
+    const profile=mode==='clubes'?st.clubProfile:st.oneProfile;
+    const client=sb();
+    if(!client||!profile)return;
+    btn.disabled=true;
+    const {data,error}=await client.rpc('claim_weekly_completion_reward',{
+      p_mode:mode,p_profile_name:profile
+    });
+    if(error){
+      window.AL_ECONOMY?.showMessage?.('No se pudo reclamar',error.message);
+      btn.disabled=false;
+      return;
+    }
+    window.AL_ECONOMY?.showMessage?.('Semana completada',String(data||'Bonus acreditado'));
+    await window.AL_ECONOMY?.loadAll?.();
+    await loadMissions();
+  });
 
   const eventLabel={granted:'ENTREGADO',opened:'ABIERTO',used:'USADO'};
   let historyRows=[];
@@ -9507,20 +9635,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   q('#adminHistoryEvent')?.addEventListener('change',renderHistory);
   q('#adminHistoryRefresh')?.addEventListener('click',loadAdminHistory);
 
-  window.addEventListener('argenleague:identity-change',()=>{
-    loadMissions();
-    loadAdminHistory();
-  });
-  window.addEventListener('argenleague:economy-sync',()=>{
-    loadMissions();
-    if(window.ARGENLEAGUE_USER_STATE?.isAdmin)loadAdminHistory();
-  });
+  window.addEventListener('argenleague:identity-change',()=>{loadMissions();loadAdminHistory();});
+  window.addEventListener('argenleague:economy-sync',()=>{loadMissions();if(window.ARGENLEAGUE_USER_STATE?.isAdmin)loadAdminHistory();});
 
   renderMissions('clubes',null,'');
   renderMissions('uno',null,'');
   setTimeout(()=>{loadMissions();loadAdminHistory();},700);
 });
 </script>
-
 </body>
 </html>
