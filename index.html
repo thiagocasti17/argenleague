@@ -3014,18 +3014,18 @@ body.v2-preview .v2-notification-panel::before{
 </div>
 <div class="v2-section-title">
 <div><span>ACTUALIDAD</span><h2>Lo último en ArgenLeague</h2></div>
-<small>Actualizado al 29/09/2026</small>
+<small>Actualizado al 30/09/2026</small>
 </div>
 <div class="v2-news-grid">
 <article class="v2-news-card featured">
 <div class="v2-news-tag">⚡ RELÁMPAGO CLUBES PRO · FC 27</div>
 <div class="v2-news-main">
 <div>
-<span class="v2-news-date">29 SEP 2026</span>
-<h3>CHAPECOENCE<br/><em>CAMPEÓN</em></h3>
-<p>Ganó el primer Relámpago de FC 27: 6–0 ante Banda Cancelada en la final.</p>
+<span class="v2-news-date">30 SEP 2026</span>
+<h3>BANDA CANCELADA<br/><em>CAMPEÓN</em></h3>
+<p>Se quedó con el Relámpago de Clubes Pro tras vencer 4–1 a Josesito Gang en la final.</p>
 </div>
-<div class="v2-score-pill">6 <span>—</span> 0</div>
+<div class="v2-score-pill">4 <span>—</span> 1</div>
 </div>
 <button data-v2-relampago="clubes" type="button">Ver torneo completo →</button>
 </article>
@@ -5390,6 +5390,22 @@ body.v2-preview .v2-notification-panel::before{
       }
     },
 
+    {
+      id:'r11', orden:11, modalidad:'clubes', costo:'GRATIS', fecha:'30/09/2026', nombre:'Relámpago — Banda Cancelada campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      descripcion:'Relámpago gratuito de Clubes Pro de FC 27. Banda Cancelada se consagró campeón tras vencer a LMJ ESPORTS en semifinales y a Josesito Gang en la final.',
+      meta:'Relámpago gratis · 4 equipos · Clubes Pro · FC 27',
+      inscripcionesAbiertas:false,
+      bracket:{
+        semis:[
+          {a:'LMJ ESPORTS', ag:3, b:'Banda Cancelada', bg:4},
+          {a:'Josesito Gang', ag:7, b:'Fabrika de dinero', bg:3},
+        ],
+        final:[
+          {a:'Banda Cancelada', ag:4, b:'Josesito Gang', bg:1}
+        ]
+      }
+    },
+
   ];
   relampagos.forEach(prepararRelampagoIds);
 
@@ -5689,8 +5705,10 @@ body.v2-preview .v2-notification-panel::before{
     { team:'Jogo com Aura', balance:1 },
     { team:'Fieles FC', balance:3 },
     { team:'Moron CDM', balance:1 },
-    { team:'Banda Cancelada', balance:1 },
-    { team:'Fabrika de dinero', balance:1 }
+    { team:'Banda Cancelada', balance:4 },
+    { team:'Fabrika de dinero', balance:2 },
+    { team:'LMJ ESPORTS', balance:1 },
+    { team:'Josesito Gang', balance:1 }
   ];
   const coinPlayerBalances = [
     { player:'Lucario343', balance:4 },
@@ -5741,10 +5759,19 @@ body.v2-preview .v2-notification-panel::before{
       {amount:1, label:'Participación en Relámpago gratis', date:'17/09/2026'},
     ],
     'Banda Cancelada':[
-      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'29/09/2026'}
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'29/09/2026'},
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'30/09/2026'},
+      {amount:2, label:'Campeón de Relámpago gratis · FC 27', date:'30/09/2026'}
     ],
     'Fabrika de dinero':[
-      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'29/09/2026'}
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'29/09/2026'},
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'30/09/2026'}
+    ],
+    'LMJ ESPORTS':[
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'30/09/2026'}
+    ],
+    'Josesito Gang':[
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'30/09/2026'}
     ]
   };
 
@@ -7394,7 +7421,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const CLUB_PROFILES=[
     'Lechonas Gang','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa',
     'Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura',
-    'Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero'
+    'Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero','LMJ ESPORTS','Josesito Gang'
   ];
 
   const PLAYER_PROFILES=[
@@ -8072,7 +8099,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
   async function loadCatalog(){
     if(!sb){
-      const clubs=['Lechonas Gang','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa','Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura','Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero'];
+      const clubs=['Lechonas Gang','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa','Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura','Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero','LMJ ESPORTS','Josesito Gang'];
       const players=['Lucario343','thiagokpo17','JEDAY_-504','tthiagoo_07','LuchoPS5','Bauti7','TitoFC24','MatiRMA','NicoFut','FedeMadrid','TomiGunner','SantiCity'];
       profileCatalog=[
         ...clubs.map(profile_name=>({mode:'clubes',profile_name,active:true})),
