@@ -2918,6 +2918,44 @@ body.v2-preview .v2-notification-panel::before{
   .mission-stat-grid{grid-template-columns:repeat(2,1fr)}
   .mission-complete-card{grid-template-columns:1fr}
 }
+
+.mission-week-overview{
+  margin:12px 0 14px;padding:16px;border:1px solid rgba(244,196,78,.28);border-radius:14px;
+  background:linear-gradient(135deg,rgba(244,196,78,.075),rgba(8,16,26,.94));
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:end;position:relative;overflow:hidden
+}
+#coinsPanel1v1 .mission-week-overview{
+  border-color:rgba(155,114,255,.28);
+  background:linear-gradient(135deg,rgba(155,114,255,.075),rgba(8,16,26,.94))
+}
+.mission-week-copy span,.mission-week-prize span{
+  display:block;color:var(--muted);font:800 6px 'JetBrains Mono',monospace;letter-spacing:.6px
+}
+.mission-week-copy h4{font:600 21px 'Oswald',sans-serif;margin:4px 0 3px}
+.mission-week-copy p{margin:0;color:var(--muted);font-size:8.5px}
+.mission-week-prize{
+  text-align:right;border:1px solid rgba(244,196,78,.2);border-radius:10px;padding:10px 12px;background:rgba(0,0,0,.12)
+}
+#coinsPanel1v1 .mission-week-prize{border-color:rgba(155,114,255,.22)}
+.mission-week-prize b{display:block;margin-top:4px;color:var(--v2-gold);font:600 13px 'Oswald',sans-serif}
+#coinsPanel1v1 .mission-week-prize b{color:var(--v2-violet)}
+.mission-week-bar{grid-column:1/-1;height:7px;border-radius:999px;background:#172231;overflow:hidden}
+.mission-week-bar i{display:block;height:100%;border-radius:999px;background:var(--v2-gold)}
+#coinsPanel1v1 .mission-week-bar i{background:var(--v2-violet)}
+
+.ac-mission-reward{
+  display:flex!important;align-items:center;gap:6px;width:max-content;max-width:100%;
+  margin-top:12px!important;padding:7px 9px!important;border-color:rgba(244,196,78,.25)!important;
+  background:rgba(244,196,78,.045)!important;color:#e7cf8a!important;
+  font:800 7px 'JetBrains Mono',monospace!important
+}
+#coinsPanel1v1 .ac-mission-reward{
+  border-color:rgba(155,114,255,.25)!important;background:rgba(155,114,255,.045)!important;color:#cbbcff!important
+}
+@media(max-width:760px){
+  .mission-week-overview{grid-template-columns:1fr}
+  .mission-week-prize{text-align:left}
+}
 </style>
 </head>
 <body class="v2-preview">
@@ -3333,8 +3371,8 @@ body.v2-preview .v2-notification-panel::before{
 <div class="profiles-toolbar">
 <div class="profiles-search-wrap">
 <span>⌕</span>
-<input autocomplete="off" id="profilesSearch" placeholder="Buscar club..." type="search">
-</input></div>
+<input autocomplete="off" id="profilesSearch" placeholder="Buscar club..." type="search"/>
+</div>
 <div class="profiles-selected-chip" id="profilesSelectedChip">Sin identidad seleccionada</div>
 </div>
 <div class="profiles-layout">
@@ -3494,7 +3532,7 @@ body.v2-preview .v2-notification-panel::before{
 <span class="tag">6 misiones activas</span>
 </div>
 <p class="ac-panel-copy">El progreso se actualiza con los resultados oficiales cargados en ArgenLeague. Cada capitán vinculado ve únicamente el avance de su equipo. Los premios de esta primera semana se definirán antes de habilitar el reclamo.</p>
-<div class="mission-profile-state" data-mission-state="clubes">Iniciá sesión como capitán para ver el progreso de tu club.</div><div class="mission-stat-grid" data-mission-summary="clubes"></div>
+<div data-mission-week-progress="clubes"></div><div class="mission-profile-state" data-mission-state="clubes">Iniciá sesión como capitán para ver el progreso de tu club.</div><div class="mission-stat-grid" data-mission-summary="clubes"></div>
 <div class="ac-missions-grid" data-mission-list="clubes"></div><div data-mission-completion="clubes"></div>
 </div>
 <div class="ac-inner-panel" data-ac-content="tienda">
@@ -3618,7 +3656,7 @@ body.v2-preview .v2-notification-panel::before{
 <span class="tag">4 misiones activas</span>
 </div>
 <p class="ac-panel-copy">El progreso se actualiza con los resultados oficiales cargados en ArgenLeague. Vinculá tu jugador 1v1 para seguir el avance. Los premios de esta primera semana todavía están a definir.</p>
-<div class="mission-profile-state violet" data-mission-state="uno">Iniciá sesión y vinculá tu jugador 1v1 para ver el progreso.</div><div class="mission-stat-grid" data-mission-summary="uno"></div>
+<div data-mission-week-progress="uno"></div><div class="mission-profile-state violet" data-mission-state="uno">Iniciá sesión y vinculá tu jugador 1v1 para ver el progreso.</div><div class="mission-stat-grid" data-mission-summary="uno"></div>
 <div class="ac-missions-grid" data-mission-list="uno"></div><div data-mission-completion="uno"></div>
 </div>
 <div class="ac-inner-panel" data-ac-content="tienda">
@@ -9413,23 +9451,23 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   const definitions={
     clubes:[
-      {id:'club_play_2',title:'A la cancha',desc:'Terminá 2 partidos oficiales durante la semana.',metric:'matches_played',target:2,icon:'⚽'},
-      {id:'club_win_1',title:'Primera victoria',desc:'Ganá 1 partido oficial durante la semana.',metric:'wins',target:1,icon:'🏆'},
-      {id:'club_cs_1',title:'Muralla I',desc:'Terminá 1 partido sin recibir goles.',metric:'clean_sheets',target:1,icon:'🧤'},
-      {id:'club_cs_2',title:'Muralla II',desc:'Terminá 2 partidos sin recibir goles.',metric:'clean_sheets',target:2,icon:'🧱'},
-      {id:'club_goals_1',title:'Pólvora',desc:'Hacé 3 o más goles en 1 partido.',metric:'three_plus_goals_matches',target:1,icon:'💥'},
-      {id:'club_goals_2',title:'Ataque total',desc:'Hacé 3 o más goles en 2 partidos distintos.',metric:'three_plus_goals_matches',target:2,icon:'🔥'}
+      {id:'club_play_2',title:'A la cancha',desc:'Terminá 2 partidos oficiales durante la semana.',metric:'matches_played',target:2,icon:'⚽',reward:'+1 AC'},
+      {id:'club_win_1',title:'Primera victoria',desc:'Ganá 1 partido oficial durante la semana.',metric:'wins',target:1,icon:'🏆',reward:'Placa / historia personalizada para redes'},
+      {id:'club_cs_1',title:'Muralla I',desc:'Terminá 1 partido sin recibir goles.',metric:'clean_sheets',target:1,icon:'🧤',reward:'+1 AC'},
+      {id:'club_cs_2',title:'Muralla II',desc:'Terminá 2 partidos sin recibir goles.',metric:'clean_sheets',target:2,icon:'🧱',reward:'Equipo destacado en la web por 7 días'},
+      {id:'club_goals_1',title:'Pólvora',desc:'Hacé 3 o más goles en 1 partido.',metric:'three_plus_goals_matches',target:1,icon:'💥',reward:'+1 AC'},
+      {id:'club_goals_2',title:'Ataque total',desc:'Hacé 3 o más goles en 2 partidos distintos.',metric:'three_plus_goals_matches',target:2,icon:'🔥',reward:'Equipo destacado en la web por 7 días'}
     ],
     uno:[
-      {id:'uno_play_2',title:'En competencia',desc:'Jugá 2 partidos oficiales durante la semana.',metric:'matches_played',target:2,icon:'🎮'},
-      {id:'uno_win_1',title:'Primera victoria',desc:'Ganá 1 partido oficial durante la semana.',metric:'wins',target:1,icon:'🏆'},
-      {id:'uno_cs_1',title:'Arco cerrado',desc:'Terminá 1 partido sin recibir goles.',metric:'clean_sheets',target:1,icon:'🧤'},
-      {id:'uno_goals_1',title:'Pólvora',desc:'Hacé 3 o más goles en 1 partido.',metric:'three_plus_goals_matches',target:1,icon:'💥'}
+      {id:'uno_play_2',title:'En competencia',desc:'Jugá 2 partidos oficiales durante la semana.',metric:'matches_played',target:2,icon:'🎮',reward:'+1 AC'},
+      {id:'uno_win_1',title:'Primera victoria',desc:'Ganá 1 partido oficial durante la semana.',metric:'wins',target:1,icon:'🏆',reward:'Perfil / rango destacado temporal'},
+      {id:'uno_cs_1',title:'Arco cerrado',desc:'Terminá 1 partido sin recibir goles.',metric:'clean_sheets',target:1,icon:'🧤',reward:'+1 AC'},
+      {id:'uno_goals_1',title:'Pólvora',desc:'Hacé 3 o más goles en 1 partido.',metric:'three_plus_goals_matches',target:1,icon:'💥',reward:'Jugador destacado en la web por 7 días'}
     ]
   };
 
   function fallbackRows(mode){
-    return definitions[mode].map(m=>({...m,progress:0,completed_at:null,reward_label:'—',claimed_at:null}));
+    return definitions[mode].map(m=>({...m,progress:0,completed_at:null,reward_label:m.reward||'—',claimed_at:null}));
   }
 
   function rewardIcon(label){
@@ -9439,6 +9477,33 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(label.toLowerCase().includes('destacado'))return '⭐';
     if(label.toLowerCase().includes('placa'))return '📲';
     return '🎁';
+  }
+
+
+  function renderWeeklyProgress(mode,rows,profile){
+    const host=q(`[data-mission-week-progress="${mode}"]`);
+    if(!host)return;
+    const total=definitions[mode].length;
+    const source=(rows&&rows.length?rows:fallbackRows(mode)).map(x=>{
+      const def=definitions[mode].find(d=>d.id===x.mission_id || d.id===x.id)||{};
+      return {...def,...x};
+    });
+    const done=profile?source.filter(m=>Number(m.progress||0)>=Number(m.target||1)).length:0;
+    const pct=total?Math.round(done/total*100):0;
+    const mainReward='Sobre Relámpago';
+    host.innerHTML=`
+      <div class="mission-week-overview">
+        <div class="mission-week-copy">
+          <span>PROGRESO SEMANAL</span>
+          <h4>${done}/${total} misiones completadas</h4>
+          <p>Completá todas las misiones de la semana para desbloquear la recompensa principal.</p>
+        </div>
+        <div class="mission-week-prize">
+          <span>RECOMPENSA PRINCIPAL</span>
+          <b>🎁 ${mainReward}</b>
+        </div>
+        <div class="mission-week-bar"><i style="width:${pct}%"></i></div>
+      </div>`;
   }
 
   function renderSummary(mode,summary,profile){
@@ -9482,10 +9547,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     const box=q(`[data-mission-list="${mode}"]`);
     const state=q(`[data-mission-state="${mode}"]`);
     if(!box)return;
-    const data=(rows&&rows.length?rows:fallbackRows(mode)).map(x=>({
-      ...definitions[mode].find(d=>d.id===x.mission_id || d.id===x.id),
-      ...x
-    }));
+    const data=(rows&&rows.length?rows:fallbackRows(mode)).map(x=>{
+      const def=definitions[mode].find(d=>d.id===x.mission_id || d.id===x.id)||{};
+      return {...def,...x,reward_label:x.reward_label||def.reward||'—'};
+    });
     if(state){
       state.classList.toggle('is-linked',!!profile);
       state.textContent=profile
@@ -9525,6 +9590,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     ];
     for(const [mode,profile] of targets){
       if(!client||!profile){
+        renderWeeklyProgress(mode,null,'');
         renderMissions(mode,null,'');
         renderSummary(mode,null,'');
         renderCompletion(mode,null,'');
@@ -9535,7 +9601,9 @@ document.addEventListener('DOMContentLoaded',()=>{
         client.rpc('get_weekly_mission_summary',{p_mode:mode,p_profile_name:profile}),
         client.rpc('get_weekly_completion_status',{p_mode:mode,p_profile_name:profile})
       ]);
-      renderMissions(mode,error?null:(Array.isArray(data)?data:[]),profile);
+      const missionRows=error?null:(Array.isArray(data)?data:[]);
+      renderWeeklyProgress(mode,missionRows,profile);
+      renderMissions(mode,missionRows,profile);
       renderSummary(mode,summary||{},profile);
       renderCompletion(mode,completion||{},profile);
     }
@@ -9638,6 +9706,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   window.addEventListener('argenleague:identity-change',()=>{loadMissions();loadAdminHistory();});
   window.addEventListener('argenleague:economy-sync',()=>{loadMissions();if(window.ARGENLEAGUE_USER_STATE?.isAdmin)loadAdminHistory();});
 
+  renderWeeklyProgress('clubes',null,'');
+  renderWeeklyProgress('uno',null,'');
   renderMissions('clubes',null,'');
   renderMissions('uno',null,'');
   setTimeout(()=>{loadMissions();loadAdminHistory();},700);
