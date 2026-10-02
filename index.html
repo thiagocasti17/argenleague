@@ -2957,6 +2957,59 @@ body.v2-preview .v2-notification-panel::before{
   .mission-week-prize{text-align:left}
 }
 </style>
+
+<style id="copa-argenleague-style">
+.copa-argenleague-home{
+  margin:22px 0 28px;padding:24px;border:1px solid rgba(244,196,78,.35);border-radius:20px;
+  background:linear-gradient(135deg,rgba(244,196,78,.10),rgba(8,15,24,.97) 58%);
+  display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:24px;align-items:center;position:relative;overflow:hidden
+}
+.copa-argenleague-home:after{
+  content:"";position:absolute;width:280px;height:280px;border-radius:50%;right:-110px;top:-100px;
+  border:1px solid rgba(244,196,78,.12)
+}
+.copa-argenleague-home h2{font:600 clamp(28px,4vw,48px) 'Oswald',sans-serif;margin:5px 0 6px}
+.copa-argenleague-home p{color:var(--muted);font-size:10px;line-height:1.6;max-width:650px}
+.copa-argenleague-data{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}
+.copa-argenleague-data>div{border:1px solid rgba(244,196,78,.16);border-radius:10px;padding:10px;background:rgba(0,0,0,.14)}
+.copa-argenleague-data span{display:block;color:var(--muted);font:800 6px 'JetBrains Mono',monospace}
+.copa-argenleague-data b{display:block;margin-top:4px;color:var(--v2-gold);font:600 15px 'Oswald',sans-serif}
+.copa-argenleague-extra{color:#dac478!important;font-weight:700}
+.copa-argenleague-badge{
+  width:160px;height:160px;border-radius:50%;border:1px solid rgba(244,196,78,.35);
+  background:radial-gradient(circle,rgba(244,196,78,.13),rgba(5,10,16,.8));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1
+}
+.copa-argenleague-badge span,.copa-argenleague-badge small{font:800 7px 'JetBrains Mono',monospace;color:var(--muted)}
+.copa-argenleague-badge b{font:700 48px 'Oswald',sans-serif;color:var(--v2-gold);line-height:1}
+.copa-argenleague-badge small{margin-top:7px;color:#dcc574}
+
+.club-open-tournament{
+  margin:0 0 16px;padding:18px;border:1px solid rgba(244,196,78,.28);border-radius:15px;
+  background:linear-gradient(135deg,rgba(244,196,78,.055),#09111b);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px
+}
+.club-open-tournament h3{font:600 24px 'Oswald',sans-serif;margin:5px 0 2px}
+.club-open-tournament p{margin:0;color:var(--muted);font-size:9px}
+.club-open-tournament-prizes{display:flex;gap:7px}
+.club-open-tournament-prizes span{border:1px solid var(--border);border-radius:9px;padding:9px 11px;min-width:90px}
+.club-open-tournament-prizes small{display:block;color:var(--muted);font:800 6px 'JetBrains Mono',monospace}
+.club-open-tournament-prizes b{display:block;margin-top:3px;color:var(--v2-gold);font:600 13px 'Oswald',sans-serif}
+.club-open-tournament-progress{grid-column:1/-1}
+.club-open-tournament-progress>div:first-child{display:flex;justify-content:space-between;color:var(--muted);font:700 7px 'JetBrains Mono',monospace;margin-bottom:6px}
+.club-open-tournament-progress strong{color:#d8c277}
+.club-open-tournament-bar{height:6px;border-radius:999px;background:#182331;overflow:hidden}
+.club-open-tournament-bar i{display:block;height:100%;background:var(--v2-gold);border-radius:999px}
+.club-open-tournament-note{grid-column:1/-1;color:#d8c277;font:700 8px 'JetBrains Mono',monospace}
+@media(max-width:760px){
+  .copa-argenleague-home{grid-template-columns:1fr}
+  .copa-argenleague-badge{display:none}
+  .copa-argenleague-data{grid-template-columns:repeat(2,1fr)}
+  .club-open-tournament{grid-template-columns:1fr}
+  .club-open-tournament-prizes{flex-wrap:wrap}
+}
+</style>
+
 </head>
 <body class="v2-preview">
 <nav>
@@ -3032,7 +3085,7 @@ body.v2-preview .v2-notification-panel::before{
 <article class="v2-news-card">
 <div class="v2-news-tag">🏆 LIGA DE CLUBES PRO</div>
 <span class="v2-news-date">08 SEP 2026</span>
-<h3>Lechonas Gang</h3>
+<h3>Newells Esports</h3>
 <p>Campeón de la primera Liga de Clubes Pro.</p>
 <button data-v2-go="ligas" type="button">Ver Liga →</button>
 </article>
@@ -3044,6 +3097,28 @@ body.v2-preview .v2-notification-panel::before{
 <button data-v2-relampago="uno" type="button">Ver 1v1 →</button>
 </article>
 </div>
+
+<div class="copa-argenleague-home">
+  <div class="copa-argenleague-copy">
+    <span class="v2-kicker gold">🏆 INSCRIPCIONES ABIERTAS · CLUBES PRO</span>
+    <h2>COPA ARGENLEAGUE</h2>
+    <p>Nuevo torneo de Clubes Pro con cupos limitados. Ya hay <strong>4 de 8 equipos</strong> inscriptos.</p>
+    <div class="copa-argenleague-data">
+      <div><span>INSCRIPCIÓN</span><b>$12.500</b></div>
+      <div><span>CAMPEÓN</span><b>$60.000</b></div>
+      <div><span>SUBCAMPEÓN</span><b>$20.000</b></div>
+      <div><span>CUPOS</span><b>4 / 8</b></div>
+    </div>
+    <p class="copa-argenleague-extra">🎯 Misiones semanales y recompensas ArgenCoins disponibles durante la competencia.</p>
+    <button class="v2-primary goldbtn" data-v2-go="clubespro" type="button">Ver Clubes Pro →</button>
+  </div>
+  <div class="copa-argenleague-badge">
+    <span>COPA</span>
+    <b>AL</b>
+    <small>4 CUPOS DISPONIBLES</small>
+  </div>
+</div>
+
 <div class="v2-ecosystem">
 <div class="v2-ecosystem-copy">
 <span class="v2-kicker gold">ARGENCOINS 2.0</span>
@@ -3113,10 +3188,29 @@ body.v2-preview .v2-notification-panel::before{
 <div><span>ESTADO ACTUAL</span><h2>Clubes Pro</h2></div>
 <small>Temporada 2026</small>
 </div>
+
+<div class="club-open-tournament">
+  <div>
+    <span class="v2-kicker gold">PRÓXIMA COMPETENCIA · INSCRIPCIONES ABIERTAS</span>
+    <h3>Copa ArgenLeague</h3>
+    <p>Clubes Pro · máximo 8 equipos · 4 equipos ya inscriptos</p>
+  </div>
+  <div class="club-open-tournament-prizes">
+    <span><small>Inscripción</small><b>$12.500</b></span>
+    <span><small>1.º premio</small><b>$60.000</b></span>
+    <span><small>2.º premio</small><b>$20.000</b></span>
+  </div>
+  <div class="club-open-tournament-progress">
+    <div><span>4 / 8 inscriptos</span><strong>4 cupos disponibles</strong></div>
+    <div class="club-open-tournament-bar"><i style="width:50%"></i></div>
+  </div>
+  <div class="club-open-tournament-note">🎯 Misiones y recompensas ArgenCoins activas durante la Copa.</div>
+</div>
+
 <div class="v2-dashboard-grid">
 <article class="v2-stat-big">
 <span class="v2-kicker">ÚLTIMO CAMPEÓN DE LIGA</span>
-<h3>Lechonas Gang</h3>
+<h3>Newells Esports</h3>
 <p>Campeón · 08/09/2026</p>
 <div class="v2-trophy-watermark">🏆</div>
 </article>
@@ -3225,7 +3319,7 @@ body.v2-preview .v2-notification-panel::before{
 <div class="section-head"><h2>Historial</h2><span class="tag">campeones y estadísticas</span></div>
 <div class="search-wrap">
 <svg fill="none" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
-<input id="histSearch" placeholder="Buscar equipo... (ej: Lechonas Gang)" type="text"/>
+<input id="histSearch" placeholder="Buscar equipo... (ej: Newells Esports)" type="text"/>
 </div>
 <p class="search-empty" id="histSearchEmpty" style="display:none;">No encontramos ningún equipo con ese nombre en el historial.</p>
 <h3 class="hist-subhead">Campeones</h3>
@@ -3740,7 +3834,7 @@ body.v2-preview .v2-notification-panel::before{
     {id:'lento_5', nombre:'Lento 5', aliases:['Lento5','Lento5 FC','Lento 5 FC']},
     {id:'chapecoence', nombre:'Chapecoence', aliases:['Chapecoense']},
     {id:'agentes_libres', nombre:'Agentes Libres', aliases:['AgentesLibres']},
-    {id:'lechonas_gang', nombre:'Lechonas Gang', aliases:['LechonasGang']},
+    {id:'lechonas_gang', nombre:'Newells Esports', aliases:['LechonasGang']},
     {id:'fulbo_champeta', nombre:'Fulbo Champeta', aliases:['FulboChampeta']},
     {id:'cazachilenos_fc', nombre:'Cazachilenos FC', aliases:['Cazachilenos','CazachilenosFC']},
   ];
@@ -3885,7 +3979,7 @@ body.v2-preview .v2-notification-panel::before{
       reglamentoUrl:'https://docs.google.com/document/d/1ru0Yt-FOYexJbndgDn-oE-PMaSRlJmfLkA8tYdFkAqw/edit?usp=sharing',
       arqueros:{
         'Rejunte 40':'CPU',
-        'Lechonas Gang':'Lucario3438458',
+        'Newells Esports':'Lucario3438458',
       },
       premios:[
         {titulo:'Campeón de Playoffs', valor:'$60.000 + 25% de descuento en la próxima inscripción + 5 ArgenCoins', top:true},
@@ -3898,19 +3992,19 @@ body.v2-preview .v2-notification-panel::before{
         formacion:'1-1-2-3',
         lineas:[
           {tipo:'delanteros', jugadores:[
-            {pos:'EI', jugador:'BolsoFC', equipo:'Lechonas Gang'},
+            {pos:'EI', jugador:'BolsoFC', equipo:'Newells Esports'},
             {pos:'DC', jugador:'Orangutan', equipo:'Cazachilenos FC'},
             {pos:'ED', jugador:'Lopez', equipo:'Cazachilenos FC'}
           ]},
           {tipo:'medios', jugadores:[
-            {pos:'MC', jugador:'Emilion', equipo:'Lechonas Gang'},
+            {pos:'MC', jugador:'Emilion', equipo:'Newells Esports'},
             {pos:'MC', jugador:'Chucky3412', equipo:'Chapecoence'}
           ]},
           {tipo:'defensa', jugadores:[
-            {pos:'DEF', jugador:'Saanty10', equipo:'Lechonas Gang'}
+            {pos:'DEF', jugador:'Saanty10', equipo:'Newells Esports'}
           ]},
           {tipo:'arquero', jugadores:[
-            {pos:'ARQ', jugador:'Lucario3438458', equipo:'Lechonas Gang'}
+            {pos:'ARQ', jugador:'Lucario3438458', equipo:'Newells Esports'}
           ]}
         ]
       },
@@ -3924,7 +4018,7 @@ body.v2-preview .v2-notification-panel::before{
             {pos:'DC', jugador:'El Beto', equipo:'Chapecoence'}
           ]},
           {tipo:'ofensivos', jugadores:[
-            {pos:'MI', jugador:'Emilion', equipo:'Lechonas Gang'},
+            {pos:'MI', jugador:'Emilion', equipo:'Newells Esports'},
             {pos:'MD', jugador:'Lopez', equipo:'Cazachilenos FC'}
           ]},
           {tipo:'medios', jugadores:[
@@ -3933,12 +4027,12 @@ body.v2-preview .v2-notification-panel::before{
           ]},
           {tipo:'defensa', jugadores:[
             {pos:'LI', jugador:'Facu Moyano', equipo:'Chapecoence'},
-            {pos:'DFC', jugador:'Saanty10', equipo:'Lechonas Gang'},
+            {pos:'DFC', jugador:'Saanty10', equipo:'Newells Esports'},
             {pos:'DFC', jugador:'Chila', equipo:'Cazachilenos FC'},
             {pos:'LD', jugador:'L. Iglesias', equipo:'Cazachilenos FC'}
           ]},
           {tipo:'arquero', jugadores:[
-            {pos:'ARQ', jugador:'Lucario3438458', equipo:'Lechonas Gang'}
+            {pos:'ARQ', jugador:'Lucario3438458', equipo:'Newells Esports'}
           ]}
         ]
       },
@@ -3948,10 +4042,10 @@ body.v2-preview .v2-notification-panel::before{
         lineas:[
           {tipo:'delanteros', jugadores:[
             {pos:'DC', jugador:'Orangutan', equipo:'Cazachilenos FC'},
-            {pos:'DC', jugador:'Nyx1887', equipo:'Lechonas Gang'}
+            {pos:'DC', jugador:'Nyx1887', equipo:'Newells Esports'}
           ]},
           {tipo:'ofensivos', jugadores:[
-            {pos:'MI', jugador:'Emilion', equipo:'Lechonas Gang'},
+            {pos:'MI', jugador:'Emilion', equipo:'Newells Esports'},
             {pos:'MD', jugador:'Lopez', equipo:'Cazachilenos FC'}
           ]},
           {tipo:'medios', jugadores:[
@@ -3960,12 +4054,12 @@ body.v2-preview .v2-notification-panel::before{
           ]},
           {tipo:'defensa', jugadores:[
             {pos:'LI', jugador:'Facu Moyano', equipo:'Chapecoence'},
-            {pos:'DFC', jugador:'Saanty10', equipo:'Lechonas Gang'},
+            {pos:'DFC', jugador:'Saanty10', equipo:'Newells Esports'},
             {pos:'DFC', jugador:'Chila', equipo:'Cazachilenos FC'},
-            {pos:'LD', jugador:'El Wachy', equipo:'Lechonas Gang'}
+            {pos:'LD', jugador:'El Wachy', equipo:'Newells Esports'}
           ]},
           {tipo:'arquero', jugadores:[
-            {pos:'ARQ', jugador:'Lucario3438458', equipo:'Lechonas Gang'}
+            {pos:'ARQ', jugador:'Lucario3438458', equipo:'Newells Esports'}
           ]}
         ]
       },
@@ -3977,7 +4071,7 @@ body.v2-preview .v2-notification-panel::before{
           jugadores:['LeoIglesias14','juan10depo','Santy_sila','totuesc','joacoagro','Ssuffo17','kilmes678','TeoCaffa07','JuliSila9']
         },
         {
-          equipo:'Lechonas Gang',
+          equipo:'Newells Esports',
           capitan:'Lucario3438458 (ElPulpaZanetti)',
           subcapitan:'Nyx1887 (22lionelmessi)',
           jugadores:['MauricioMacri010','Bolsofc','Matiezeee','Julian-_CaT','sheigy247','Elwachy29','dioseslaclave32','Gondoou','iGvNzZ','MESSIEMI27','Fran-2021','Sebabalcarce','inmemorialll','12121309']
@@ -4013,36 +4107,36 @@ body.v2-preview .v2-notification-panel::before{
           jugadores:['paputy777','Felizelefante','Juan_444777Gual','Loco11lol','Josephfg11','xSkiel','Rudiger4','yeshua504','FLASHXXT77','Jxhmed_05','JafetG2','Jhonvi2913','teomyyg5u25k','varsin07']
         },
       ],
-      equipos:['Rejunte 40','Lento 5','Chapecoence','Agentes Libres','Lechonas Gang','Fulbo Champeta','Cazachilenos FC'],
+      equipos:['Rejunte 40','Lento 5','Chapecoence','Agentes Libres','Newells Esports','Fulbo Champeta','Cazachilenos FC'],
       // Cargá gl/gv (goles local / goles visitante) a medida que se jueguen los partidos.
       // Mientras estén en null, el partido figura como pendiente y no afecta la tabla.
       fixture:[
         {fecha:1, dia:'Viernes', fechaTxt:'28/08/2026', hora:'23:00', libre:'Rejunte 40', partidos:[
           {l:'Cazachilenos FC', v:'Lento 5', h:'23:00', gl:8, gv:2},
           {l:'Chapecoence', v:'Fulbo Champeta', h:'23:00', gl:2, gv:1},
-          {l:'Lechonas Gang', v:'Agentes Libres', h:'23:00', gl:3, gv:0, wo:true},
+          {l:'Newells Esports', v:'Agentes Libres', h:'23:00', gl:3, gv:0, wo:true},
         ]},
         {fecha:2, dia:'Sábado', fechaTxt:'29/08/2026', hora:'23:00', libre:'Fulbo Champeta', partidos:[
           {l:'Cazachilenos FC', v:'Rejunte 40', h:'23:00', gl:8, gv:3},
-          {l:'Lento 5', v:'Lechonas Gang', h:'23:00', gl:2, gv:13},
+          {l:'Lento 5', v:'Newells Esports', h:'23:00', gl:2, gv:13},
           {l:'Agentes Libres', v:'Chapecoence', h:'23:00', gl:0, gv:3, wo:true},
         ]},
         {fecha:3, dia:'Domingo', fechaTxt:'30/08/2026', hora:'23:00', libre:'Agentes Libres', partidos:[
           {l:'Rejunte 40', v:'Fulbo Champeta', h:'23:00', gl:1, gv:0},
-          {l:'Cazachilenos FC', v:'Lechonas Gang', h:'23:00', gl:1, gv:2},
+          {l:'Cazachilenos FC', v:'Newells Esports', h:'23:00', gl:1, gv:2},
           {l:'Chapecoence', v:'Lento 5', h:'23:00', gl:3, gv:0},
         ]},
         {fecha:4, dia:'Lunes', fechaTxt:'31/08/2026', hora:'23:00', libre:'Lento 5', partidos:[
-          {l:'Lechonas Gang', v:'Rejunte 40', h:'23:00', gl:4, gv:0},
+          {l:'Newells Esports', v:'Rejunte 40', h:'23:00', gl:4, gv:0},
           {l:'Fulbo Champeta', v:'Agentes Libres', h:'23:00', gl:3, gv:0},
           {l:'Chapecoence', v:'Cazachilenos FC', h:'23:00', gl:2, gv:4},
         ]},
         {fecha:5, dia:'Martes', fechaTxt:'01/09/2026', hora:'23:00', libre:'Cazachilenos FC', partidos:[
           {l:'Rejunte 40', v:'Agentes Libres', h:'23:00', gl:3, gv:0},
-          {l:'Lechonas Gang', v:'Chapecoence', h:'23:00', gl:2, gv:1},
+          {l:'Newells Esports', v:'Chapecoence', h:'23:00', gl:2, gv:1},
           {l:'Lento 5', v:'Fulbo Champeta', h:'23:00', gl:3, gv:7},
         ]},
-        {fecha:6, dia:'Miércoles', fechaTxt:'02/09/2026', hora:'23:00', libre:'Lechonas Gang', partidos:[
+        {fecha:6, dia:'Miércoles', fechaTxt:'02/09/2026', hora:'23:00', libre:'Newells Esports', partidos:[
           {l:'Chapecoence', v:'Rejunte 40', h:'23:00', gl:2, gv:1},
           {l:'Agentes Libres', v:'Lento 5', h:'23:00', gl:0, gv:3},
           {l:'Fulbo Champeta', v:'Cazachilenos FC', h:'23:00', gl:2, gv:1},
@@ -4050,34 +4144,34 @@ body.v2-preview .v2-notification-panel::before{
         {fecha:7, dia:'Jueves', fechaTxt:'03/09/2026', hora:'23:00', libre:'Chapecoence', partidos:[
           {l:'Rejunte 40', v:'Lento 5', h:'23:00', gl:3, gv:0},
           {l:'Cazachilenos FC', v:'Agentes Libres', h:'23:00', gl:3, gv:0},
-          {l:'Lechonas Gang', v:'Fulbo Champeta', h:'23:00', gl:3, gv:1},
+          {l:'Newells Esports', v:'Fulbo Champeta', h:'23:00', gl:3, gv:1},
         ]},
         {fecha:8, dia:'Jueves', fechaTxt:'03/09/2026', hora:'23:45', libre:'Rejunte 40', partidos:[
           {l:'Lento 5', v:'Cazachilenos FC', h:'23:45', gl:0, gv:3},
           {l:'Fulbo Champeta', v:'Chapecoence', h:'23:45', gl:2, gv:3},
-          {l:'Agentes Libres', v:'Lechonas Gang', h:'23:45', gl:0, gv:3},
+          {l:'Agentes Libres', v:'Newells Esports', h:'23:45', gl:0, gv:3},
         ]},
         {fecha:9, dia:'Viernes', fechaTxt:'04/09/2026', hora:'23:00', libre:'Fulbo Champeta', partidos:[
           {l:'Rejunte 40', v:'Cazachilenos FC', h:'23:00', gl:2, gv:3},
-          {l:'Lechonas Gang', v:'Lento 5', h:'23:00', gl:3, gv:0},
+          {l:'Newells Esports', v:'Lento 5', h:'23:00', gl:3, gv:0},
           {l:'Chapecoence', v:'Agentes Libres', h:'23:00', gl:3, gv:0},
         ]},
         {fecha:10, dia:'Viernes', fechaTxt:'04/09/2026', hora:'23:45', libre:'Agentes Libres', partidos:[
           {l:'Fulbo Champeta', v:'Rejunte 40', h:'23:45', gl:1, gv:1},
-          {l:'Lechonas Gang', v:'Cazachilenos FC', h:'23:45', gl:3, gv:3},
+          {l:'Newells Esports', v:'Cazachilenos FC', h:'23:45', gl:3, gv:3},
           {l:'Lento 5', v:'Chapecoence', h:'23:45', gl:0, gv:3},
         ]},
         {fecha:11, dia:'Sábado', fechaTxt:'05/09/2026', hora:'23:00', libre:'Lento 5', partidos:[
-          {l:'Rejunte 40', v:'Lechonas Gang', h:'23:00', gl:0, gv:3},
+          {l:'Rejunte 40', v:'Newells Esports', h:'23:00', gl:0, gv:3},
           {l:'Agentes Libres', v:'Fulbo Champeta', h:'23:00', gl:0, gv:3},
           {l:'Cazachilenos FC', v:'Chapecoence', h:'23:00', gl:2, gv:4},
         ]},
         {fecha:12, dia:'Sábado', fechaTxt:'05/09/2026', hora:'23:45', libre:'Cazachilenos FC', partidos:[
           {l:'Agentes Libres', v:'Rejunte 40', h:'23:45', gl:0, gv:3},
-          {l:'Chapecoence', v:'Lechonas Gang', h:'23:45', gl:2, gv:1},
+          {l:'Chapecoence', v:'Newells Esports', h:'23:45', gl:2, gv:1},
           {l:'Fulbo Champeta', v:'Lento 5', h:'23:45', gl:3, gv:0},
         ]},
-        {fecha:13, dia:'Domingo', fechaTxt:'06/09/2026', hora:'23:00', libre:'Lechonas Gang', partidos:[
+        {fecha:13, dia:'Domingo', fechaTxt:'06/09/2026', hora:'23:00', libre:'Newells Esports', partidos:[
           {l:'Rejunte 40', v:'Chapecoence', h:'23:00', gl:0, gv:6},
           {l:'Lento 5', v:'Agentes Libres', h:'23:00', gl:3, gv:0},
           {l:'Cazachilenos FC', v:'Fulbo Champeta', h:'23:00', gl:5, gv:1},
@@ -4085,7 +4179,7 @@ body.v2-preview .v2-notification-panel::before{
         {fecha:14, dia:'Domingo', fechaTxt:'06/09/2026', hora:'23:45', libre:'Chapecoence', partidos:[
           {l:'Lento 5', v:'Rejunte 40', h:'23:45', gl:0, gv:3},
           {l:'Agentes Libres', v:'Cazachilenos FC', h:'23:45', gl:0, gv:3},
-          {l:'Fulbo Champeta', v:'Lechonas Gang', h:'23:45', gl:0, gv:1},
+          {l:'Fulbo Champeta', v:'Newells Esports', h:'23:45', gl:0, gv:1},
         ]},
       ],
       playoffs:{
@@ -4096,11 +4190,11 @@ body.v2-preview .v2-notification-panel::before{
           {
             serie:'Semifinal 1',
             sembrados:'1° vs 4°',
-            ida:{l:'Fulbo Champeta', v:'Lechonas Gang', h:'23:00', gl:0, gv:6},
-            vuelta:{l:'Lechonas Gang', v:'Fulbo Champeta', h:'23:30', gl:6, gv:0},
-            defineLocal:'Lechonas Gang',
-            agregado:'Lechonas Gang 12 - 0 Fulbo Champeta',
-            ganador:'Lechonas Gang'
+            ida:{l:'Fulbo Champeta', v:'Newells Esports', h:'23:00', gl:0, gv:6},
+            vuelta:{l:'Newells Esports', v:'Fulbo Champeta', h:'23:30', gl:6, gv:0},
+            defineLocal:'Newells Esports',
+            agregado:'Newells Esports 12 - 0 Fulbo Champeta',
+            ganador:'Newells Esports'
           },
           {
             serie:'Semifinal 2',
@@ -4115,10 +4209,10 @@ body.v2-preview .v2-notification-panel::before{
         final:{
           fechaTxt:'08/09/2026',
           dia:'Martes',
-          ida:{l:'Cazachilenos FC', v:'Lechonas Gang', h:'23:00', gl:1, gv:2},
-          vuelta:{l:'Lechonas Gang', v:'Cazachilenos FC', h:'23:30', gl:1, gv:1},
-          agregado:'Lechonas Gang 3 - 2 Cazachilenos FC',
-          campeon:'Lechonas Gang'
+          ida:{l:'Cazachilenos FC', v:'Newells Esports', h:'23:00', gl:1, gv:2},
+          vuelta:{l:'Newells Esports', v:'Cazachilenos FC', h:'23:30', gl:1, gv:1},
+          agregado:'Newells Esports 3 - 2 Cazachilenos FC',
+          campeon:'Newells Esports'
         }
       },
       // Estadísticas de jugadores: cargá acá goleadores, asistidores, amarillas y rojas
@@ -4138,30 +4232,30 @@ body.v2-preview .v2-notification-panel::before{
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:2},
           {jugador:'Castolo', equipo:'Fulbo Champeta', cantidad:2},
           {jugador:'Bebecita', equipo:'Fulbo Champeta', cantidad:1},
-          {jugador:'Flecha', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Flecha', equipo:'Newells Esports', cantidad:1},
           {jugador:'Izuhx', equipo:'Rejunte 40', cantidad:2},
           {jugador:'SrFox', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Sibak', equipo:'Rejunte 40', cantidad:1},
           {jugador:'E.Nene', equipo:'Lento 5', cantidad:2},
-          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:23},
-          {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:6},
-          {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:1},
-          {jugador:'Juanse', equipo:'Lechonas Gang', cantidad:1},
-          {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:1},
-          {jugador:'Dioseslaclave32', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Nyx1887', equipo:'Newells Esports', cantidad:23},
+          {jugador:'BolsoFC', equipo:'Newells Esports', cantidad:6},
+          {jugador:'Igvnzz', equipo:'Newells Esports', cantidad:1},
+          {jugador:'Juanse', equipo:'Newells Esports', cantidad:1},
+          {jugador:'Saanty10', equipo:'Newells Esports', cantidad:1},
+          {jugador:'Dioseslaclave32', equipo:'Newells Esports', cantidad:1},
           {jugador:'Bananin', equipo:'Rejunte 40', cantidad:3},
           {jugador:'Y.Hernandez', equipo:'Rejunte 40', cantidad:1},
-          {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:5},
-          {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:2},
+          {jugador:'Dylanbrxx', equipo:'Newells Esports', cantidad:5},
+          {jugador:'Richordead23', equipo:'Newells Esports', cantidad:2},
           {jugador:'Roooddrrii', equipo:'Chapecoence', cantidad:1},
           {jugador:'Tatogartuaxd', equipo:'Chapecoence', cantidad:4},
           {jugador:'El Beto', equipo:'Chapecoence', cantidad:8},
         
-          {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:2},
+          {jugador:'Emilion', equipo:'Newells Esports', cantidad:2},
           {jugador:'Chupi', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'El Enano', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:1},
-          {jugador:'Matiezeee', equipo:'Lechonas Gang', cantidad:1},],
+          {jugador:'Matiezeee', equipo:'Newells Esports', cantidad:1},],
         asistidores:[
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
           {jugador:'Lopez', equipo:'Cazachilenos FC', cantidad:6},
@@ -4171,14 +4265,14 @@ body.v2-preview .v2-notification-panel::before{
           {jugador:'L.Iglesias', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Elenano', equipo:'Cazachilenos FC', cantidad:1},
           {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:7},
-          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:5},
-          {jugador:'BolsoFC', equipo:'Lechonas Gang', cantidad:6},
-          {jugador:'Igvnzz', equipo:'Lechonas Gang', cantidad:5},
-          {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:7},
-          {jugador:'Solocrimen32', equipo:'Lechonas Gang', cantidad:3},
-          {jugador:'Fraan2021', equipo:'Lechonas Gang', cantidad:1},
-          {jugador:'Richordead23', equipo:'Lechonas Gang', cantidad:3},
-          {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:6},
+          {jugador:'Nyx1887', equipo:'Newells Esports', cantidad:5},
+          {jugador:'BolsoFC', equipo:'Newells Esports', cantidad:6},
+          {jugador:'Igvnzz', equipo:'Newells Esports', cantidad:5},
+          {jugador:'Emilion', equipo:'Newells Esports', cantidad:7},
+          {jugador:'Solocrimen32', equipo:'Newells Esports', cantidad:3},
+          {jugador:'Fraan2021', equipo:'Newells Esports', cantidad:1},
+          {jugador:'Richordead23', equipo:'Newells Esports', cantidad:3},
+          {jugador:'Dylanbrxx', equipo:'Newells Esports', cantidad:6},
           {jugador:'Castellon', equipo:'Rejunte 40', cantidad:2},
           {jugador:'Izuhx', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Tatogartuaxd', equipo:'Chapecoence', cantidad:3},
@@ -4187,7 +4281,7 @@ body.v2-preview .v2-notification-panel::before{
         
           {jugador:'El Beto', equipo:'Chapecoence', cantidad:6},
           {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:3},
-          {jugador:'El Wachy', equipo:'Lechonas Gang', cantidad:1},],
+          {jugador:'El Wachy', equipo:'Newells Esports', cantidad:1},],
         amarillas:[
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:1},
           {jugador:'Gabo', equipo:'Rejunte 40', cantidad:1},
@@ -4205,36 +4299,36 @@ body.v2-preview .v2-notification-panel::before{
           {jugador:'Chila', equipo:'Cazachilenos FC', cantidad:2},
           {jugador:'SrFox', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Wi', equipo:'Rejunte 40', cantidad:1},
-          {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:2},
+          {jugador:'Saanty10', equipo:'Newells Esports', cantidad:2},
           {jugador:'Sixseven', equipo:'Cazachilenos FC', cantidad:1},
-          {jugador:'Shaggy', equipo:'Lechonas Gang', cantidad:1},
-          {jugador:'Dylanbrxx', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Shaggy', equipo:'Newells Esports', cantidad:1},
+          {jugador:'Dylanbrxx', equipo:'Newells Esports', cantidad:1},
           {jugador:'Castolo', equipo:'Fulbo Champeta', cantidad:1},
         
           {jugador:'Roooddrrii', equipo:'Chapecoence', cantidad:1},
           {jugador:'El Beto', equipo:'Chapecoence', cantidad:1},
           {jugador:'J.Lopez', equipo:'Cazachilenos FC', cantidad:1},],
         rojas:[
-          {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Saanty10', equipo:'Newells Esports', cantidad:1},
         ],
         mvp:[
           {jugador:'chucky3412', equipo:'Chapecoence', cantidad:1},
           {jugador:'Orangutan', equipo:'Cazachilenos FC', cantidad:4},
-          {jugador:'Nyx1887', equipo:'Lechonas Gang', cantidad:3},
+          {jugador:'Nyx1887', equipo:'Newells Esports', cantidad:3},
           {jugador:'Bananin', equipo:'Rejunte 40', cantidad:1},
-          {jugador:'Saanty10', equipo:'Lechonas Gang', cantidad:3},
+          {jugador:'Saanty10', equipo:'Newells Esports', cantidad:3},
           {jugador:'Castellon', equipo:'Rejunte 40', cantidad:1},
           {jugador:'Ortega', equipo:'Fulbo Champeta', cantidad:1},
-          {jugador:'Flecha', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Flecha', equipo:'Newells Esports', cantidad:1},
           {jugador:'Pela', equipo:'Cazachilenos FC', cantidad:2},
           {jugador:'Chila', equipo:'Cazachilenos FC', cantidad:1},
         
-          {jugador:'Emilion', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'Emilion', equipo:'Newells Esports', cantidad:1},
           {jugador:'El Beto', equipo:'Chapecoence', cantidad:2},
           {jugador:'Val Zigtv', equipo:'Chapecoence', cantidad:1},
-          {jugador:'T.Bernier', equipo:'Lechonas Gang', cantidad:1},
+          {jugador:'T.Bernier', equipo:'Newells Esports', cantidad:1},
           {jugador:'Chupi', equipo:'Cazachilenos FC', cantidad:1},
-          {jugador:'El Wachy', equipo:'Lechonas Gang', cantidad:1},],
+          {jugador:'El Wachy', equipo:'Newells Esports', cantidad:1},],
       }
     }
   ];
@@ -5234,6 +5328,19 @@ body.v2-preview .v2-notification-panel::before{
   // ---- RELAMPAGO ----
   const relampagos = [
     {
+      id:'copa-argenleague-2026', orden:99, modalidad:'clubes', costo:'$12.500', fecha:'PRÓXIMAMENTE',
+      nombre:'Copa ArgenLeague', estado:'abierto', estadoLabel:'Inscripciones abiertas',
+      descripcion:'Copa de Clubes Pro con un máximo de 8 equipos. Ya hay 4 equipos inscriptos.',
+      meta:'Clubes Pro · 8 cupos · 4 inscriptos · $60.000 campeón · $20.000 subcampeón',
+      inscripcionesAbiertas:true,
+      cupos:8,
+      inscriptos:4,
+      premios:'Campeón $60.000 · Subcampeón $20.000',
+      misionesActivas:true,
+      bracket:{}
+    },
+
+    {
       id:'r5-1v1', orden:5, modalidad:'1v1', costo:'GRATIS', fecha:'08/09/2026', nombre:'Relámpago 1v1 — Francia campeón', estado:'finalizado', estadoLabel:'Finalizado',
       descripcion:'Primer Relámpago 1v1 de ArgenLeague, disputado desde cuartos de final con 8 jugadores.',
       meta:'1v1 · 8 jugadores · desde cuartos de final',
@@ -5270,14 +5377,14 @@ body.v2-preview .v2-notification-panel::before{
       }
     },
     {
-      id:'r1', orden:1, modalidad:'clubes', fecha:'17/08/2026', nombre:'Relámpago — Lechonas Gang campeón', estado:'finalizado', estadoLabel:'Finalizado',
-      descripcion:'Semis y final del relámpago. Lechonas Gang se quedó con el título en una final durísima.', meta:'Relámpago a 4 equipos, arrancó directo desde semis',
+      id:'r1', orden:1, modalidad:'clubes', fecha:'17/08/2026', nombre:'Relámpago — Newells Esports campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      descripcion:'Semis y final del relámpago. Newells Esports se quedó con el título en una final durísima.', meta:'Relámpago a 4 equipos, arrancó directo desde semis',
       bracket:{
         semis:[
           {a:'EstadioConLinton', ag:3, b:'Rejunte 40', bg:0},
-          {a:'JogoComAura', ag:4, b:'Lechonas Gang', bg:6},
+          {a:'JogoComAura', ag:4, b:'Newells Esports', bg:6},
         ],
-        final:[{a:'EstadioConLinton', ag:6, b:'Lechonas Gang', bg:7}]
+        final:[{a:'EstadioConLinton', ag:6, b:'Newells Esports', bg:7}]
       }
     },
     {
@@ -5309,20 +5416,20 @@ body.v2-preview .v2-notification-panel::before{
       }
     },
     {
-      id:'r4', orden:4, modalidad:'clubes', fecha:'26/08/2026', nombre:'Relámpago — Lechonas Gang bicampeón', estado:'finalizado', estadoLabel:'Finalizado',
-      descripcion:'El más parejo hasta ahora en cuartos, pero Lechonas Gang se despachó con un baile en la final.', meta:'Relámpago a 8 equipos, desde cuartos de final',
+      id:'r4', orden:4, modalidad:'clubes', fecha:'26/08/2026', nombre:'Relámpago — Newells Esports bicampeón', estado:'finalizado', estadoLabel:'Finalizado',
+      descripcion:'El más parejo hasta ahora en cuartos, pero Newells Esports se despachó con un baile en la final.', meta:'Relámpago a 8 equipos, desde cuartos de final',
       bracket:{
         cuartos:[
           {a:'JogoComAura', ag:1, b:'Fulbo Champeta', bg:3},
           {a:'Cazachilenos FC', ag:3, b:'Cobres', bg:0},
-          {a:'Lechonas Gang', ag:3, b:'ELN FC', bg:0},
+          {a:'Newells Esports', ag:3, b:'ELN FC', bg:0},
           {a:'Chapecoence', ag:4, b:'Cartonsito FC', bg:0},
         ],
         semis:[
           {a:'Fulbo Champeta', ag:0, b:'Cazachilenos FC', bg:1},
-          {a:'Lechonas Gang', ag:5, b:'Chapecoence', bg:2},
+          {a:'Newells Esports', ag:5, b:'Chapecoence', bg:2},
         ],
-        final:[{a:'Lechonas Gang', ag:12, b:'Cazachilenos FC', bg:4}]
+        final:[{a:'Newells Esports', ag:12, b:'Cazachilenos FC', bg:4}]
       }
     },
     {
@@ -5332,11 +5439,11 @@ body.v2-preview .v2-notification-panel::before{
       inscripcionesAbiertas:false,
       bracket:{
         semis:[
-          {a:'Lechonas Gang', ag:6, b:'Chapecoence', bg:3},
+          {a:'Newells Esports', ag:6, b:'Chapecoence', bg:3},
           {a:'Las Palmas', ag:13, b:'La Balsa', bg:1},
         ],
         final:[
-          {a:'Las Palmas', ag:5, b:'Lechonas Gang', bg:2}
+          {a:'Las Palmas', ag:5, b:'Newells Esports', bg:2}
         ]
       }
     },
@@ -5347,11 +5454,11 @@ body.v2-preview .v2-notification-panel::before{
       bracket:{
         cuartos:[
           {a:'Cazachilenos FC', ag:4, b:'Fernettt FC', bg:0},
-          {a:'Jogo com Aura', ag:3, b:'Lechonas Gang', bg:10},
+          {a:'Jogo com Aura', ag:3, b:'Newells Esports', bg:10},
         ],
         semis:[
           {a:'Chapecoence', ag:6, b:'La Balsa', bg:0},
-          {a:'Lechonas Gang', ag:2, b:'Cazachilenos FC', bg:3},
+          {a:'Newells Esports', ag:2, b:'Cazachilenos FC', bg:3},
         ],
         final:[
           {a:'Chapecoence', ag:2, b:'Cazachilenos FC', bg:0}
@@ -5694,7 +5801,7 @@ body.v2-preview .v2-notification-panel::before{
 
   // ---- ARGENCOINS: Clubes Pro + 1v1 ----
   const coinBalances = [
-    { team:'Lechonas Gang', balance:11 },
+    { team:'Newells Esports', balance:11 },
     { team:'Chapecoence', balance:10 },
     { team:'Cazachilenos FC', balance:6 },
     { team:'Las Palmas', balance:5 },
@@ -5718,7 +5825,7 @@ body.v2-preview .v2-notification-panel::before{
   ];
 
   const coinMovements = {
-    'Lechonas Gang':[
+    'Newells Esports':[
       {amount:2, label:'Inscripción a Liga Oficial'},
       {amount:5, label:'Campeón de Liga Oficial'},
       {amount:1, label:'Participación en Relámpago gratis', date:'09/09/2026'},
@@ -6896,7 +7003,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   /* ---------- Mission identity ---------- */
   const missionProfiles={
     clubes:[
-      'Lechonas Gang','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa',
+      'Newells Esports','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa',
       'Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura'
     ],
     uno:[
@@ -7419,7 +7526,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(!section)return;
 
   const CLUB_PROFILES=[
-    'Lechonas Gang','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa',
+    'Newells Esports','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa',
     'Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura',
     'Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero','LMJ ESPORTS','Josesito Gang'
   ];
@@ -7542,7 +7649,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             const f=pf.final[0];
             if(f.ag!=null&&f.bg!=null)winner=f.ag>f.bg?f.a:f.b;
           }
-          if(!winner && l.id==='clubes-pro') winner='Lechonas Gang';
+          if(!winner && l.id==='clubes-pro') winner='Newells Esports';
           if(clean(winner)===clean(name)){
             titles.push({type:'🏆 Liga de Clubes Pro',date:l.fechaFin||'',detail:l.nombre||'Liga'});
           }
@@ -8099,7 +8206,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
   async function loadCatalog(){
     if(!sb){
-      const clubs=['Lechonas Gang','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa','Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura','Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero','LMJ ESPORTS','Josesito Gang'];
+      const clubs=['Newells Esports','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa','Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura','Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero','LMJ ESPORTS','Josesito Gang'];
       const players=['Lucario343','thiagokpo17','JEDAY_-504','tthiagoo_07','LuchoPS5','Bauti7','TitoFC24','MatiRMA','NicoFut','FedeMadrid','TomiGunner','SantiCity'];
       profileCatalog=[
         ...clubs.map(profile_name=>({mode:'clubes',profile_name,active:true})),
@@ -8723,7 +8830,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const sb=window.ARGENLEAGUE_SB;
   const INITIAL={
     club:{
-      'Lechonas Gang':11,'Chapecoence':10,'Cazachilenos FC':6,'Las Palmas':5,
+      'Newells Esports':11,'Chapecoence':10,'Cazachilenos FC':6,'Las Palmas':5,
       'La Balsa':3,'Fieles FC':3,'Fulbo Champeta':2,'Rejunte 40':2,
       'Moron CDM':1,'Fernettt FC':1,'Jogo com Aura':1,'Banda Cancelada':1,
       'Fabrika de dinero':1,'El22':0
