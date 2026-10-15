@@ -2958,58 +2958,6 @@ body.v2-preview .v2-notification-panel::before{
 }
 </style>
 
-<style id="copa-argenleague-style">
-.copa-argenleague-home{
-  margin:22px 0 28px;padding:24px;border:1px solid rgba(244,196,78,.35);border-radius:20px;
-  background:linear-gradient(135deg,rgba(244,196,78,.10),rgba(8,15,24,.97) 58%);
-  display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:24px;align-items:center;position:relative;overflow:hidden
-}
-.copa-argenleague-home:after{
-  content:"";position:absolute;width:280px;height:280px;border-radius:50%;right:-110px;top:-100px;
-  border:1px solid rgba(244,196,78,.12)
-}
-.copa-argenleague-home h2{font:600 clamp(28px,4vw,48px) 'Oswald',sans-serif;margin:5px 0 6px}
-.copa-argenleague-home p{color:var(--muted);font-size:10px;line-height:1.6;max-width:650px}
-.copa-argenleague-data{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}
-.copa-argenleague-data>div{border:1px solid rgba(244,196,78,.16);border-radius:10px;padding:10px;background:rgba(0,0,0,.14)}
-.copa-argenleague-data span{display:block;color:var(--muted);font:800 6px 'JetBrains Mono',monospace}
-.copa-argenleague-data b{display:block;margin-top:4px;color:var(--v2-gold);font:600 15px 'Oswald',sans-serif}
-.copa-argenleague-extra{color:#dac478!important;font-weight:700}
-.copa-argenleague-badge{
-  width:160px;height:160px;border-radius:50%;border:1px solid rgba(244,196,78,.35);
-  background:radial-gradient(circle,rgba(244,196,78,.13),rgba(5,10,16,.8));
-  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1
-}
-.copa-argenleague-badge span,.copa-argenleague-badge small{font:800 7px 'JetBrains Mono',monospace;color:var(--muted)}
-.copa-argenleague-badge b{font:700 48px 'Oswald',sans-serif;color:var(--v2-gold);line-height:1}
-.copa-argenleague-badge small{margin-top:7px;color:#dcc574}
-
-.club-open-tournament{
-  margin:0 0 16px;padding:18px;border:1px solid rgba(244,196,78,.28);border-radius:15px;
-  background:linear-gradient(135deg,rgba(244,196,78,.055),#09111b);
-  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px
-}
-.club-open-tournament h3{font:600 24px 'Oswald',sans-serif;margin:5px 0 2px}
-.club-open-tournament p{margin:0;color:var(--muted);font-size:9px}
-.club-open-tournament-prizes{display:flex;gap:7px}
-.club-open-tournament-prizes span{border:1px solid var(--border);border-radius:9px;padding:9px 11px;min-width:90px}
-.club-open-tournament-prizes small{display:block;color:var(--muted);font:800 6px 'JetBrains Mono',monospace}
-.club-open-tournament-prizes b{display:block;margin-top:3px;color:var(--v2-gold);font:600 13px 'Oswald',sans-serif}
-.club-open-tournament-progress{grid-column:1/-1}
-.club-open-tournament-progress>div:first-child{display:flex;justify-content:space-between;color:var(--muted);font:700 7px 'JetBrains Mono',monospace;margin-bottom:6px}
-.club-open-tournament-progress strong{color:#d8c277}
-.club-open-tournament-bar{height:6px;border-radius:999px;background:#182331;overflow:hidden}
-.club-open-tournament-bar i{display:block;height:100%;background:var(--v2-gold);border-radius:999px}
-.club-open-tournament-note{grid-column:1/-1;color:#d8c277;font:700 8px 'JetBrains Mono',monospace}
-@media(max-width:760px){
-  .copa-argenleague-home{grid-template-columns:1fr}
-  .copa-argenleague-badge{display:none}
-  .copa-argenleague-data{grid-template-columns:repeat(2,1fr)}
-  .club-open-tournament{grid-template-columns:1fr}
-  .club-open-tournament-prizes{flex-wrap:wrap}
-}
-</style>
-
 </head>
 <body class="v2-preview">
 <nav>
@@ -3067,18 +3015,18 @@ body.v2-preview .v2-notification-panel::before{
 </div>
 <div class="v2-section-title">
 <div><span>ACTUALIDAD</span><h2>Lo último en ArgenLeague</h2></div>
-<small>Actualizado al 30/09/2026</small>
+<small>Actualizado al 14/10/2026</small>
 </div>
 <div class="v2-news-grid">
 <article class="v2-news-card featured">
 <div class="v2-news-tag">⚡ RELÁMPAGO CLUBES PRO · FC 27</div>
 <div class="v2-news-main">
 <div>
-<span class="v2-news-date">30 SEP 2026</span>
-<h3>BANDA CANCELADA<br/><em>CAMPEÓN</em></h3>
-<p>Se quedó con el Relámpago de Clubes Pro tras vencer 4–1 a Josesito Gang en la final.</p>
+<span class="v2-news-date">14 OCT 2026</span>
+<h3>CAJA FUERTE FC<br/><em>CAMPEÓN</em></h3>
+<p>Se quedó con el Relámpago gratis de Clubes Pro tras vencer 3–1 a A Peloo FC en la final.</p>
 </div>
-<div class="v2-score-pill">4 <span>—</span> 1</div>
+<div class="v2-score-pill">3 <span>—</span> 1</div>
 </div>
 <button data-v2-relampago="clubes" type="button">Ver torneo completo →</button>
 </article>
@@ -3096,27 +3044,6 @@ body.v2-preview .v2-notification-panel::before{
 <p>Campeón del último Relámpago 1v1.</p>
 <button data-v2-relampago="uno" type="button">Ver 1v1 →</button>
 </article>
-</div>
-
-<div class="copa-argenleague-home">
-  <div class="copa-argenleague-copy">
-    <span class="v2-kicker gold">🏆 INSCRIPCIONES ABIERTAS · CLUBES PRO</span>
-    <h2>COPA ARGENLEAGUE</h2>
-    <p>Nuevo torneo de Clubes Pro con cupos limitados. Ya hay <strong>4 de 8 equipos</strong> inscriptos.</p>
-    <div class="copa-argenleague-data">
-      <div><span>INSCRIPCIÓN</span><b>$12.500</b></div>
-      <div><span>CAMPEÓN</span><b>$60.000</b></div>
-      <div><span>SUBCAMPEÓN</span><b>$20.000</b></div>
-      <div><span>CUPOS</span><b>4 / 8</b></div>
-    </div>
-    <p class="copa-argenleague-extra">🎯 Misiones semanales y recompensas ArgenCoins disponibles durante la competencia.</p>
-    <button class="v2-primary goldbtn" data-v2-go="clubespro" type="button">Ver Clubes Pro →</button>
-  </div>
-  <div class="copa-argenleague-badge">
-    <span>COPA</span>
-    <b>AL</b>
-    <small>4 CUPOS DISPONIBLES</small>
-  </div>
 </div>
 
 <div class="v2-ecosystem">
@@ -3187,24 +3114,6 @@ body.v2-preview .v2-notification-panel::before{
 <div class="v2-section-title">
 <div><span>ESTADO ACTUAL</span><h2>Clubes Pro</h2></div>
 <small>Temporada 2026</small>
-</div>
-
-<div class="club-open-tournament">
-  <div>
-    <span class="v2-kicker gold">PRÓXIMA COMPETENCIA · INSCRIPCIONES ABIERTAS</span>
-    <h3>Copa ArgenLeague</h3>
-    <p>Clubes Pro · máximo 8 equipos · 4 equipos ya inscriptos</p>
-  </div>
-  <div class="club-open-tournament-prizes">
-    <span><small>Inscripción</small><b>$12.500</b></span>
-    <span><small>1.º premio</small><b>$60.000</b></span>
-    <span><small>2.º premio</small><b>$20.000</b></span>
-  </div>
-  <div class="club-open-tournament-progress">
-    <div><span>4 / 8 inscriptos</span><strong>4 cupos disponibles</strong></div>
-    <div class="club-open-tournament-bar"><i style="width:50%"></i></div>
-  </div>
-  <div class="club-open-tournament-note">🎯 Misiones y recompensas ArgenCoins activas durante la Copa.</div>
 </div>
 
 <div class="v2-dashboard-grid">
@@ -5327,18 +5236,6 @@ body.v2-preview .v2-notification-panel::before{
 
   // ---- RELAMPAGO ----
   const relampagos = [
-    {
-      id:'copa-argenleague-2026', orden:99, modalidad:'clubes', costo:'$12.500', fecha:'PRÓXIMAMENTE',
-      nombre:'Copa ArgenLeague', estado:'abierto', estadoLabel:'Inscripciones abiertas',
-      descripcion:'Copa de Clubes Pro con un máximo de 8 equipos. Ya hay 4 equipos inscriptos.',
-      meta:'Clubes Pro · 8 cupos · 4 inscriptos · $60.000 campeón · $20.000 subcampeón',
-      inscripcionesAbiertas:true,
-      cupos:8,
-      inscriptos:4,
-      premios:'Campeón $60.000 · Subcampeón $20.000',
-      misionesActivas:true,
-      bracket:{}
-    },
 
     {
       id:'r5-1v1', orden:5, modalidad:'1v1', costo:'GRATIS', fecha:'08/09/2026', nombre:'Relámpago 1v1 — Francia campeón', estado:'finalizado', estadoLabel:'Finalizado',
@@ -5509,6 +5406,22 @@ body.v2-preview .v2-notification-panel::before{
         ],
         final:[
           {a:'Banda Cancelada', ag:4, b:'Josesito Gang', bg:1}
+        ]
+      }
+    },
+
+    {
+      id:'r12', orden:12, modalidad:'clubes', costo:'GRATIS', fecha:'14/10/2026', nombre:'Relámpago — Caja Fuerte FC campeón', estado:'finalizado', estadoLabel:'Finalizado',
+      descripcion:'Relámpago gratuito de Clubes Pro. Caja Fuerte FC se consagró campeón tras vencer a El22 en semifinales y a A Peloo FC en la final.',
+      meta:'Relámpago gratis · 4 equipos · Clubes Pro · FC 27',
+      inscripcionesAbiertas:false,
+      bracket:{
+        semis:[
+          {a:'Caja Fuerte FC', ag:3, b:'El22', bg:0},
+          {a:'A Peloo FC', ag:4, b:'Auditorio', bg:1},
+        ],
+        final:[
+          {a:'Caja Fuerte FC', ag:3, b:'A Peloo FC', bg:1}
         ]
       }
     },
@@ -5815,7 +5728,11 @@ body.v2-preview .v2-notification-panel::before{
     { team:'Banda Cancelada', balance:4 },
     { team:'Fabrika de dinero', balance:2 },
     { team:'LMJ ESPORTS', balance:1 },
-    { team:'Josesito Gang', balance:1 }
+    { team:'Josesito Gang', balance:1 },
+    { team:'El22', balance:1 },
+    { team:'Caja Fuerte FC', balance:3 },
+    { team:'A Peloo FC', balance:1 },
+    { team:'Auditorio', balance:1 }
   ];
   const coinPlayerBalances = [
     { player:'Lucario343', balance:4 },
@@ -5879,6 +5796,19 @@ body.v2-preview .v2-notification-panel::before{
     ],
     'Josesito Gang':[
       {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'30/09/2026'}
+    ],
+    'El22':[
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'14/10/2026'}
+    ],
+    'Caja Fuerte FC':[
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'14/10/2026'},
+      {amount:2, label:'Campeón de Relámpago gratis · FC 27', date:'14/10/2026'}
+    ],
+    'A Peloo FC':[
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'14/10/2026'}
+    ],
+    'Auditorio':[
+      {amount:1, label:'Participación en Relámpago gratis · FC 27', date:'14/10/2026'}
     ]
   };
 
@@ -6084,7 +6014,7 @@ body.v2-preview .v2-notification-panel::before{
 <svg fill="none" stroke-width="1.9" viewbox="0 0 24 24"><path d="M8 9c1.2-1 2.6-1.5 4-1.5s2.8.5 4 1.5"></path><rect height="10" rx="5" width="16" x="4" y="8"></rect><path d="M9 13.2v.1M15 13.2v.1"></path><path d="M9 5.5 8 8M15 5.5l1 2.5"></path></svg>
 <span>Discord</span>
 </a>
-<div aria-label="Última actualización" class="site-updated">Actualizado: 30/09/2026 · v2.0</div>
+<div aria-label="Última actualización" class="site-updated">Actualizado: 14/10/2026 · v2.0</div>
 <style id="argen-update-v15-styles">
   /* Fecha actual */
   .fixture-current-banner{display:flex;align-items:center;gap:7px;margin:0 0 12px;padding:10px 13px;border:1px solid var(--accent-dim);border-radius:8px;background:rgba(79,166,232,.07);font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;color:var(--line)}
@@ -7528,7 +7458,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const CLUB_PROFILES=[
     'Newells Esports','Chapecoence','Cazachilenos FC','Las Palmas','La Balsa',
     'Fulbo Champeta','Rejunte 40','Fernettt FC','Jogo com Aura',
-    'Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero','LMJ ESPORTS','Josesito Gang'
+    'Fieles FC','Moron CDM','El22','Banda Cancelada','Fabrika de dinero','LMJ ESPORTS','Josesito Gang','Caja Fuerte FC','A Peloo FC','Auditorio'
   ];
 
   const PLAYER_PROFILES=[
