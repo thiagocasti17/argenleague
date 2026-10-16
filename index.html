@@ -2981,6 +2981,42 @@ body.v2-preview .v2-notification-panel::before{
   .penalty-rank-row{grid-template-columns:30px minmax(0,1fr) 105px!important}
   #inicio .penalty-home-card{margin-top:-30px}
 }
+
+/* ===== Penales: arco, hinchada, Dibu, sonido ===== */
+.penalty-crowd{position:absolute;left:0;right:0;top:0;height:62%;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;z-index:1;pointer-events:none}
+.penalty-net{z-index:2}
+.fan-row{display:flex;justify-content:center;gap:2px;margin-top:-13px;transform:scale(var(--s,1));transform-origin:50% 100%;flex:0 0 auto}
+.fan{position:relative;flex:0 0 20px;width:20px;height:30px;animation:fanIdle var(--t,2s) ease-in-out var(--d,0s) infinite}
+.fan .hd{position:absolute;left:5px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--k)}
+.fan .bd{position:absolute;left:2px;top:12px;width:16px;height:18px;border-radius:7px 7px 0 0;background:var(--c)}
+.fan .arm{position:absolute;top:13px;width:4px;height:11px;border-radius:2px;background:var(--c);transform-origin:50% 2px;transition:transform .25s}
+.fan .arm.l{left:0;transform:rotate(12deg)}.fan .arm.r{right:0;transform:rotate(-12deg)}
+@keyframes fanIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes fanJump{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fanSad{0%,100%{transform:translateY(3px) rotate(-2deg)}50%{transform:translateY(5px) rotate(2deg)}}
+.penalty-goal.is-goal .fan{animation:fanJump .5s ease-in-out var(--d,0s) infinite}
+.penalty-goal.is-goal .fan .arm.l{transform:rotate(160deg)}.penalty-goal.is-goal .fan .arm.r{transform:rotate(-160deg)}
+.penalty-goal.is-saved .fan{animation:fanSad 1.6s ease-in-out var(--d,0s) infinite}
+.penalty-goal.is-saved .fan .arm.l{transform:rotate(135deg)}.penalty-goal.is-saved .fan .arm.r{transform:rotate(-135deg)}
+.penalty-goal{transition:box-shadow .3s}
+.penalty-goal.is-goal{box-shadow:0 0 30px rgba(244,196,78,.5)}
+.penalty-goal.noanim .penalty-ball,.penalty-goal.noanim .penalty-keeper,.penalty-goal.noanim .k-svg,.penalty-goal.noanim .k-arm{transition:none!important}
+.penalty-keeper{width:56px;height:74px;bottom:38px;font-size:0;transform:translateX(-50%);transition:left .28s ease}
+.penalty-keeper .k-idle{width:100%;height:100%;animation:keeperBob 1.1s ease-in-out infinite}
+.penalty-keeper .k-svg{display:block;width:100%;height:100%;overflow:visible;transform-origin:50% 70%;transition:transform .32s cubic-bezier(.2,.8,.3,1)}
+.k-arm{transition:transform .25s}
+.k-arm.l{transform-origin:19px 30px;animation:armL 1.1s ease-in-out infinite}
+.k-arm.r{transform-origin:45px 30px;animation:armR 1.1s ease-in-out infinite}
+@keyframes armL{0%,100%{transform:rotate(28deg)}50%{transform:rotate(46deg)}}
+@keyframes armR{0%,100%{transform:rotate(-46deg)}50%{transform:rotate(-28deg)}}
+@keyframes keeperBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.penalty-keeper.dl .k-idle,.penalty-keeper.dr .k-idle,.penalty-keeper.dc .k-idle{animation:none}
+.penalty-keeper.dl .k-arm.l,.penalty-keeper.dr .k-arm.l,.penalty-keeper.dc .k-arm.l{animation:none;transform:rotate(165deg)}
+.penalty-keeper.dl .k-arm.r,.penalty-keeper.dr .k-arm.r,.penalty-keeper.dc .k-arm.r{animation:none;transform:rotate(-165deg)}
+.penalty-keeper.dl .k-svg{transform:translateY(-8px) rotate(-78deg)}
+.penalty-keeper.dr .k-svg{transform:translateY(-8px) rotate(78deg)}
+.penalty-keeper.dc .k-svg{transform:translateY(-34px) scale(1.06)}
+.penalty-sound{background:none;border:1px solid rgba(244,196,78,.22);color:#e6d393;border-radius:7px;padding:3px 7px;font:700 7px 'JetBrains Mono',monospace;cursor:pointer}
 </style>
 </head>
 <body class="v2-preview">
@@ -3330,13 +3366,31 @@ body.v2-preview .v2-notification-panel::before{
 <div class="penalty-game-layout">
 <div class="penalty-game-card">
 <div class="penalty-game-status" id="penaltyGameStatus">Elegí un lado para patear.</div>
-
+<div class="penalty-goal" id="penaltyGoal">
+<div class="penalty-crowd" id="penaltyCrowd"></div>
+<div class="penalty-net"></div>
+<div class="penalty-keeper" id="penaltyKeeper"><div class="k-idle"><svg class="k-svg" viewBox="0 0 64 84" aria-hidden="true">
+<rect x="21" y="50" width="9" height="14" rx="2" fill="#111"/><rect x="34" y="50" width="9" height="14" rx="2" fill="#111"/>
+<rect x="22" y="63" width="7" height="8" fill="#e0b08a"/><rect x="35" y="63" width="7" height="8" fill="#e0b08a"/>
+<rect x="22" y="70" width="7" height="8" fill="#e6ff3d"/><rect x="35" y="70" width="7" height="8" fill="#e6ff3d"/>
+<rect x="20" y="77" width="11" height="5" rx="2" fill="#111"/><rect x="33" y="77" width="11" height="5" rx="2" fill="#111"/>
+<rect x="18" y="26" width="28" height="28" rx="6" fill="#e6ff3d"/>
+<text x="32" y="46" text-anchor="middle" font-size="13" font-weight="800" fill="#111" font-family="Oswald,Arial,sans-serif">23</text>
+<g class="k-arm l"><rect x="10" y="28" width="9" height="20" rx="4" fill="#e6ff3d"/><circle cx="14.5" cy="50" r="5.5" fill="#fff" stroke="#111" stroke-width="1"/></g>
+<g class="k-arm r"><rect x="45" y="28" width="9" height="20" rx="4" fill="#e6ff3d"/><circle cx="49.5" cy="50" r="5.5" fill="#fff" stroke="#111" stroke-width="1"/></g>
+<circle cx="32" cy="16" r="10" fill="#e0b08a"/>
+<path d="M22 14 Q22 4 32 4 Q42 4 42 14 Q38 9 32 9 Q26 9 22 14Z" fill="#2a1a12"/>
+<path d="M23 17 Q32 31 41 17 Q41 24 32 27 Q23 24 23 17Z" fill="#2a1a12"/>
+<circle cx="28" cy="15" r="1.3" fill="#111"/><circle cx="36" cy="15" r="1.3" fill="#111"/>
+</svg></div></div>
+<div class="penalty-ball" id="penaltyBall">⚽</div>
+</div>
 <div class="penalty-kick-buttons">
 <button data-penalty-dir="left" type="button">← Izquierda</button>
 <button data-penalty-dir="center" type="button">↑ Centro</button>
 <button data-penalty-dir="right" type="button">Derecha →</button>
 </div>
-<div class="penalty-game-foot"><span id="penaltyAttempts">0 intentos</span><span>El fallo reinicia la racha</span></div>
+<div class="penalty-game-foot"><span id="penaltyAttempts">0 intentos</span><button class="penalty-sound" id="penaltySound" type="button">🔊 Sonido</button><span>El fallo reinicia la racha</span></div>
 </div>
 <div class="penalty-how">
 <span class="v2-kicker">CÓMO FUNCIONA</span>
@@ -9962,21 +10016,79 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(error)throw new Error(error.message);
     state={...(state||{}),reward_mode:mode,reward_profile:profile};
   }
+  /* ---- sonido ---- */
+  let audioCtx=null,noiseBuf=null,muted=false;
+  try{muted=localStorage.getItem('al_pen_muted')==='1';}catch(e){}
+  function ac(){try{if(!audioCtx){const C=window.AudioContext||window.webkitAudioContext;if(C)audioCtx=new C();}if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();}catch(e){}return audioCtx;}
+  function noise(c){if(!noiseBuf||noiseBuf.sampleRate!==c.sampleRate){const len=c.sampleRate*3;noiseBuf=c.createBuffer(1,len,c.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;}return noiseBuf;}
+  function roar(){
+    const c=ac();if(!c)return;const t=c.currentTime;
+    const src=c.createBufferSource();src.buffer=noise(c);src.loop=true;
+    const bp=c.createBiquadFilter();bp.type='bandpass';bp.Q.value=.7;
+    bp.frequency.setValueAtTime(600,t);bp.frequency.linearRampToValueAtTime(1500,t+.6);bp.frequency.linearRampToValueAtTime(900,t+2.6);
+    const g=c.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.8,t+.3);g.gain.setValueAtTime(.8,t+1.2);g.gain.exponentialRampToValueAtTime(.001,t+2.8);
+    src.connect(bp);bp.connect(g);g.connect(c.destination);src.start(t);src.stop(t+2.9);
+  }
+  function groan(){
+    const c=ac();if(!c)return;const t=c.currentTime;
+    const src=c.createBufferSource();src.buffer=noise(c);src.loop=true;
+    const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=700;
+    const g=c.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.35,t+.3);g.gain.exponentialRampToValueAtTime(.001,t+2.2);
+    src.connect(lp);lp.connect(g);g.connect(c.destination);src.start(t);src.stop(t+2.3);
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=600;f.Q.value=2;
+    const vg=c.createGain();vg.gain.setValueAtTime(0.0001,t);vg.gain.linearRampToValueAtTime(.09,t+.15);vg.gain.exponentialRampToValueAtTime(.001,t+1.7);
+    f.connect(vg);vg.connect(c.destination);
+    [0,9,-11,17].forEach(det=>{const o=c.createOscillator();o.type='sawtooth';o.detune.value=det;o.frequency.setValueAtTime(260,t);o.frequency.exponentialRampToValueAtTime(150,t+1.6);o.connect(f);o.start(t);o.stop(t+1.8);});
+  }
+  function shoutGol(){
+    try{
+      if(!('speechSynthesis' in window))return;
+      const vs=speechSynthesis.getVoices();
+      const u=new SpeechSynthesisUtterance('¡Gooooool!');u.lang='es-AR';
+      const v=vs.find(v=>/^es[-_]AR/i.test(v.lang))||vs.find(v=>/^es/i.test(v.lang));if(v)u.voice=v;
+      u.rate=.85;u.pitch=1.4;u.volume=1;speechSynthesis.cancel();speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  function reactSound(goal){if(muted)return;if(goal){roar();shoutGol();}else groan();}
+  function paintSoundBtn(){const b=q('#penaltySound');if(b)b.textContent=muted?'🔇 Silenciado':'🔊 Sonido';}
+
+  /* ---- hinchada ---- */
+  function buildCrowd(){
+    const box=q('#penaltyCrowd');if(!box||box.dataset.built)return;box.dataset.built='1';
+    const shirts=['#75aadb','#ffffff','#75aadb','#e9f1f8','#f4c44e','#4f86bd','#ffffff'],skins=['#f1c9a5','#d9a37b','#b9794f','#8a5a3b'];
+    const r=a=>a[Math.floor(Math.random()*a.length)];
+    box.innerHTML=[{n:46,s:.72,o:.7},{n:38,s:.86,o:.85},{n:32,s:1,o:1}].map(row=>{
+      let h='';for(let i=0;i<row.n;i++)h+=`<div class="fan" style="--c:${r(shirts)};--k:${r(skins)};--d:-${(Math.random()*2).toFixed(2)}s;--t:${(1.5+Math.random()*1.2).toFixed(2)}s"><u class="arm l"></u><u class="arm r"></u><i class="hd"></i><b class="bd"></b></div>`;
+      return `<div class="fan-row" style="--s:${row.s};opacity:${row.o}">${h}</div>`;
+    }).join('');
+  }
+
+  /* ---- animación del penal ---- */
+  let reactT=0,resetT=0;
+  function resetScene(){
+    const g=q('#penaltyGoal'),ball=q('#penaltyBall'),keeper=q('#penaltyKeeper');
+    g?.classList.add('noanim');g?.classList.remove('kicking','is-goal','is-saved');
+    if(ball){ball.style.left='50%';ball.style.bottom='14px';ball.style.transform='translateX(-50%) scale(1)';}
+    if(keeper){keeper.style.left='50%';keeper.classList.remove('dl','dr','dc');}
+    void g?.offsetWidth;g?.classList.remove('noanim');
+  }
   function animateKick(userDir,keeperDir,goal){
     const g=q('#penaltyGoal'),ball=q('#penaltyBall'),keeper=q('#penaltyKeeper');
-    g?.classList.remove('kicking');
-    if(ball){ball.style.left='50%';ball.style.bottom='14px';ball.style.transform='translateX(-50%) scale(1)';}
-    if(keeper){keeper.style.left='50%';keeper.style.transform='translateX(-50%)';}
+    clearTimeout(reactT);clearTimeout(resetT);
+    resetScene();
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      if(keeper){keeper.style.left=dirX[keeperDir];keeper.style.transform='translateX(-50%) scale(1.05)';}
+      if(keeper){keeper.style.left=dirX[keeperDir];keeper.classList.add(keeperDir==='left'?'dl':keeperDir==='right'?'dr':'dc');}
       if(ball){ball.style.left=dirX[userDir];ball.style.bottom='165px';ball.style.transform='translateX(-50%) scale(.74)';}
       g?.classList.add('kicking');
     }));
+    reactT=setTimeout(()=>{g?.classList.add(goal?'is-goal':'is-saved');reactSound(goal);},340);
+    resetT=setTimeout(resetScene,2600);
     const status=q('#penaltyGameStatus');
     if(status)status.textContent=goal?`⚽ ¡GOL! Arquero a ${dirLabel[keeperDir]}.`:`🧤 ATAJADO. El arquero fue a ${dirLabel[keeperDir]}. Racha a 0.`;
   }
   async function kick(dir){
     if(busy)return;
+    ac();
     if(!user().loggedIn){document.querySelector('[data-open-google-login]')?.click();return;}
     const client=sb();if(!client)return;
     busy=true;qa('[data-penalty-dir]').forEach(b=>b.disabled=true);
@@ -9996,6 +10108,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   q('#penaltyRefreshRanking')?.addEventListener('click',loadRanking);
   q('#penaltyRewardProfile')?.addEventListener('change',async()=>{try{await ensureRewardChoice();}catch(e){window.AL_ECONOMY?.showMessage?.('Penales',e.message);}});
   window.addEventListener('argenleague:identity-change',loadState);
+  buildCrowd();paintSoundBtn();
+  q('#penaltySound')?.addEventListener('click',()=>{muted=!muted;try{localStorage.setItem('al_pen_muted',muted?'1':'0');}catch(e){}paintSoundBtn();if(!muted)ac();});
   setTimeout(loadState,700);
 });
 </script>
