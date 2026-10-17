@@ -3017,6 +3017,15 @@ body.v2-preview .v2-notification-panel::before{
 .penalty-keeper.dr .k-svg{transform:translateY(-8px) rotate(78deg)}
 .penalty-keeper.dc .k-svg{transform:translateY(-34px) scale(1.06)}
 .penalty-sound{background:none;border:1px solid rgba(244,196,78,.22);color:#e6d393;border-radius:7px;padding:3px 7px;font:700 7px 'JetBrains Mono',monospace;cursor:pointer}
+
+/* ===== arco de fútbol ===== */
+.penalty-goal{border-color:rgba(232,240,247,.14)}
+.penalty-net{display:none}
+.goal-line{position:absolute;left:0;right:0;bottom:68px;height:2px;background:rgba(255,255,255,.35);z-index:2}
+.goal-net{position:absolute;left:8%;right:8%;bottom:68px;height:155px;z-index:2;background-color:rgba(6,12,20,.55);background-image:linear-gradient(rgba(255,255,255,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.2) 1px,transparent 1px);background-size:14px 14px}
+.goal-posts{position:absolute;left:8%;right:8%;bottom:68px;height:155px;z-index:5;pointer-events:none;border:6px solid #f2f6fa;border-bottom:0;border-radius:3px 3px 0 0;box-shadow:0 0 8px rgba(0,0,0,.45)}
+.penalty-keeper{bottom:68px!important}
+.penalty-goal.kicking .penalty-ball{bottom:118px}
 </style>
 </head>
 <body class="v2-preview">
@@ -3368,7 +3377,7 @@ body.v2-preview .v2-notification-panel::before{
 <div class="penalty-game-status" id="penaltyGameStatus">Elegí un lado para patear.</div>
 <div class="penalty-goal" id="penaltyGoal">
 <div class="penalty-crowd" id="penaltyCrowd"></div>
-<div class="penalty-net"></div>
+<div class="goal-line"></div><div class="goal-net"></div><div class="goal-posts"></div>
 <div class="penalty-keeper" id="penaltyKeeper"><div class="k-idle"><svg class="k-svg" viewBox="0 0 64 84" aria-hidden="true">
 <rect x="21" y="50" width="9" height="14" rx="2" fill="#111"/><rect x="34" y="50" width="9" height="14" rx="2" fill="#111"/>
 <rect x="22" y="63" width="7" height="8" fill="#e0b08a"/><rect x="35" y="63" width="7" height="8" fill="#e0b08a"/>
@@ -10029,17 +10038,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     const g=c.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.8,t+.3);g.gain.setValueAtTime(.8,t+1.2);g.gain.exponentialRampToValueAtTime(.001,t+2.8);
     src.connect(bp);bp.connect(g);g.connect(c.destination);src.start(t);src.stop(t+2.9);
   }
-  function groan(){
-    const c=ac();if(!c)return;const t=c.currentTime;
-    const src=c.createBufferSource();src.buffer=noise(c);src.loop=true;
-    const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=700;
-    const g=c.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.35,t+.3);g.gain.exponentialRampToValueAtTime(.001,t+2.2);
-    src.connect(lp);lp.connect(g);g.connect(c.destination);src.start(t);src.stop(t+2.3);
-    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=600;f.Q.value=2;
-    const vg=c.createGain();vg.gain.setValueAtTime(0.0001,t);vg.gain.linearRampToValueAtTime(.09,t+.15);vg.gain.exponentialRampToValueAtTime(.001,t+1.7);
-    f.connect(vg);vg.connect(c.destination);
-    [0,9,-11,17].forEach(det=>{const o=c.createOscillator();o.type='sawtooth';o.detune.value=det;o.frequency.setValueAtTime(260,t);o.frequency.exponentialRampToValueAtTime(150,t+1.6);o.connect(f);o.start(t);o.stop(t+1.8);});
-  }
   function shoutGol(){
     try{
       if(!('speechSynthesis' in window))return;
@@ -10049,7 +10047,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       u.rate=.85;u.pitch=1.4;u.volume=1;speechSynthesis.cancel();speechSynthesis.speak(u);
     }catch(e){}
   }
-  function reactSound(goal){if(muted)return;if(goal){roar();shoutGol();}else groan();}
+  function reactSound(goal){if(muted)return;if(goal){roar();shoutGol();}}
   function paintSoundBtn(){const b=q('#penaltySound');if(b)b.textContent=muted?'🔇 Silenciado':'🔊 Sonido';}
 
   /* ---- hinchada ---- */
@@ -10078,7 +10076,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     resetScene();
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
       if(keeper){keeper.style.left=dirX[keeperDir];keeper.classList.add(keeperDir==='left'?'dl':keeperDir==='right'?'dr':'dc');}
-      if(ball){ball.style.left=dirX[userDir];ball.style.bottom='165px';ball.style.transform='translateX(-50%) scale(.74)';}
+      if(ball){ball.style.left=dirX[userDir];ball.style.bottom='118px';ball.style.transform='translateX(-50%) scale(.7)';}
       g?.classList.add('kicking');
     }));
     reactT=setTimeout(()=>{g?.classList.add(goal?'is-goal':'is-saved');reactSound(goal);},340);
